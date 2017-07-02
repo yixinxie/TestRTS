@@ -5,15 +5,15 @@
 #include "../graphics/Renderer.h"
 #include "../misc/CharHelper.h"
 #include "../misc/Macros.h"
-
+#include "../misc/ArrayT.h"
 
 using namespace OriGraphics;
 class GLInstancedSprites{
-public:
-	GLFWwindow* window;
 private:
 	GLuint vertexbuffer;
-	GLuint textureID;
+
+	ArrayT<GLuint> textureIDs;
+
 	GLuint samplerVarHnd;
 	GLuint shaderHnd;
 	GLuint initShaders(const char* vertex_file_path, const char* fragment_file_path);

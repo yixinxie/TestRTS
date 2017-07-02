@@ -16,6 +16,7 @@ G* g;
 
 int main()
 {
+	basicMem.initHeap(1000000);
 	G::instance()->renderer = new GLManager();
 	G::instance()->renderer->init(0, 1024, 768);
 	

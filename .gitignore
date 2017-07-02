@@ -3,3 +3,5 @@ RTS/x64/Debug/vc140.idb
 *.md
 *.opendb
 RTS.sdf
+*.vcxproj
+RTS/RTS.vcxproj

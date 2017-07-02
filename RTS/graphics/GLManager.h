@@ -12,32 +12,7 @@ class GLManager : public Renderer{
 public:
 	GLFWwindow* window;
 private:
-	GLuint vertexbuffer;
-	GLuint textureID;
-	GLuint samplerVarHnd;
-	//ID3D11RenderTargetView* backbuffer;
-
-	//D3D11_VIEWPORT viewport;
-
-	//// depth and stencil
-	//ID3D11Texture2D* depthStencilTex;
-	//ID3D11DepthStencilState* depthStencilState;
-	//ID3D11DepthStencilView* depthStencilView;
-
-	//// instancing
-	//ID3D11Buffer* viewProjMatrixCB;
-
-	//// techniques:
-	//DXInstancedSprite* instancedSprites;
-	//DXInstancing* instancedQuads;
-	//
-	//DXInstancedMesh* instancedMesh;
-	//DXShadowMap* shadowMap;
-	//DXDeferred* deferredShading;
-
-	// resources
-	//
-
+	GLInstancedSprites* instancedSprites;
 	void initDepthStencil(void);
 	void prepareCamera(void);
 	//void prepareViewProjectionCB(ID3D11Buffer** constantBuffer, const Vector3 position, const Vector3 euler, float fieldOfView, float aspectRatio, float nearPlane, float farPlane, ID3D11Buffer** constantBuffer2);
@@ -49,8 +24,7 @@ public:
 	GLManager(void);
 	// overrides
 	bool init(HWND hWnd, int _width, int _height);
-	virtual void dispose(void);
-	int createTexture(unsigned int width, unsigned int height, const unsigned char* initialData);
+	void dispose(void);
 	
 	void initInstancing(void);
 	void disposeInstancing(void);

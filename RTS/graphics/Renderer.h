@@ -45,7 +45,7 @@ namespace OriGraphics{
 		
 		void render(void);
 		virtual void platformRender(void) = 0;
-		virtual int createTexture(unsigned int w, unsigned int h, const unsigned char* initialData) = 0;
+		//virtual int createTexture(unsigned int w, unsigned int h, const unsigned char* initialData) = 0;
 		/*void setMainCamera(const Vector3& pos, const Vector3& rot, const float fov, const float _nearPlane, const float _farPlane);
 		void updateMainCamera(const Vector3& pos, const Vector3& rot);
 		int registerInstancedObject(void);

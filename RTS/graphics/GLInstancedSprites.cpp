@@ -3,37 +3,29 @@
 #include <assert.h>
 GLInstancedSprites::GLInstancedSprites(void){
 	//ZeroMemory((void*)this, sizeof(GLInstancedSprites));
-	window = nullptr;
 	vertexbuffer = 0;
 }
 void GLInstancedSprites::dispose(){
 }
 void GLInstancedSprites::init(){
-	shaderHnd = initShaders("shaders/sprite_vs.glsl", "shaders/sprite_fs.glsl");
-}
-void GLInstancedSprites::newSprite(unsigned int width, unsigned int height, const char* spritePath){
-
 	/// refactor this!
 	GLuint VertexArrayID;
 	glGenVertexArrays(1, &VertexArrayID);
 	glBindVertexArray(VertexArrayID);
-	
 
-	glUseProgram(shaderHnd);
-	//glEnable(GL_CULL_FACE);
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	shaderHnd = initShaders("shaders/sprite_vs.glsl", "shaders/sprite_fs.glsl");
+
 	static const GLfloat g_vertex_buffer_data[] = {
 		-1.0f, -1.0f,	0.0f, 0.0,	0.0,
 		1.0f, -1.0f,	0.0f, 1,	0,
 		-1.0f,  1.0f,	0.0f, 0,	1,
 
 		-1.0f,  1.0f,	0.0f, 0,	1,
-		
+
 		1.0f, -1.0f,	0.0f, 1,	0,
 		1.0f, 1.0f,		0.0f, 1,	1,
-		
-		
+
+
 	};
 	// This will identify our vertex buffer
 	// Generate 1 buffer, put the resulting identifier in vertexbuffer
@@ -42,6 +34,14 @@ void GLInstancedSprites::newSprite(unsigned int width, unsigned int height, cons
 	glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
 	// Give our vertices to OpenGL.
 	glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_data), g_vertex_buffer_data, GL_STATIC_DRAW);
+}
+void GLInstancedSprites::newSprite(unsigned int width, unsigned int height, const char* spritePath){
+
+	
+	
+
+	
+	
 	std::vector<unsigned char> pngData; //the raw pixels
 	//unsigned int error = lodepng::load_file(pngData, "assets/arrows.png");
 	unsigned int error = lodepng::load_file(pngData, spritePath);
@@ -60,10 +60,15 @@ void GLInstancedSprites::newSprite(unsigned int width, unsigned int height, cons
 void GLInstancedSprites::onRender(){
 	GLuint err;
 	/* Render here */
+	glUseProgram(shaderHnd);
+	//glEnable(GL_CULL_FACE);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
 	// Bind our texture in Texture Unit 0
 	glActiveTexture(GL_TEXTURE0);
 	err = glGetError();
-	glBindTexture(GL_TEXTURE_2D, textureID);
+	glBindTexture(GL_TEXTURE_2D, textureIDs[0]);
 	err = glGetError();
 	// Set our "myTextureSampler" sampler to user Texture Unit 0
 	glUniform1i(samplerVarHnd, 0);
@@ -104,6 +109,7 @@ void GLInstancedSprites::onRender(){
 	glDrawArrays(GL_TRIANGLES, 0, 6); // Starting from vertex 0; 3 vertices total -> 1 triangle
 	err = glGetError();
 	glDisableVertexAttribArray(0);
+	glDisableVertexAttribArray(1);
 	err = glGetError();
 
 
@@ -111,11 +117,11 @@ void GLInstancedSprites::onRender(){
 int GLInstancedSprites::createTexture(unsigned int width, unsigned int height, const unsigned char* initialData){
 	int ret = 0;
 
-	
-	glGenTextures(1, &textureID);
-
+	GLuint texId;
+	glGenTextures(1, &texId);
+	textureIDs.push(texId);
 	// "Bind" the newly created texture : all future texture functions will modify this texture
-	glBindTexture(GL_TEXTURE_2D, textureID);
+	glBindTexture(GL_TEXTURE_2D, textureIDs[0]);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, initialData);
 	GLuint err = glGetError();
 	// Read the file, call glTexImage2D with the right parameters
