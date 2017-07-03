@@ -5,3 +5,5 @@ RTS/x64/Debug/vc140.idb
 RTS.sdf
 *.vcxproj
 RTS/RTS.vcxproj
+*.filters
+RTS/RTS.vcxproj

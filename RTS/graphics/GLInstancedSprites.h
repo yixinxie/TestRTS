@@ -6,14 +6,21 @@
 #include "../misc/CharHelper.h"
 #include "../misc/Macros.h"
 #include "../misc/ArrayT.h"
+#include "../misc/ArrayStruct.h"
 
 using namespace OriGraphics;
+struct SpriteDesc {
+	Vector2 pos;
+	float rotation;
+	float scale;
+	unsigned int states;
+};
 class GLInstancedSprites{
 private:
 	GLuint vertexbuffer;
 
 	ArrayT<GLuint> textureIDs;
-
+	ArrayStruct<SpriteDesc> spriteDesc;
 	GLuint samplerVarHnd;
 	GLuint shaderHnd;
 	GLuint initShaders(const char* vertex_file_path, const char* fragment_file_path);

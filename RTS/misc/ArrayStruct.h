@@ -3,17 +3,17 @@
 #include "BasicMem.h"
 // only use this for primitive types
 template<typename T>
-class ArrayT{
+class ArrayStruct{
 private:
 	void resize(void) {
 		int newSize = arraySize * 2;
 
 		T* newArray = ori_alloc_array_r(T, newSize, "array resiz template");
-		//int unit_size = sizeof(T);
-		//memcpy(newArray, arrayData, unit_size * arraySize);
-		for (int i = 0; i < arraySize; ++i) {
-			newArray[i] = arrayData[i];
-		}
+		int unit_size = sizeof(T);
+		memcpy(newArray, arrayData, unit_size * arraySize);
+		//for (int i = 0; i < arraySize; ++i) {
+		//	newArray[i] = arrayData[i];
+		//}
 		ori_dealloc(arrayData);
 		arrayData = newArray;
 		arraySize = newSize;
@@ -24,13 +24,13 @@ private:
 public:
 	int length;
 	
-	ArrayT(int defaultSize = 4) {
+	ArrayStruct(int defaultSize = 4) {
 		arraySize = defaultSize;
 		arrayData = ori_alloc_array_r(T, arraySize, "array template");
 		length = 0;
 
 	}
-	~ArrayT() {
+	~ArrayStruct() {
 		ori_dealloc(arrayData);
 	}
 	void clear(void) {
@@ -40,7 +40,8 @@ public:
 		if (length == arraySize) {
 			resize();
 		}
-		arrayData[length] = val;
+		int unit_size = sizeof(T);
+		memcpy(arrayData[length], val, unit_size);
 		length++;
 	}
 	void removeAt(int idx) {
@@ -48,7 +49,8 @@ public:
 		length--;
 		int unit_size = sizeof(T);
 		for (int i = idx; i < length; ++i) {
-			arrayData[i] = arrayData[i + 1];
+			//arrayData[i] = arrayData[i + 1];
+			memcpy(arrayData[i], arrayData[i + 1], unit_size);
 		}
 	}
 	void remove(T val) {
@@ -63,5 +65,8 @@ public:
 	T& operator[] (int idx) {
 		assert(idx >= 0 && idx < length);
 		return arrayData[idx];
+	}
+	T* getPtr() {
+		return arrayData;
 	}
 };

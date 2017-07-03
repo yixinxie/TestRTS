@@ -36,11 +36,6 @@ void GLInstancedSprites::init(){
 	glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_data), g_vertex_buffer_data, GL_STATIC_DRAW);
 }
 void GLInstancedSprites::newSprite(unsigned int width, unsigned int height, const char* spritePath){
-
-	
-	
-
-	
 	
 	std::vector<unsigned char> pngData; //the raw pixels
 	//unsigned int error = lodepng::load_file(pngData, "assets/arrows.png");
