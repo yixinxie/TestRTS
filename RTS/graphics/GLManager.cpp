@@ -50,7 +50,8 @@ bool GLManager::init(HWND hWnd, int _width, int _height)
 	//glBindVertexArray(VertexArrayID);
 	instancedSprites = new	GLInstancedSprites();
 	instancedSprites->init();
-	instancedSprites->newSprite(512, 512, "assets/arrows.png");
+	instancedSprites->newSpriteSheet(512, 512, "assets/arrows.png");
+	instancedSprites->newSprite();
 	return true;
 }
 void GLManager::loadPNG(const IntVector2& _dim, const char* fileName) {

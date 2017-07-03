@@ -17,10 +17,13 @@ struct SpriteDesc {
 };
 class GLInstancedSprites{
 private:
-	GLuint vertexbuffer;
+	GLuint vertex_buffer; // base vertex buffer
+	GLuint instance_buffer; // per instance data and states.
 
 	ArrayT<GLuint> textureIDs;
-	ArrayStruct<SpriteDesc> spriteDesc;
+	SpriteDesc* spriteDesc;
+	int sprite_count;
+	int sprite_max;
 	GLuint samplerVarHnd;
 	GLuint shaderHnd;
 	GLuint initShaders(const char* vertex_file_path, const char* fragment_file_path);
@@ -30,6 +33,7 @@ public:
 	// overrides
 	void init(void);
 	void onRender(void);
-	void newSprite(unsigned int width, unsigned int height, const char* spritePath);
+	void newSpriteSheet(unsigned int width, unsigned int height, const char* spritePath);
+	void newSprite(void);
 	void dispose(void);
 };
