@@ -25,6 +25,9 @@
     <Filter Include="Source Files\graphics">
       <UniqueIdentifier>{40ff6a58-fc5a-4d65-819b-36e4e8702e6b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\gameplay">
+      <UniqueIdentifier>{74e27763-abb5-4455-a2fc-c05e00f7a0a1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -84,6 +87,18 @@
     <ClInclude Include="graphics\GLInstancedSprites.h">
       <Filter>Source Files\graphics</Filter>
     </ClInclude>
+    <ClInclude Include="misc\ArrayT.h">
+      <Filter>Source Files\misc</Filter>
+    </ClInclude>
+    <ClInclude Include="misc\ArrayStruct.h">
+      <Filter>Source Files\misc</Filter>
+    </ClInclude>
+    <ClInclude Include="gameplay\Unit.h">
+      <Filter>Source Files\gameplay</Filter>
+    </ClInclude>
+    <ClInclude Include="gameplay\Scene.h">
+      <Filter>Source Files\gameplay</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -136,6 +151,12 @@
     </ClCompile>
     <ClCompile Include="graphics\GLInstancedSprites.cpp">
       <Filter>Source Files\graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="gameplay\Unit.cpp">
+      <Filter>Source Files\gameplay</Filter>
+    </ClCompile>
+    <ClCompile Include="gameplay\Scene.cpp">
+      <Filter>Source Files\gameplay</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

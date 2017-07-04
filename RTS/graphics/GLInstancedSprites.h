@@ -2,18 +2,19 @@
 #pragma once
 #include "GL/glew.h"
 #include "GLFW/glfw3.h"
+#include "glm/glm.hpp"
+#include "glm/gtc/matrix_transform.hpp"
 #include "../graphics/Renderer.h"
 #include "../misc/CharHelper.h"
 #include "../misc/Macros.h"
 #include "../misc/ArrayT.h"
-#include "../misc/ArrayStruct.h"
-
 using namespace OriGraphics;
 struct SpriteDesc {
 	Vector2 pos;
-	float rotation;
-	float scale;
-	unsigned int states;
+	Vector2 rotation_scale;
+	Vector2 uv;
+	
+	//unsigned int states;
 };
 class GLInstancedSprites{
 private:
@@ -25,6 +26,7 @@ private:
 	int sprite_count;
 	int sprite_max;
 	GLuint samplerVarHnd;
+	GLuint viewprojMatrixHnd;
 	GLuint shaderHnd;
 	GLuint initShaders(const char* vertex_file_path, const char* fragment_file_path);
 	int createTexture(unsigned int width, unsigned int height, const unsigned char* initialData);
@@ -32,8 +34,8 @@ public:
 	GLInstancedSprites(void);
 	// overrides
 	void init(void);
-	void onRender(void);
+	void onRender(glm::mat4 proj_view_mat);
 	void newSpriteSheet(unsigned int width, unsigned int height, const char* spritePath);
-	void newSprite(void);
+	void newSprite(const Vector2 pos, const Vector2 uv);
 	void dispose(void);
 };

@@ -5,12 +5,15 @@
 #include "../graphics/Renderer.h"
 #include "../misc/CharHelper.h"
 #include "../misc/Macros.h"
+#include "glm/glm.hpp"
+#include "glm/gtc/matrix_transform.hpp"
 #include "GLInstancedSprites.h"
 
 using namespace OriGraphics;
 class GLManager : public Renderer{
 public:
 	GLFWwindow* window;
+	glm::mat4 proj_view;
 private:
 	GLInstancedSprites* instancedSprites;
 	void initDepthStencil(void);
@@ -19,7 +22,6 @@ private:
 	void assembleDrawables(void);
 	void restoreRenderTarget(void);
 	GLuint loadShaders(const char* vertex_file_path, const char* fragment_file_path);
-	void loadPNG(const IntVector2& _dim, const char* fileName);
 public:
 	GLManager(void);
 	// overrides
@@ -33,4 +35,7 @@ public:
 	// experimental
 	void renderWithShadowMap(void);
 	void renderWithoutShadowMap(void);
+
+	void newSpriteSheet(unsigned int width, unsigned int height, const char* spritePath);
+	void newSprite(const Vector2 pos, const Vector2 uv);
 };

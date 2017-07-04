@@ -5,7 +5,7 @@ struct Vector2{
 	}
 	Vector2() :x(0), y(0){}
 
-	Vector2 operator*(const float val)
+	Vector2 operator*(const float& val)
 	{
 		Vector2 vec;
 		vec.x = this->x * val;

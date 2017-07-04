@@ -6,7 +6,7 @@
 //#include "CameraDesc.h"
 //#include "LightSourceDesc.h"
 //#include "ObjectTransformDesc.h"
-//#include "../gameplay/RectTransform.h"
+#include "../misc/SimpleVector.h"
 using namespace std;
 namespace OriGraphics{
 
@@ -59,5 +59,8 @@ namespace OriGraphics{
 		void updateSpriteObject(const int id, RectTransform* rect);*/
 		inline int getPixelWidth(void){ return width; }
 		inline int getPixelHeight(void){ return height; }
+
+		virtual void newSpriteSheet(unsigned int width, unsigned int height, const char* spritePath) = 0;
+		virtual void newSprite(const Vector2 pos, const Vector2 uv) = 0;
 	};
 }

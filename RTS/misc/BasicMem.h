@@ -2,14 +2,22 @@
 #pragma once
 #include <vector>
 #include <unordered_map>
+struct MemAllocDebugDesc {
+	char* remarks;
+	int id;
+};
 // requires a declaration of the extern variable basicMem in the main file.
 class BasicMemory{
 private:
-	std::unordered_map<int, char*> remarks;
 	std::unordered_map<int, int> sizes;
+	// debug info
+	std::unordered_map<int, MemAllocDebugDesc> debugDesc;
+
+	// end of debug info.
 	unsigned char* heapStart;
 	int used;
 	int size;
+	int id_counter;
 public:
 	BasicMemory(void);
 	void initHeap(int defaultHeapSize);

@@ -3,16 +3,27 @@
 #include <assert.h>
 #define BUFFER_OFFSET(i) ((char *)NULL + (i))
 GLInstancedSprites::GLInstancedSprites(void){
-	//ZeroMemory((void*)this, sizeof(GLInstancedSprites));
-	vertex_buffer = 0;
-	instance_buffer = 0;
-	spriteDesc = nullptr;
-	sprite_count = 0;
-	sprite_max = 4;
+	
 }
 void GLInstancedSprites::dispose(){
+
+	GLuint disposeBuffers[2];
+	disposeBuffers[0] = instance_buffer;
+	disposeBuffers[1] = vertex_buffer;
+	glDeleteBuffers(2, disposeBuffers);
+
+	ori_dealloc(spriteDesc);
+	textureIDs.~ArrayT();
 }
 void GLInstancedSprites::init(){
+	textureIDs.reserve();
+	vertex_buffer = 0;
+	instance_buffer = 0;
+
+	sprite_count = 0;
+	sprite_max = 4;
+	spriteDesc = ori_alloc_array_r(SpriteDesc, sprite_max, "init");
+
 	GLuint VertexArrayID;
 	glGenVertexArrays(1, &VertexArrayID);
 	glBindVertexArray(VertexArrayID);
@@ -23,10 +34,8 @@ void GLInstancedSprites::init(){
 		-1.0f, -1.0f,	0.0f, 0.0,	0.0,
 		1.0f, -1.0f,	0.0f, 1,	0,
 		-1.0f,  1.0f,	0.0f, 0,	1,
-
-		-1.0f,  1.0f,	0.0f, 0,	1,
-
-		1.0f, -1.0f,	0.0f, 1,	0,
+		//-1.0f,  1.0f,	0.0f, 0,	1,
+		//1.0f, -1.0f,	0.0f, 1,	0,
 		1.0f, 1.0f,		0.0f, 1,	1,
 
 
@@ -39,7 +48,7 @@ void GLInstancedSprites::init(){
 	// create instance buffer
 	glGenBuffers(1, &instance_buffer);
 	glBindBuffer(GL_ARRAY_BUFFER, instance_buffer);
-	glBufferData(GL_ARRAY_BUFFER, sprite_max * sizeof(SpriteDesc), spriteDesc, GL_STREAM_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sprite_max * sizeof(SpriteDesc), nullptr, GL_STREAM_DRAW);
 }
 void GLInstancedSprites::newSpriteSheet(unsigned int width, unsigned int height, const char* spritePath){
 	
@@ -58,151 +67,118 @@ void GLInstancedSprites::newSpriteSheet(unsigned int width, unsigned int height,
 	createTexture(width, height, image.data());
 
 }
-void GLInstancedSprites::newSprite(void) {
+void GLInstancedSprites::newSprite(const Vector2 pos, const Vector2 uv) {
+	GLuint er;
+	int cur = sprite_count;
 	sprite_count++;
-	if (sprite_count >= sprite_max) {
+	if (cur >= sprite_max) {
 		
 		GLuint singleBuffer[1];
 		singleBuffer[0] = instance_buffer;
 		glDeleteBuffers(1, singleBuffer);
-		sprite_max *= 2;
-		glGenBuffers(1, &instance_buffer);
-		glBindBuffer(GL_ARRAY_BUFFER, instance_buffer);
-		glBufferData(GL_ARRAY_BUFFER, sprite_max * sizeof(SpriteDesc), spriteDesc, GL_STREAM_DRAW);
-	}
+		SpriteDesc* oldptr = spriteDesc;
+		
 
+		sprite_max *= 2;
+		spriteDesc = ori_alloc_array(SpriteDesc, sprite_max);
+		memcpy(spriteDesc, oldptr, sprite_max / 2 * sizeof(SpriteDesc));
+		ori_dealloc(oldptr);
+		glGenBuffers(1, &instance_buffer);
+
+		//glBindBuffer(GL_ARRAY_BUFFER, instance_buffer);
+		//glBufferData(GL_ARRAY_BUFFER, sprite_max * sizeof(SpriteDesc), spriteDesc, GL_STREAM_DRAW);
+
+	}
+	const float unitUV = 1.0f / 12.0f;
+	spriteDesc[cur].pos = pos;
+	spriteDesc[cur].rotation_scale = Vector2(1, 1);
+	spriteDesc[cur].uv.x = uv.x * unitUV;
+	spriteDesc[cur].uv.y = uv.y * unitUV;
+	glBindBuffer(GL_ARRAY_BUFFER, instance_buffer);
+	glBufferData(GL_ARRAY_BUFFER, sprite_max * sizeof(SpriteDesc), NULL, GL_STREAM_DRAW); // Buffer orphaning, a common way to improve streaming perf. See above link for details.
+	glBufferSubData(GL_ARRAY_BUFFER, 0, sprite_max * sizeof(SpriteDesc), spriteDesc);
 }
-void GLInstancedSprites::onRender(){
+void GLInstancedSprites::onRender(glm::mat4 proj_view_mat){
 	GLuint err;
 	// shader switch
 	glUseProgram(shaderHnd);
 	//glEnable(GL_CULL_FACE);
+	glUniformMatrix4fv(viewprojMatrixHnd, 1, GL_FALSE, &proj_view_mat[0][0]);
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	// texture setup
 	glActiveTexture(GL_TEXTURE0);
-	err = glGetError();
 	glBindTexture(GL_TEXTURE_2D, textureIDs[0]);
-	err = glGetError();
 	glUniform1i(samplerVarHnd, 0);
-	err = glGetError();
 
 	// 1rst attribute buffer : vertices
 	glEnableVertexAttribArray(0);
-	err = glGetError();
 	glBindBuffer(GL_ARRAY_BUFFER, vertex_buffer);
-	err = glGetError();
 
 	glVertexAttribPointer(
 		0,                  // attribute 0. No particular reason for 0, but must match the layout in the shader.
 		3,                  // size
 		GL_FLOAT,           // type
 		GL_FALSE,           // normalized?
-		sizeof(GL_FLOAT) * 5,                  // stride
-		//(void*)0            // array buffer offset
-		(void*)0
+		sizeof(GLfloat) * 5,                  // stride
+		BUFFER_OFFSET(0)
 		);
 
-	err = glGetError();
 	glEnableVertexAttribArray(1);
 	glVertexAttribPointer(
-		1,                  // attribute 0. No particular reason for 0, but must match the layout in the shader.
+		1, 
 		2,                  // size
 		GL_FLOAT,           // type
 		GL_FALSE,           // normalized?
-		sizeof(GL_FLOAT) * 5,                  // stride
-		//BUFFER_OFFSET(12)            // array buffer offset
-		(void*)(sizeof(GL_FLOAT) * 3)
+		sizeof(GLfloat) * 5,                  // stride
+		BUFFER_OFFSET(sizeof(GL_FLOAT) * 3)
 		);
+	// instance buffer
+	glBindBuffer(GL_ARRAY_BUFFER, instance_buffer);
 	err = glGetError();
-	//
-	//// base vertex buffer
-	//glBindBuffer(GL_ARRAY_BUFFER, vertex_buffer);
-	//err = glGetError();
-
-	//glVertexAttribPointer(
-	//	0,                  // attribute 0. No particular reason for 0, but must match the layout in the shader.
-	//	3,                  // size
-	//	GL_FLOAT,           // type
-	//	GL_FALSE,           // normalized?
-	//	sizeof(GL_FLOAT) * 5,                  // stride
-	//	//(void*)0            // array buffer offset
-	//	(void*)0
-	//	);
-
-	//err = glGetError();
-	//glEnableVertexAttribArray(1);
-	//glVertexAttribPointer(
-	//	1,                  // attribute 0. No particular reason for 0, but must match the layout in the shader.
-	//	2,                  // size
-	//	GL_FLOAT,           // type
-	//	GL_FALSE,           // normalized?
-	//	sizeof(GL_FLOAT) * 5,                  // stride
-	//	//BUFFER_OFFSET(12)            // array buffer offset
-	//	(void*)(sizeof(GL_FLOAT) * 3)
-	//	);
-	//err = glGetError();glBindBuffer(GL_ARRAY_BUFFER, vertex_buffer);
-	//err = glGetError();
-
-	//glVertexAttribPointer(
-	//	0,                  // attribute 0. No particular reason for 0, but must match the layout in the shader.
-	//	3,                  // size
-	//	GL_FLOAT,           // type
-	//	GL_FALSE,           // normalized?
-	//	sizeof(GL_FLOAT) * 5,                  // stride
-	//	//(void*)0            // array buffer offset
-	//	(void*)0
-	//	);
-
-	//err = glGetError();
-	//glEnableVertexAttribArray(1);
-	//glVertexAttribPointer(
-	//	1,                  // attribute 0. No particular reason for 0, but must match the layout in the shader.
-	//	2,                  // size
-	//	GL_FLOAT,           // type
-	//	GL_FALSE,           // normalized?
-	//	sizeof(GL_FLOAT) * 5,                  // stride
-	//	//BUFFER_OFFSET(12)            // array buffer offset
-	//	(void*)(sizeof(GL_FLOAT) * 3)
-	//	);
-	//err = glGetError();
-
-	//// instance buffer
-	//glBindBuffer(GL_ARRAY_BUFFER, vertex_buffer);
-	//err = glGetError();
-
-	//glVertexAttribPointer(
-	//	0,                  // attribute 0. No particular reason for 0, but must match the layout in the shader.
-	//	3,                  // size
-	//	GL_FLOAT,           // type
-	//	GL_FALSE,           // normalized?
-	//	sizeof(GL_FLOAT) * 5,                  // stride
-	//										   //(void*)0            // array buffer offset
-	//	(void*)0
-	//	);
-
-	//err = glGetError();
-	//glEnableVertexAttribArray(1);
-	//glVertexAttribPointer(
-	//	1,                  // attribute 0. No particular reason for 0, but must match the layout in the shader.
-	//	2,                  // size
-	//	GL_FLOAT,           // type
-	//	GL_FALSE,           // normalized?
-	//	sizeof(GL_FLOAT) * 5,                  // stride
-	//										   //BUFFER_OFFSET(12)            // array buffer offset
-	//	(void*)(sizeof(GL_FLOAT) * 3)
-	//	);
-	//err = glGetError();
-
-	// draw
-	glDrawArrays(GL_TRIANGLES, 0, 6 * sprite_count); // Starting from vertex 0; 3 vertices total -> 1 triangle
+	glEnableVertexAttribArray(2);
 	err = glGetError();
+	glVertexAttribPointer(
+		2, 
+		2,
+		GL_FLOAT, 
+		GL_FALSE, 
+		sizeof(SpriteDesc),
+		BUFFER_OFFSET(0)
+		);
+	// rotation scale
+	glEnableVertexAttribArray(3);
+	glVertexAttribPointer(
+		3, 
+		2, 
+		GL_FLOAT,
+		GL_FALSE,
+		sizeof(SpriteDesc),
+		BUFFER_OFFSET(sizeof(GLfloat) * 2)
+		);
+	// instance uv
+	glEnableVertexAttribArray(4);
+	glVertexAttribPointer(
+		4,
+		2,
+		GL_FLOAT,
+		GL_FALSE,
+		sizeof(SpriteDesc),
+		BUFFER_OFFSET(sizeof(GLfloat) * 4)
+		);
+	glVertexAttribDivisor(0, 0);
+	glVertexAttribDivisor(1, 0);
+	glVertexAttribDivisor(2, 1);
+	glVertexAttribDivisor(3, 1);
+	glVertexAttribDivisor(4, 1);
+	glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 4, sprite_count);
 	glDisableVertexAttribArray(0);
 	glDisableVertexAttribArray(1);
+	glDisableVertexAttribArray(2);
+	glDisableVertexAttribArray(3);
+	glDisableVertexAttribArray(4);
 	err = glGetError();
-
-
 }
 int GLInstancedSprites::createTexture(unsigned int width, unsigned int height, const unsigned char* initialData){
 	int ret = 0;
@@ -283,14 +259,13 @@ GLuint GLInstancedSprites::initShaders(const char* vertex_file_path, const char*
 	glDetachShader(ProgramID, vshaderHnd);
 	glDetachShader(ProgramID, fshaderHnd);
 
-	
-
 	glDeleteShader(vshaderHnd);
 	glDeleteShader(fshaderHnd);
 	vshaderCode->dispose();
 	fshaderCode->dispose();
 
 	samplerVarHnd = glGetUniformLocation(ProgramID, "myTextureSampler");
+	viewprojMatrixHnd = glGetUniformLocation(ProgramID, "mat_view_proj");
 	//GLuint err = glGetError();
 	return ProgramID;
 }

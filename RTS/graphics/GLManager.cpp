@@ -12,6 +12,7 @@ void GLManager::dispose()
 	// close and release all existing COM objects
 	// render technique related
 	instancedSprites->dispose();
+	ori_dealloc(instancedSprites);
 	Renderer::dispose();
 	glfwTerminate();
 	
@@ -39,23 +40,23 @@ bool GLManager::init(HWND hWnd, int _width, int _height)
 	/* Make the window's context current */
 	glfwMakeContextCurrent(window);
 	glewExperimental = true;
-	printf_s("console");
+
 	if (glewInit() != GLEW_OK) {
 		printf_s("Failed to initialize GLEW\n");
 		return false;
 	}
-	/// refactor this!
-	//GLuint VertexArrayID;
-	//glGenVertexArrays(1, &VertexArrayID);
-	//glBindVertexArray(VertexArrayID);
-	instancedSprites = new	GLInstancedSprites();
+	instancedSprites = ori_alloc(GLInstancedSprites);
 	instancedSprites->init();
 	instancedSprites->newSpriteSheet(512, 512, "assets/arrows.png");
-	instancedSprites->newSprite();
+	instancedSprites->newSprite(Vector2(0.5, 0), Vector2(7, 0));
+	instancedSprites->newSprite(Vector2(-0.5, -0.5), Vector2(1, 0));
+	instancedSprites->newSprite(Vector2(0.5, -0.5), Vector2(1, 0));
+	instancedSprites->newSprite(Vector2(-1.5, -0.5), Vector2(1, 0));
+	instancedSprites->newSprite(Vector2(-0.5, -1.5), Vector2(1, 0));
+	//instancedSprites->newSprite();
 	return true;
 }
-void GLManager::loadPNG(const IntVector2& _dim, const char* fileName) {
-}
+
 void GLManager::initDepthStencil(){
 
 }
@@ -70,24 +71,41 @@ void GLManager::renderWithShadowMap(){
 void GLManager::platformRender(){
 	GLuint err;
 	assembleDrawables();
+	prepareCamera();
 
-	/* Render here */
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	// Bind our texture in Texture Unit 0
-	instancedSprites->onRender();
-	/* Swap front and back buffers */
+
+
+
+
+	instancedSprites->onRender(proj_view);
+	glLineWidth(2.5);
+	glColor3f(1.0, 0.0, 0.0);
+	glBegin(GL_LINES);
+	glVertex3f(0.0, 0.0, 0.0);
+	glVertex3f(15, 0, 0);
+	glEnd();
 	glfwSwapBuffers(window);
-	err = glGetError();
-	/* Poll for and process events */
 	glfwPollEvents();
-	err = glGetError();
 
 }
 void GLManager::restoreRenderTarget(){
 	
 }
 void GLManager::prepareCamera(){
-	
+	//glm::mat4 Projection = glm::perspective(glm::radians(45.0f), (float)width / (float)height, 0.1f, 100.0f);
+
+	// Or, for an ortho camera :
+	glm::mat4 proj_mat = glm::ortho(-10.0f,10.0f,-10.0f,10.0f,0.0f,100.0f); // In world coordinates
+
+	// Camera matrix
+	glm::mat4 view_mat = glm::lookAt(
+		glm::vec3(0, 0, 1), // Camera is at (4,3,3), in World Space
+		glm::vec3(0, 0, 0), // and looks at the origin
+		glm::vec3(0, 1, 0)  // Head is up (set to 0,-1,0 to look upside-down)
+		);
+
+	proj_view = proj_mat * view_mat;
 }
 
 void GLManager::assembleDrawables(){
@@ -201,3 +219,10 @@ void GLManager::assembleDrawables(){
 //	//GLuint err = glGetError();
 //	return ProgramID;
 //}
+
+void GLManager::newSpriteSheet(unsigned int width, unsigned int height, const char* spritePath) {
+	instancedSprites->newSpriteSheet(width, height, spritePath);
+}
+void GLManager::newSprite(const Vector2 pos, const Vector2 uv) {
+	instancedSprites->newSprite(pos, uv);
+}

@@ -1,17 +1,20 @@
 // basic memory management
+#include <Windows.h>
 #include "BasicMem.h"
+
 //unsigned char* heapStart;
 //int used;
 //int size;
 BasicMemory::BasicMemory(){
-
+	id_counter = 0;
 }
 void BasicMemory::initHeap(int defaultHeapSize){
 	size = defaultHeapSize;
 	heapStart = new unsigned char[size];
-	for (int i = 0; i < size; ++i){
+	/*for (int i = 0; i < size; ++i){
 		heapStart[i] = 0;
-	}
+	}*/
+	ZeroMemory(heapStart, size);
 }
 void* BasicMemory::alloc(int _size){
 	unsigned char* ret = heapStart;
@@ -20,7 +23,19 @@ void* BasicMemory::alloc(int _size){
 	}
 	ret += used;
 	used += _size;
-	sizes.insert({ (int)ret, _size });
+	int infoKey = (int)ret - (int)heapStart;
+	sizes.insert({ infoKey, _size });
+
+	
+	// debug
+	{
+		MemAllocDebugDesc desc;
+		desc.id = id_counter;
+		desc.remarks = nullptr;
+		debugDesc.insert({ infoKey , desc });
+		id_counter++;
+	}
+
 	return (void*)ret;
 }
 void* BasicMemory::alloc_r(int _size, const char* _remarks){
@@ -30,35 +45,46 @@ void* BasicMemory::alloc_r(int _size, const char* _remarks){
 	}
 	ret += used;
 	used += _size;
-	sizes.insert({ (int)ret, _size });
+	int infoKey = (int)ret - (int)heapStart;
+	sizes.insert({ infoKey, _size });
 	char *dbg = new char[64];
-	strcpy_s(dbg, 64, _remarks);
-	remarks.insert({ (int)ret, dbg });
+	
+	{
+		MemAllocDebugDesc desc;
+		desc.id = id_counter;
+		desc.remarks = new char[64];
+		strcpy_s(desc.remarks, 64, _remarks);
+		debugDesc.insert({ infoKey, desc });
+		id_counter++;
+	}
+
 	return (void*)ret;
 }
 void BasicMemory::dealloc(void* ptr){
 	int sdf = 0;
-	auto res = sizes.find((int)ptr);
+	int infoKey = (int)ptr - (int)heapStart;
+	auto res = sizes.find(infoKey);
 	if (res == sizes.end()){
 		// key not found!
-		printf("allocation not found %d.\n", (int)ptr);
-	}else if (sizes[(int)ptr] == 0){
-		printf("repeated deallocation at %d.\n", (int)ptr);
+		printf("allocation not found %d.\n", infoKey);
+	}else if (sizes[infoKey] == 0){
+		printf("repeated deallocation at %d.\n", infoKey);
 	}
 	else{
-		sizes[(int)ptr] = 0;
+		sizes[infoKey] = 0;
 	}
 }
 void BasicMemory::report(void){
 	int leakedCount = 0;
+	auto desc_it = debugDesc.begin();
 	for (auto it = sizes.begin(); it != sizes.end(); ++it){
 		printf("%d size %d", it->first, it->second);
 		if (it->second != 0){
 			leakedCount++;
 		}
-		auto found = remarks.find(it->first);
-		if (found != remarks.end()){
-			printf(" remark: %s\n",  remarks[it->first]);
+		auto found = debugDesc.find(it->first);
+		if (found != debugDesc.end()){
+			printf(" remarks: %s (%d)\n", found->second.remarks, found->second.id);
 		}
 		else{
 			printf("\n");
