@@ -28,6 +28,9 @@
     <Filter Include="Source Files\gameplay">
       <UniqueIdentifier>{74e27763-abb5-4455-a2fc-c05e00f7a0a1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\input">
+      <UniqueIdentifier>{e01b957f-8e3a-4e50-835a-453c5964d7ec}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -99,6 +102,15 @@
     <ClInclude Include="gameplay\Scene.h">
       <Filter>Source Files\gameplay</Filter>
     </ClInclude>
+    <ClInclude Include="misc\WindowsInput.h">
+      <Filter>Source Files\input</Filter>
+    </ClInclude>
+    <ClInclude Include="gameplay\InputManager.h">
+      <Filter>Source Files\gameplay</Filter>
+    </ClInclude>
+    <ClInclude Include="gameplay\OObject.h">
+      <Filter>Source Files\gameplay</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -156,6 +168,15 @@
       <Filter>Source Files\gameplay</Filter>
     </ClCompile>
     <ClCompile Include="gameplay\Scene.cpp">
+      <Filter>Source Files\gameplay</Filter>
+    </ClCompile>
+    <ClCompile Include="misc\WindowsInput.cpp">
+      <Filter>Source Files\input</Filter>
+    </ClCompile>
+    <ClCompile Include="gameplay\InputManager.cpp">
+      <Filter>Source Files\gameplay</Filter>
+    </ClCompile>
+    <ClCompile Include="gameplay\OObject.cpp">
       <Filter>Source Files\gameplay</Filter>
     </ClCompile>
   </ItemGroup>

@@ -95,3 +95,8 @@ void BasicMemory::report(void){
 	printf("leak count: %d\n", leakedCount);
 	
 }
+//template<class type> 
+//type* BasicMemory::allocT() {
+//	
+//		
+//}
