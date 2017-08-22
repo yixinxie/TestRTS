@@ -33,24 +33,47 @@ public:
 	//}
 };
 extern BasicMemory basicMem;
-template<typename T> T* allocT(void) {
+template<typename T> T* alloc(void) {
 	T* ret = (T*)basicMem.alloc(sizeof(T));
-	new(ret) T();
 	return ret;
 }
-template<typename T> T* alloc_array(int count) {
+template<typename T> T* alloc(const char* remarks) {
+	T* ret = (T*)basicMem.alloc_r(sizeof(T), remarks);
+	return ret;
+}
+template<typename T> void callCons(T* ptr) {
+	new(ptr) T();
+}
+
+template<typename T> T* allocArray(int count) {
 	T* ret = (T*)basicMem.alloc(sizeof(T) * (count));
-	for (int i = 0; i < count; ++i) {
-		new(ret[i]) T();
-	}
 	return ret;
 }
-template<typename T> void dealloc(T* ptr) {
+template<typename T> T* allocArray(int count, const char* remarks) {
+	T* ret = (T*)basicMem.alloc_r(sizeof(T) * (count), remarks);
+	return ret;
+}
+template<typename T> void callCons(T* ptr, int count) {
+	for (int i = 0; i < count; ++i) {
+		new(ptr[i]) T();
+	}
+}
+
+template<typename T> void deallocT(T* ptr) {
 	ptr->~T();
 	basicMem.dealloc(ptr);
 }
-#define ori_alloc(TYPE) (TYPE*)basicMem.alloc(sizeof(TYPE));
-#define ori_alloc_r(TYPE, REMARKS) (TYPE*)basicMem.alloc_r(sizeof(TYPE), (REMARKS));
-#define ori_alloc_array(TYPE, COUNT) (TYPE*)basicMem.alloc(sizeof(TYPE) * (COUNT));
-#define ori_alloc_array_r(TYPE, COUNT, REMARKS) (TYPE*)basicMem.alloc_r(sizeof(TYPE) * (COUNT), (REMARKS));
-#define ori_dealloc(PTR) basicMem.dealloc(PTR);
+template<typename T> void deallocND(T* ptr) {
+	basicMem.dealloc(ptr);
+}
+//#define allocT(T) ret = (T*)basicMem.alloc(sizeof(T));new(ret) T();
+//#define allocT(T) ret = (T*)basicMem.alloc(sizeof(T));new(ret) T();
+//#define allocT_r(T, REMARKS) ret = (T*)basicMem.alloc(sizeof(T), REMARKS);new(ret) T();
+//#define allocTArray(T, COUNT) ret = (T*)basicMem.alloc(sizeof(T) * (COUNT));for (int i = 0; i < (COUNT); ++i)new(ret[i]) T();
+//#define allocTArray_r(T, COUNT, REMARKS) ret = (T*)basicMem.alloc_r(sizeof(T) * (COUNT), (REMARKS));for (int i = 0; i < (COUNT); ++i)new(ret[i]) T();
+
+//#define ori_alloc(TYPE) (TYPE*)basicMem.alloc(sizeof(TYPE));
+//#define ori_alloc_r(TYPE, REMARKS) (TYPE*)basicMem.alloc_r(sizeof(TYPE), (REMARKS));
+//#define ori_alloc_array(TYPE, COUNT) (TYPE*)basicMem.alloc(sizeof(TYPE) * (COUNT));
+//#define ori_alloc_array_r(TYPE, COUNT, REMARKS) (TYPE*)basicMem.alloc_r(sizeof(TYPE) * (COUNT), (REMARKS));
+//#define ori_dealloc(PTR) basicMem.dealloc(PTR);

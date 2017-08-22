@@ -12,8 +12,8 @@ void GLInstancedSprites::dispose(){
 	disposeBuffers[1] = vertex_buffer;
 	glDeleteBuffers(2, disposeBuffers);
 
-	ori_dealloc(spriteDesc);
-	textureIDs.~ArrayT();
+	deallocND(spriteDesc);
+	//textureIDs.~ArrayT();
 }
 void GLInstancedSprites::init(){
 	textureIDs.reserve();
@@ -22,7 +22,7 @@ void GLInstancedSprites::init(){
 
 	sprite_count = 0;
 	sprite_max = 4;
-	spriteDesc = ori_alloc_array_r(SpriteDesc, sprite_max, "init");
+	spriteDesc = allocArray<SpriteDesc>(sprite_max, "init");
 
 	GLuint VertexArrayID;
 	glGenVertexArrays(1, &VertexArrayID);
@@ -80,9 +80,9 @@ void GLInstancedSprites::newSprite(const Vector2 pos, const Vector2 uv) {
 		
 
 		sprite_max *= 2;
-		spriteDesc = ori_alloc_array(SpriteDesc, sprite_max);
+		spriteDesc = allocArray<SpriteDesc>(sprite_max, "sprite desc");
 		memcpy(spriteDesc, oldptr, sprite_max / 2 * sizeof(SpriteDesc));
-		ori_dealloc(oldptr);
+		deallocND(oldptr);
 		glGenBuffers(1, &instance_buffer);
 
 		//glBindBuffer(GL_ARRAY_BUFFER, instance_buffer);

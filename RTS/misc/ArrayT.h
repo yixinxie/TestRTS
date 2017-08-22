@@ -8,13 +8,13 @@ private:
 	void resize(void) {
 		int newSize = arraySize * 2;
 
-		T* newArray = ori_alloc_array_r(T, newSize, "array resiz template");
+		T* newArray = allocArray<T>(newSize, "array resiz template");
 		//int unit_size = sizeof(T);
 		//memcpy(newArray, arrayData, unit_size * arraySize);
 		for (int i = 0; i < arraySize; ++i) {
 			newArray[i] = arrayData[i];
 		}
-		ori_dealloc(arrayData);
+		deallocT(arrayData);
 		arrayData = newArray;
 		arraySize = newSize;
 	}
@@ -24,22 +24,28 @@ private:
 public:
 	int length;
 	
-	ArrayT(int defaultSize = 4) {
+	ArrayT(int defaultSize) {
 		arraySize = defaultSize;
-		arrayData = ori_alloc_array_r(T, arraySize, "array template");
+		arrayData = allocArray<T>(arraySize, "array template");
+		length = 0;
+
+	}
+	ArrayT(void) {
+		arraySize = 4;
+		arrayData = allocArray<T>(arraySize, "array template");
 		length = 0;
 
 	}
 	void reserve(int defaultSize = 4) {
 		if (arrayData != nullptr) {
-			ori_dealloc(arrayData);
+			deallocT(arrayData);
 		}
 		arraySize = defaultSize;
-		arrayData = ori_alloc_array_r(T, arraySize, "array template");
+		arrayData = allocArray<T>(arraySize, "array template");
 		length = 0;
 	}
 	~ArrayT() {
-		ori_dealloc(arrayData);
+		deallocT(arrayData);
 	}
 	void clear(void) {
 		length = 0;
@@ -79,13 +85,13 @@ private:
 	void resize(void) {
 		int newSize = arraySize * 2;
 
-		T* newArray = ori_alloc_array_r(T, newSize, "array resiz template");
+		T* newArray = allocArray(T, newSize, "array resiz template");
 		int unit_size = sizeof(T);
 		memcpy(newArray, arrayData, unit_size * arraySize);
 		//for (int i = 0; i < arraySize; ++i) {
 		//	newArray[i] = arrayData[i];
 		//}
-		ori_dealloc(arrayData);
+		deallocT(arrayData);
 		arrayData = newArray;
 		arraySize = newSize;
 	}
@@ -95,21 +101,27 @@ private:
 public:
 	int length;
 
-	ArrayStruct(int defaultSize = 4) {
+	ArrayStruct(int defaultSize) {
 		arraySize = defaultSize;
-		arrayData = ori_alloc_array_r(T, arraySize, "array struct template");
+		arrayData = allocArray<T>(arraySize, "array struct template");
+		length = 0;
+
+	}
+	ArrayStruct(void) {
+		arraySize = 4;
+		arrayData = allocArray<T>(arraySize, "array struct template");
 		length = 0;
 
 	}
 	~ArrayStruct() {
-		ori_dealloc(arrayData);
+		deallocT(arrayData);
 	}
 	void reserve(int defaultSize = 4) {
 		if (arrayData != nullptr) {
-			ori_dealloc(arrayData);
+			deallocT(arrayData);
 		}
 		arraySize = defaultSize;
-		arrayData = ori_alloc_array_r(T, arraySize, "array struct template");
+		arrayData = allocArray<T>(arraySize, "array struct template");
 		length = 0;
 	}
 	void clear(void) {

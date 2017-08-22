@@ -8,8 +8,9 @@ private:
 	int* arrayData;
 public:
 	int length;
+	ArrayInt();
+	ArrayInt(int defaultSize);
 	
-	ArrayInt(int defaultSize = 4);
 	~ArrayInt();
 	void clear(void);
 	void push(int val); // add at the end of the array.

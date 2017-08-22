@@ -29,7 +29,7 @@ int main()
 	G::instance()->input = new WindowsInput();
 	G::instance()->input->setGLFWHandle(wnd);
 
-	test = ori_alloc(Scene);
+	test = alloc<Scene>("scene");
 	test->init(G::instance()->renderer);
 	test->initScene();
 	while (!glfwWindowShouldClose(wnd))
@@ -38,6 +38,7 @@ int main()
 		G::instance()->renderer->render();
 		Sleep(16);
 	}
+	deallocT(test);
 	G::instance()->renderer->dispose();
 	basicMem.report();
 	getchar();

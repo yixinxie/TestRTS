@@ -12,7 +12,7 @@ void GLManager::dispose()
 	// close and release all existing COM objects
 	// render technique related
 	instancedSprites->dispose();
-	ori_dealloc(instancedSprites);
+	deallocT(instancedSprites);
 	Renderer::dispose();
 	glfwTerminate();
 	
@@ -45,7 +45,7 @@ bool GLManager::init(HWND hWnd, int _width, int _height)
 		printf_s("Failed to initialize GLEW\n");
 		return false;
 	}
-	instancedSprites = ori_alloc(GLInstancedSprites);
+	instancedSprites = alloc<GLInstancedSprites>();
 	instancedSprites->init();
 	instancedSprites->newSpriteSheet(512, 512, "assets/arrows.png");
 	instancedSprites->newSprite(Vector2(0.5, 0), Vector2(7, 0));

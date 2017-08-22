@@ -11,7 +11,7 @@ class Scene {
 private:
 	Renderer* renderer;
 	ArrayT<OObject*> OObjectArray;
-	ArrayStruct<Unit> units;
+	//ArrayStruct<Unit> units;
 public:
 	Scene(void);
 	~Scene();

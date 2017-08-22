@@ -3,12 +3,13 @@
 #include "BasicMem.h"
 ArrayPtr::ArrayPtr(int defaultSize){
 	arraySize = defaultSize;
-	arrayData = ori_alloc_array_r(void*, arraySize, "array ptr");
+	arrayData = allocArray<void*>(arraySize, "array ptr");
+	callCons(arrayData, arraySize);
 	length = 0;
 
 }
 ArrayPtr::~ArrayPtr(){
-	ori_dealloc(arrayData);
+	//ori_dealloc(arrayData);
 }
 void ArrayPtr::clear(){
 	length = 0;
@@ -38,12 +39,13 @@ void ArrayPtr::remove(const void* val){
 void ArrayPtr::resize(){
 	int newSize = arraySize * 2;
 
-	void** newArray = ori_alloc_array_r(void*, newSize,"array int re");
+	void** newArray = allocArray<void*>(newSize,"array int re");
 
 	for (int i = 0; i < arraySize; ++i){
 		newArray[i] = arrayData[i];
 	}
-	ori_dealloc(arrayData);
+	deallocT(arrayData);
+	//ori_dealloc(arrayData);
 	arrayData = newArray;
 	arraySize = newSize;
 }
