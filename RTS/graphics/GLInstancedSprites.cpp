@@ -29,12 +29,10 @@ void GLInstancedSprites::init(){
 	shaderHnd = initShaders("shaders/sprite_vs.glsl", "shaders/sprite_fs.glsl");
 
 	static const GLfloat g_vertex_buffer_data[] = {
-		-1.0f, -1.0f,	0.0f, 0.0,	0.0,
-		1.0f, -1.0f,	0.0f, 1,	0,
-		-1.0f,  1.0f,	0.0f, 0,	1,
-		//-1.0f,  1.0f,	0.0f, 0,	1,
-		//1.0f, -1.0f,	0.0f, 1,	0,
-		1.0f, 1.0f,		0.0f, 1,	1,
+		-1.0f, -1.0f,	0.0f, 0.0f,	0.0f,
+		1.0f, -1.0f,	0.0f, 1.0f,	0.0f,
+		-1.0f,  1.0f,	0.0f, 0.0f,	1.0f,
+		1.0f, 1.0f,		0.0f, 1.0f,	1.0f,
 
 
 	};

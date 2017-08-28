@@ -17,10 +17,14 @@ struct TextureMeta {
 class GLManager : public Renderer{
 public:
 	GLFWwindow* window;
-	glm::mat4 proj_view;
+	
 private:
+	glm::mat4 proj_view;
 	int textureIdCounter;
+
+	// char hash, index in instancedSprites
 	std::unordered_map<unsigned int, int> textureIds;
+
 	ArrayPtr<GLInstancedSprites*> instancedSprites;
 	void initDepthStencil(void);
 	void prepareCamera(void);

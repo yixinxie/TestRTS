@@ -45,6 +45,7 @@ bool GLManager::init(HWND hWnd, int _width, int _height)
 		printf_s("Failed to initialize GLEW\n");
 		return false;
 	}
+	glfwGetFramebufferSize(window, &width, &height);
 	return true;
 }
 
@@ -58,7 +59,6 @@ void GLManager::renderWithoutShadowMap(){
 void GLManager::renderWithShadowMap(){
 	
 }
-// render with deferred-shading
 void GLManager::platformRender(){
 	GLuint err;
 	assembleDrawables();
@@ -101,13 +101,17 @@ void GLManager::prepareCamera(){
 	//glm::mat4 Projection = glm::perspective(glm::radians(45.0f), (float)width / (float)height, 0.1f, 100.0f);
 
 	// Or, for an ortho camera :
-	glm::mat4 proj_mat = glm::ortho(-10.0f,10.0f,-10.0f,10.0f,0.0f,100.0f); // In world coordinates
+	float aspect = (float)width / (float)height;
+	float size = 10.0f;
+	glm::mat4 proj_mat = glm::ortho(-size * aspect, size * aspect,
+		-size,  size,
+		0.0f,100.0f); // In world coordinates
 
 	// Camera matrix
 	glm::mat4 view_mat = glm::lookAt(
-		glm::vec3(0, 0, 1), // Camera is at (4,3,3), in World Space
-		glm::vec3(0, 0, 0), // and looks at the origin
-		glm::vec3(0, 1, 0)  // Head is up (set to 0,-1,0 to look upside-down)
+		glm::vec3(0, 0, 1), // Camera's pos in World Space
+		glm::vec3(0, 0, 0), // lookat
+		glm::vec3(0, 1, 0)  // up vector (set to 0,-1,0 to look upside-down)
 		);
 
 	proj_view = proj_mat * view_mat;
