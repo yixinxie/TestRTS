@@ -168,6 +168,7 @@
     <ClInclude Include="gameplay\InputManager.h" />
     <ClInclude Include="gameplay\OObject.h" />
     <ClInclude Include="gameplay\Scene.h" />
+    <ClInclude Include="gameplay\SelectorRect.h" />
     <ClInclude Include="gameplay\Unit.h" />
     <ClInclude Include="graphics\GLInstancedSprites.h" />
     <ClInclude Include="graphics\GLManager.h" />
@@ -195,6 +196,7 @@
     <ClCompile Include="gameplay\InputManager.cpp" />
     <ClCompile Include="gameplay\OObject.cpp" />
     <ClCompile Include="gameplay\Scene.cpp" />
+    <ClCompile Include="gameplay\SelectorRect.cpp" />
     <ClCompile Include="gameplay\Unit.cpp" />
     <ClCompile Include="graphics\GLInstancedSprites.cpp" />
     <ClCompile Include="graphics\GLManager.cpp" />

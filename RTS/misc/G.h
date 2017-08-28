@@ -1,10 +1,14 @@
+#pragma once
 #include "../graphics/Renderer.h"
 #include "../misc/WindowsInput.h"
-//#include "../input/DXInput.h"
+#include "../gameplay/Scene.h"
 #define OERenderer G::instance()->renderer
 #define OEInput G::instance()->input
+
+/* Ori Engine */
 using namespace OriGraphics;
 // G is the global variable holder.
+class Scene;
 class G{
 private:
 	G(void);
@@ -13,5 +17,5 @@ public:
 	static G* instance(void);
 	Renderer* renderer;
 	WindowsInput* input;
-	//DXInput* input;
+	Scene* currentScene;
 };

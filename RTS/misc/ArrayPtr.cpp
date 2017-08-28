@@ -10,6 +10,7 @@ ArrayPtr::ArrayPtr(int defaultSize){
 }
 ArrayPtr::~ArrayPtr(){
 	//ori_dealloc(arrayData);
+	deallocT(arrayData);
 }
 void ArrayPtr::clear(){
 	length = 0;

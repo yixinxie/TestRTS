@@ -3,6 +3,11 @@
 #include "../misc/CharHelper.h"
 #include "../misc/BasicMem.h"
 using namespace OriGraphics;
+
+Renderer::Renderer() {
+}
+Renderer::~Renderer() {
+}
 //void Renderer::setMainCamera(const Vector3& pos, const Vector3& rot, const float fov, const float _nearPlane, const float _farPlane){
 //	CameraDesc* params = ori_alloc(CameraDesc);
 //	//params->position = pos;
@@ -32,6 +37,8 @@ void Renderer::dispose(void){
 	//	ori_dealloc(it->second);
 	//}
 }
+
+
 //void Renderer::updateMainCamera(const Vector3& pos, const Vector3& rot){
 //	if (cameras.size() == 0 || cameras[0] == nullptr)return;
 //	cameras[0]->position = pos;

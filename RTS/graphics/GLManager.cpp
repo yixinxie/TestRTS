@@ -1,18 +1,18 @@
 #include "GLManager.h"
 #include "../lodepng/lodepng.h"
 #include <assert.h>
-GLManager::GLManager(void){
+GLManager::GLManager(void) : window(nullptr){
 	//ZeroMemory((void*)this, sizeof(GLManager));
-	window = nullptr;
-	instancedSprites = nullptr;
-	
 }
-void GLManager::dispose()
+GLManager::~GLManager()
 {
 	// close and release all existing COM objects
 	// render technique related
-	instancedSprites->dispose();
-	deallocT(instancedSprites);
+	for (int i = 0; i < instancedSprites.length; ++i) {
+		instancedSprites[i]->dispose();
+		deallocT(instancedSprites[i]);
+	}
+	
 	Renderer::dispose();
 	glfwTerminate();
 	
@@ -45,15 +45,6 @@ bool GLManager::init(HWND hWnd, int _width, int _height)
 		printf_s("Failed to initialize GLEW\n");
 		return false;
 	}
-	instancedSprites = alloc<GLInstancedSprites>();
-	instancedSprites->init();
-	instancedSprites->newSpriteSheet(512, 512, "assets/arrows.png");
-	instancedSprites->newSprite(Vector2(0.5, 0), Vector2(7, 0));
-	instancedSprites->newSprite(Vector2(-0.5, -0.5), Vector2(1, 0));
-	instancedSprites->newSprite(Vector2(0.5, -0.5), Vector2(1, 0));
-	instancedSprites->newSprite(Vector2(-1.5, -0.5), Vector2(1, 0));
-	instancedSprites->newSprite(Vector2(-0.5, -1.5), Vector2(1, 0));
-	//instancedSprites->newSprite();
 	return true;
 }
 
@@ -72,21 +63,35 @@ void GLManager::platformRender(){
 	GLuint err;
 	assembleDrawables();
 	prepareCamera();
-
+	
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	for (int i = 0; i < instancedSprites.length; ++i) {
+		instancedSprites[i]->onRender(proj_view);
+	}
+	//glViewport(0, 0, 640, 480);
+	//glMatrixMode(GL_PROJECTION);
+	//err = glGetError();
+	//glLoadIdentity();
+	//
+	////glMatrixMode(GL_MODELVIEW);
+	////glLoadIdentity();
+	//err = glGetError();
+	glLineWidth(1.5f);
 
-
-
-
-	instancedSprites->onRender(proj_view);
-	glLineWidth(2.5);
-	glColor3f(1.0, 0.0, 0.0);
+	err = glGetError();
+	glColor3f(1.0f, 0.0f, 0.0f);
+	err = glGetError();
 	glBegin(GL_LINES);
-	glVertex3f(0.0, 0.0, 0.0);
-	glVertex3f(15, 0, 0);
+	err = glGetError();
+	glVertex2f(0.0, 0.5);
+	err = glGetError();
+	glVertex2f(15, 0);
+	err = glGetError();
 	glEnd();
+	err = glGetError();
 	glfwSwapBuffers(window);
 	glfwPollEvents();
+	err = glGetError();
 
 }
 void GLManager::restoreRenderTarget(){
@@ -113,116 +118,38 @@ void GLManager::assembleDrawables(){
 		instancedMesh = new DXInstancedMesh(dev, devcon);
 		instancedMesh->init();
 	}
-	instancedMesh->updateInstanceBuffer(instancedObjects);
+	instancedMesh->updateInstanceBuffer(instancedObjects);*/
 
-	if (instancedSprites == nullptr){
-		instancedSprites = new DXInstancedSprite(dev, devcon);
-		instancedSprites->init();
+	for (int i = 0; i < instancedSprites.length; ++i) {
+		instancedSprites[i]->updateBufferFromSpriteDesc();
 	}
-	instancedSprites->updateInstanceBuffer(spriteObjects);*/
 
 }
-//int GLManager::createTexture(unsigned int width, unsigned int height, const unsigned char* initialData){
-//	int ret = 0;
-//
-//	
-//	glGenTextures(1, &textureID);
-//
-//	// "Bind" the newly created texture : all future texture functions will modify this texture
-//	glBindTexture(GL_TEXTURE_2D, textureID);
-//	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, initialData);
-//	GLuint err = glGetError();
-//	// Read the file, call glTexImage2D with the right parameters
-//	//glTexImage2D(initialData, 0);
-//
-//	// Nice trilinear filtering.
-//	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-//	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-//	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-//	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-//	glGenerateMipmap(GL_TEXTURE_2D);
-//
-//	err = glGetError();
-//	return ret;
-//}
-////
-//GLuint GLManager::loadShaders(const char* vertex_file_path, const char* fragment_file_path) {
-//	CharBuffer* vshaderCode = CharHelper::loadTextFile(vertex_file_path);
-//	CharBuffer* fshaderCode = CharHelper::loadTextFile(fragment_file_path);
-//	// Create the shaders
-//	GLuint vshaderHnd = glCreateShader(GL_VERTEX_SHADER);
-//	GLuint fshaderHnd = glCreateShader(GL_FRAGMENT_SHADER);
-//
-//	// Read the Fragment Shader code from the file
-//	GLint Result = GL_FALSE;
-//	int InfoLogLength;
-//
-//
-//	// Compile Vertex Shader
-//	printf("Compiling vshader : %s\n", vertex_file_path);
-//	glShaderSource(vshaderHnd, 1, &vshaderCode->buffer, NULL);
-//	glCompileShader(vshaderHnd);
-//
-//	// Check Vertex Shader
-//	glGetShaderiv(vshaderHnd, GL_COMPILE_STATUS, &Result);
-//	glGetShaderiv(vshaderHnd, GL_INFO_LOG_LENGTH, &InfoLogLength);
-//	if (InfoLogLength > 0) {
-//		std::vector<char> VertexShaderErrorMessage(InfoLogLength + 1);
-//		char msg[255];
-//		//glGetShaderInfoLog(vshaderHnd, InfoLogLength, NULL, &VertexShaderErrorMessage[0]);
-//		glGetShaderInfoLog(vshaderHnd, InfoLogLength, NULL, msg);
-//		printf("%s\n", &VertexShaderErrorMessage[0]);
-//	}
-//
-//
-//	// Compile Fragment Shader
-//	printf("Compiling fshader : %s\n", fragment_file_path);
-//	glShaderSource(fshaderHnd, 1, &fshaderCode->buffer, NULL);
-//	glCompileShader(fshaderHnd);
-//
-//	// Check Fragment Shader
-//	glGetShaderiv(fshaderHnd, GL_COMPILE_STATUS, &Result);
-//	glGetShaderiv(fshaderHnd, GL_INFO_LOG_LENGTH, &InfoLogLength);
-//	if (InfoLogLength > 0) {
-//		std::vector<char> FragmentShaderErrorMessage(InfoLogLength + 1);
-//		glGetShaderInfoLog(fshaderHnd, InfoLogLength, NULL, &FragmentShaderErrorMessage[0]);
-//		printf("%s\n", &FragmentShaderErrorMessage[0]);
-//	}
-//
-//	// Link the program
-//	printf("Linking program\n");
-//	GLuint ProgramID = glCreateProgram();
-//	glAttachShader(ProgramID, vshaderHnd);
-//	glAttachShader(ProgramID, fshaderHnd);
-//	glLinkProgram(ProgramID);
-//
-//	// Check the program
-//	glGetProgramiv(ProgramID, GL_LINK_STATUS, &Result);
-//	glGetProgramiv(ProgramID, GL_INFO_LOG_LENGTH, &InfoLogLength);
-//	if (InfoLogLength > 0) {
-//		std::vector<char> ProgramErrorMessage(InfoLogLength + 1);
-//		glGetProgramInfoLog(ProgramID, InfoLogLength, NULL, &ProgramErrorMessage[0]);
-//		printf("%s\n", &ProgramErrorMessage[0]);
-//	}
-//	
-//	glDetachShader(ProgramID, vshaderHnd);
-//	glDetachShader(ProgramID, fshaderHnd);
-//
-//	
-//
-//	glDeleteShader(vshaderHnd);
-//	glDeleteShader(fshaderHnd);
-//	vshaderCode->dispose();
-//	fshaderCode->dispose();
-//
-//	samplerVarHnd = glGetUniformLocation(ProgramID, "myTextureSampler");
-//	//GLuint err = glGetError();
-//	return ProgramID;
-//}
+int GLManager::newSpriteSheet(unsigned int width, unsigned int height, const char* spritePath) {
+	int ret = 0;
+	int hash = CharHelper::charHash(spritePath);
 
-void GLManager::newSpriteSheet(unsigned int width, unsigned int height, const char* spritePath) {
-	instancedSprites->newSpriteSheet(width, height, spritePath);
+	auto it = textureIds.find(hash);
+	if (it == textureIds.end()) {
+		TextureMeta newMeta;
+		GLInstancedSprites* newSpriteInstance = newClass<GLInstancedSprites>();
+		newSpriteInstance->init();
+		newSpriteInstance->newSpriteSheet(width, height, spritePath);
+		instancedSprites.push(newSpriteInstance);
+		ret = instancedSprites.length - 1;
+		textureIds.insert(std::pair<unsigned int, int>(hash, ret));
+	}
+	else {
+		ret = it->second;
+	}
+	return ret;
 }
-void GLManager::newSprite(const Vector2 pos, const Vector2 uv) {
-	instancedSprites->newSprite(pos, uv);
+int GLManager::newSprite(int handle, const Vector2 pos, const Vector2 uv) {
+	return instancedSprites[handle]->newSprite(pos, uv);
+}
+void GLManager::updateSprite(int textureId, int spriteId, const Vector2 pos) {
+	instancedSprites[textureId]->updateSprite(spriteId, pos);
+}
+void GLManager::addLine2D(Vector2 pos0, Vector2 pos1, unsigned int color) {
+
 }

@@ -106,6 +106,16 @@ int CharHelper::charToInt(const char* tmp){
 unsigned __int64 CharHelper::charToUInt64(const char* tmp){
 	return strtoull(tmp, nullptr, 10);
 }
+unsigned int CharHelper::charHash(const char* str){
+	unsigned int hash = 5381;
+	unsigned char c;
+
+	while (c = *str++) {
+		hash = ((hash << 5) + hash) + c; /* hash * 33 + c */
+	}
+
+	return hash;
+}
 //void CharHelper::genGUID(OriGUID* guid){
 //	GUID result;
 //	UuidCreate(&result);

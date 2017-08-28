@@ -111,6 +111,9 @@
     <ClInclude Include="gameplay\OObject.h">
       <Filter>Source Files\gameplay</Filter>
     </ClInclude>
+    <ClInclude Include="gameplay\SelectorRect.h">
+      <Filter>Source Files\gameplay</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -177,6 +180,9 @@
       <Filter>Source Files\gameplay</Filter>
     </ClCompile>
     <ClCompile Include="gameplay\OObject.cpp">
+      <Filter>Source Files\gameplay</Filter>
+    </ClCompile>
+    <ClCompile Include="gameplay\SelectorRect.cpp">
       <Filter>Source Files\gameplay</Filter>
     </ClCompile>
   </ItemGroup>

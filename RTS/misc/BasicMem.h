@@ -23,6 +23,7 @@ public:
 	void initHeap(int defaultHeapSize);
 	void* alloc(int _size);
 	void* alloc_r(int _size, const char* remarks);
+	void remarks(const char* _remarks);
 	void dealloc(void* ptr);
 	void report(void);
 
@@ -33,17 +34,27 @@ public:
 	//}
 };
 extern BasicMemory basicMem;
-template<typename T> T* alloc(void) {
+template<typename T> T* newClass(void) {
 	T* ret = (T*)basicMem.alloc(sizeof(T));
+	new((T*)ret) T();
 	return ret;
 }
-template<typename T> T* alloc(const char* remarks) {
+template<typename T> T* newClass(const char* remarks) {
 	T* ret = (T*)basicMem.alloc_r(sizeof(T), remarks);
+	new((T*)ret) T();
 	return ret;
 }
-template<typename T> void callCons(T* ptr) {
-	new(ptr) T();
-}
+//template<typename T> T* alloc(void) {
+//	T* ret = (T*)basicMem.alloc(sizeof(T));
+//	return ret;
+//}
+//template<typename T> T* alloc(const char* remarks) {
+//	T* ret = (T*)basicMem.alloc_r(sizeof(T), remarks);
+//	return ret;
+//}
+//template<typename T> void callCons(T* ptr) {
+//	new((T*)ptr) T();
+//}
 
 template<typename T> T* allocArray(int count) {
 	T* ret = (T*)basicMem.alloc(sizeof(T) * (count));
@@ -77,3 +88,73 @@ template<typename T> void deallocND(T* ptr) {
 //#define ori_alloc_array(TYPE, COUNT) (TYPE*)basicMem.alloc(sizeof(TYPE) * (COUNT));
 //#define ori_alloc_array_r(TYPE, COUNT, REMARKS) (TYPE*)basicMem.alloc_r(sizeof(TYPE) * (COUNT), (REMARKS));
 //#define ori_dealloc(PTR) basicMem.dealloc(PTR);
+template < typename T > class SharedPtr
+{
+private:
+	T*    pData;       // pointer
+	int ref_count;
+
+public:
+	SharedPtr() : pData(0), ref_count(0)
+	{
+	}
+
+	//SharedPtr(T* pValue) : pData(pValue), reference(0)
+	//{
+	//	// Create a new reference 
+	//	reference = new RC();
+	//	// Increment the reference count
+	//	reference->AddRef();
+	//}
+
+	//SharedPtr(const SharedPtr<T>& sp) : pData(sp.pData), reference(sp.reference)
+	//{
+	//	// Copy constructor
+	//	// Copy the data and reference pointer
+	//	// and increment the reference count
+	//	ref_count++;
+	//}
+
+	~SharedPtr()
+	{
+		// Destructor
+		// Decrement the reference count
+		// if reference become zero delete the data
+		if (reference->Release() == 0)
+		{
+			delete pData;
+		}
+	}
+
+	T& operator* ()
+	{
+		return *pData;
+	}
+
+	T* operator-> ()
+	{
+		return pData;
+	}
+
+	SharedPtr<T>& operator = (const SharedPtr<T>& sp)
+	{
+		// Assignment operator
+		if (this != &sp) // Avoid self assignment
+		{
+			// Decrement the old reference count
+			// if reference become zero delete the old data
+			ref_count--;
+			if (ref_count == 0)
+			{
+				delete pData;
+			}
+
+			// Copy the data and reference pointer
+			// and increment the reference count
+			pData = sp.pData;
+			reference = sp.reference;
+			reference->AddRef();
+		}
+		return *this;
+	}
+};

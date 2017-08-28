@@ -35,5 +35,6 @@ public:
 	static int charToInt(const char* chars);
 	static unsigned __int64 charToUInt64(const char* chars);
 	static IntVector2 charToIntVec2(const char* chars);
+	static unsigned int charHash(const char* chars);
 	//static void genGUID(OriGUID* guid);
 };

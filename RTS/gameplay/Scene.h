@@ -1,4 +1,5 @@
 #pragma once
+#include "../misc/G.h"
 #include "../graphics/Renderer.h"
 #include "../misc/CharHelper.h"
 #include "../misc/Macros.h"
@@ -10,8 +11,9 @@ using namespace OriGraphics;
 class Scene {
 private:
 	Renderer* renderer;
-	ArrayT<OObject*> OObjectArray;
-	//ArrayStruct<Unit> units;
+	ArrayPtr<OObject*> OObjectArray;
+	ArrayPtr<Unit*> units;
+	void (*f)();
 public:
 	Scene(void);
 	~Scene();
@@ -19,4 +21,6 @@ public:
 	void initScene(void);
 	void update(float timeElapsed);
 	void addOObject(OObject* obj);
+	void addUnit(Vector2 pos, Vector2 uv);
+	//void setTimer(void);
 };

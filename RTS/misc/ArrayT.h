@@ -3,12 +3,13 @@
 #include "BasicMem.h"
 // only use this for primitive types
 template<typename T>
-class ArrayT{
+class ArrayPtr{
 private:
 	void resize(void) {
 		int newSize = arraySize * 2;
 
 		T* newArray = allocArray<T>(newSize, "array resiz template");
+		//callCons(newArray, newSize);
 		//int unit_size = sizeof(T);
 		//memcpy(newArray, arrayData, unit_size * arraySize);
 		for (int i = 0; i < arraySize; ++i) {
@@ -24,15 +25,17 @@ private:
 public:
 	int length;
 	
-	ArrayT(int defaultSize) {
+	ArrayPtr(int defaultSize) {
 		arraySize = defaultSize;
 		arrayData = allocArray<T>(arraySize, "array template");
+		//callCons(arrayData, arraySize);
 		length = 0;
 
 	}
-	ArrayT(void) {
+	ArrayPtr(void) {
 		arraySize = 4;
 		arrayData = allocArray<T>(arraySize, "array template");
+		//callCons(arrayData, arraySize);
 		length = 0;
 
 	}
@@ -42,10 +45,11 @@ public:
 		}
 		arraySize = defaultSize;
 		arrayData = allocArray<T>(arraySize, "array template");
+		//callCons(arrayData, arraySize);
 		length = 0;
 	}
-	~ArrayT() {
-		deallocT(arrayData);
+	~ArrayPtr() {
+		deallocND(arrayData);
 	}
 	void clear(void) {
 		length = 0;
@@ -85,7 +89,7 @@ private:
 	void resize(void) {
 		int newSize = arraySize * 2;
 
-		T* newArray = allocArray(T, newSize, "array resiz template");
+		T* newArray = allocArray<T>(newSize, "array resiz template");
 		int unit_size = sizeof(T);
 		memcpy(newArray, arrayData, unit_size * arraySize);
 		//for (int i = 0; i < arraySize; ++i) {
@@ -114,7 +118,7 @@ public:
 
 	}
 	~ArrayStruct() {
-		deallocT(arrayData);
+		deallocND(arrayData);
 	}
 	void reserve(int defaultSize = 4) {
 		if (arrayData != nullptr) {
@@ -133,6 +137,89 @@ public:
 		}
 		int unit_size = sizeof(T);
 		memcpy(arrayData[length], val, unit_size);
+		length++;
+	}
+	void removeAt(int idx) {
+		assert(idx >= 0 && idx < length);
+		length--;
+		int unit_size = sizeof(T);
+		for (int i = idx; i < length; ++i) {
+			//arrayData[i] = arrayData[i + 1];
+			memcpy(arrayData[i], arrayData[i + 1], unit_size);
+		}
+	}
+	void remove(T val) {
+		for (int i = 0; i < length; ++i) {
+			if (arrayData[i] == val) {
+				removeAt(i);
+				break;
+			}
+		}
+	}
+
+	T& operator[] (int idx) {
+		assert(idx >= 0 && idx < length);
+		return arrayData[idx];
+	}
+	T* getPtr() {
+		return arrayData;
+	}
+};
+
+template<typename T>
+class ArrayPrimitive {
+private:
+	void resize(void) {
+		int newSize = arraySize * 2;
+
+		T* newArray = allocArray<T>(newSize, "array resiz template");
+		int unit_size = sizeof(T);
+		memcpy(newArray, arrayData, unit_size * arraySize);
+		//for (int i = 0; i < arraySize; ++i) {
+		//	newArray[i] = arrayData[i];
+		//}
+		deallocND(arrayData);
+		arrayData = newArray;
+		arraySize = newSize;
+	}
+
+	int arraySize;
+	T* arrayData;
+public:
+	int length;
+
+	ArrayPrimitive(int defaultSize) {
+		arraySize = defaultSize;
+		arrayData = allocArray<T>(arraySize, "array prim template");
+		length = 0;
+
+	}
+	ArrayPrimitive(void) {
+		arraySize = 4;
+		arrayData = allocArray<T>(arraySize, "array prim template");
+		length = 0;
+
+	}
+	~ArrayPrimitive() {
+		deallocND(arrayData);
+	}
+	void reserve(int defaultSize = 4) {
+		if (arrayData != nullptr) {
+			deallocND(arrayData);
+		}
+		arraySize = defaultSize;
+		arrayData = allocArray<T>(arraySize, "array prim template");
+		length = 0;
+	}
+	void clear(void) {
+		length = 0;
+	}
+	void push(T val) {
+		if (length == arraySize) {
+			resize();
+		}
+		int unit_size = sizeof(T);
+		arrayData[length] = val;
 		length++;
 	}
 	void removeAt(int idx) {

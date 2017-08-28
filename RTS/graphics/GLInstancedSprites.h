@@ -16,12 +16,14 @@ struct SpriteDesc {
 	
 	//unsigned int states;
 };
+
 class GLInstancedSprites{
 private:
 	GLuint vertex_buffer; // base vertex buffer
 	GLuint instance_buffer; // per instance data and states.
 
-	ArrayT<GLuint> textureIDs;
+	
+	GLuint textureId;
 	SpriteDesc* spriteDesc;
 	int sprite_count;
 	int sprite_max;
@@ -29,13 +31,16 @@ private:
 	GLuint viewprojMatrixHnd;
 	GLuint shaderHnd;
 	GLuint initShaders(const char* vertex_file_path, const char* fragment_file_path);
-	int createTexture(unsigned int width, unsigned int height, const unsigned char* initialData);
+	GLuint createTexture(unsigned int width, unsigned int height, const unsigned char* initialData);
 public:
 	GLInstancedSprites(void);
 	// overrides
 	void init(void);
 	void onRender(glm::mat4 proj_view_mat);
-	void newSpriteSheet(unsigned int width, unsigned int height, const char* spritePath);
-	void newSprite(const Vector2 pos, const Vector2 uv);
+	GLuint newSpriteSheet(unsigned int width, unsigned int height, const char* spritePath);
+	int newSprite(const Vector2 pos, const Vector2 uv);
+	void updateSprite(int spriteId, const Vector2 pos);
+	void updateBufferFromSpriteDesc(void);
 	void dispose(void);
+	void useTexture(const char* resourceId, unsigned int _width, unsigned int _height);
 };

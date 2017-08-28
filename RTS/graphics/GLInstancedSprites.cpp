@@ -13,10 +13,8 @@ void GLInstancedSprites::dispose(){
 	glDeleteBuffers(2, disposeBuffers);
 
 	deallocND(spriteDesc);
-	//textureIDs.~ArrayT();
 }
 void GLInstancedSprites::init(){
-	textureIDs.reserve();
 	vertex_buffer = 0;
 	instance_buffer = 0;
 
@@ -50,7 +48,7 @@ void GLInstancedSprites::init(){
 	glBindBuffer(GL_ARRAY_BUFFER, instance_buffer);
 	glBufferData(GL_ARRAY_BUFFER, sprite_max * sizeof(SpriteDesc), nullptr, GL_STREAM_DRAW);
 }
-void GLInstancedSprites::newSpriteSheet(unsigned int width, unsigned int height, const char* spritePath){
+GLuint GLInstancedSprites::newSpriteSheet(unsigned int width, unsigned int height, const char* spritePath){
 	
 	std::vector<unsigned char> pngData; //the raw pixels
 	//unsigned int error = lodepng::load_file(pngData, "assets/arrows.png");
@@ -64,10 +62,11 @@ void GLInstancedSprites::newSpriteSheet(unsigned int width, unsigned int height,
 	// create texture in GPU.
 	//resourceHandle = G::instance()->renderer->createTexture(width, height, imageBuffer);
 	//assert(resourceHandle >= 0);
-	createTexture(width, height, image.data());
+	textureId = createTexture(width, height, image.data());
+	return textureId;
 
 }
-void GLInstancedSprites::newSprite(const Vector2 pos, const Vector2 uv) {
+int GLInstancedSprites::newSprite(const Vector2 pos, const Vector2 uv) {
 	GLuint er;
 	int cur = sprite_count;
 	sprite_count++;
@@ -91,9 +90,18 @@ void GLInstancedSprites::newSprite(const Vector2 pos, const Vector2 uv) {
 	}
 	const float unitUV = 1.0f / 12.0f;
 	spriteDesc[cur].pos = pos;
-	spriteDesc[cur].rotation_scale = Vector2(1, 1);
+	spriteDesc[cur].rotation_scale = Vector2(0, 1);
 	spriteDesc[cur].uv.x = uv.x * unitUV;
 	spriteDesc[cur].uv.y = uv.y * unitUV;
+	glBindBuffer(GL_ARRAY_BUFFER, instance_buffer);
+	glBufferData(GL_ARRAY_BUFFER, sprite_max * sizeof(SpriteDesc), NULL, GL_STREAM_DRAW); // Buffer orphaning, a common way to improve streaming perf. See above link for details.
+	glBufferSubData(GL_ARRAY_BUFFER, 0, sprite_max * sizeof(SpriteDesc), spriteDesc);
+	return cur;
+}
+void GLInstancedSprites::updateSprite(int spriteId, const Vector2 pos) {
+	spriteDesc[spriteId].pos = pos;
+}
+void GLInstancedSprites::updateBufferFromSpriteDesc() {
 	glBindBuffer(GL_ARRAY_BUFFER, instance_buffer);
 	glBufferData(GL_ARRAY_BUFFER, sprite_max * sizeof(SpriteDesc), NULL, GL_STREAM_DRAW); // Buffer orphaning, a common way to improve streaming perf. See above link for details.
 	glBufferSubData(GL_ARRAY_BUFFER, 0, sprite_max * sizeof(SpriteDesc), spriteDesc);
@@ -109,7 +117,8 @@ void GLInstancedSprites::onRender(glm::mat4 proj_view_mat){
 
 	// texture setup
 	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, textureIDs[0]);
+	//auto it = textureIds.begin();
+	glBindTexture(GL_TEXTURE_2D, textureId);
 	glUniform1i(samplerVarHnd, 0);
 
 	// 1rst attribute buffer : vertices
@@ -180,12 +189,11 @@ void GLInstancedSprites::onRender(glm::mat4 proj_view_mat){
 	glDisableVertexAttribArray(4);
 	err = glGetError();
 }
-int GLInstancedSprites::createTexture(unsigned int width, unsigned int height, const unsigned char* initialData){
-	int ret = 0;
+GLuint GLInstancedSprites::createTexture(unsigned int width, unsigned int height, const unsigned char* initialData){
 	GLuint texId;
 	glGenTextures(1, &texId);
-	textureIDs.push(texId);
-	glBindTexture(GL_TEXTURE_2D, textureIDs[0]);
+	//textureIDs.push(texId);
+	glBindTexture(GL_TEXTURE_2D, texId);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, initialData);
 	GLuint err = glGetError();
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
@@ -194,7 +202,7 @@ int GLInstancedSprites::createTexture(unsigned int width, unsigned int height, c
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 	glGenerateMipmap(GL_TEXTURE_2D);
 	err = glGetError();
-	return ret;
+	return texId;
 }
 //
 GLuint GLInstancedSprites::initShaders(const char* vertex_file_path, const char* fragment_file_path) {
@@ -268,4 +276,6 @@ GLuint GLInstancedSprites::initShaders(const char* vertex_file_path, const char*
 	viewprojMatrixHnd = glGetUniformLocation(ProgramID, "mat_view_proj");
 	//GLuint err = glGetError();
 	return ProgramID;
+}
+void GLInstancedSprites::useTexture(const char* resourceId, unsigned int _width, unsigned int _height) {
 }

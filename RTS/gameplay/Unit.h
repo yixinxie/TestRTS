@@ -17,9 +17,12 @@ private:
 
 	byte animState; // idle, moving, attacking etc.
 	int baseFrame;
+	int textureId;
+	int spriteDescId;
 	int frame;
 public:
 	Unit(void);
 	~Unit();
-	void init(void);
+	void init(Vector2 pos, Vector2 uv);
+	void update(float deltaTime);
 };

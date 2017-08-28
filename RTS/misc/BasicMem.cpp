@@ -22,8 +22,8 @@ void* BasicMemory::alloc(int _size){
 		int sdf = 0;
 	}
 	ret += used;
+	int infoKey = used;
 	used += _size;
-	int infoKey = (int)ret - (int)heapStart;
 	sizes.insert({ infoKey, _size });
 
 	
@@ -38,21 +38,31 @@ void* BasicMemory::alloc(int _size){
 
 	return (void*)ret;
 }
+void BasicMemory::remarks(const char* _remarks) {
+	int infoKey = used;
+	MemAllocDebugDesc desc;
+	desc.id = id_counter;
+	desc.remarks = nullptr;
+	
+	debugDesc.insert({ infoKey , desc });
+	id_counter++;
+}
 void* BasicMemory::alloc_r(int _size, const char* _remarks){
 	unsigned char* ret = heapStart;
 	if (used == 0){
 		int sdf = 0;
 	}
 	ret += used;
+	int infoKey = used;
 	used += _size;
-	int infoKey = (int)ret - (int)heapStart;
+	
 	sizes.insert({ infoKey, _size });
-	char *dbg = new char[64];
 	
 	{
 		MemAllocDebugDesc desc;
 		desc.id = id_counter;
 		desc.remarks = new char[64];
+		//sprintf_s(desc.remarks, "%d:%s", __LINE__, __FILE__);
 		strcpy_s(desc.remarks, 64, _remarks);
 		debugDesc.insert({ infoKey, desc });
 		id_counter++;
@@ -78,18 +88,19 @@ void BasicMemory::report(void){
 	int leakedCount = 0;
 	auto desc_it = debugDesc.begin();
 	for (auto it = sizes.begin(); it != sizes.end(); ++it){
-		printf("%d size %d", it->first, it->second);
+		//printf("%d size %d", it->first, it->second);
 		if (it->second != 0){
 			leakedCount++;
-		}
-		auto found = debugDesc.find(it->first);
-		if (found != debugDesc.end()){
-			printf(" remarks: %s (%d)\n", found->second.remarks, found->second.id);
-		}
-		else{
-			printf("\n");
+			auto found = debugDesc.find(it->first);
+			if (found != debugDesc.end()) {
+				printf("leaked remarks: %s (%d)\n", found->second.remarks, found->second.id);
+			}
+			else {
+				printf("no remarks available!\n");
 
+			}
 		}
+		
 		
 	}
 	printf("leak count: %d\n", leakedCount);
