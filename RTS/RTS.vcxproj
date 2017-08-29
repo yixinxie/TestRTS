@@ -165,6 +165,7 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="gameplay\Camera.h" />
     <ClInclude Include="gameplay\InputManager.h" />
     <ClInclude Include="gameplay\OObject.h" />
     <ClInclude Include="gameplay\Scene.h" />
@@ -193,6 +194,7 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="gameplay\Camera.cpp" />
     <ClCompile Include="gameplay\InputManager.cpp" />
     <ClCompile Include="gameplay\OObject.cpp" />
     <ClCompile Include="gameplay\Scene.cpp" />

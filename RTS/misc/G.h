@@ -4,6 +4,7 @@
 #include "../gameplay/Scene.h"
 #define OERenderer G::instance()->renderer
 #define OEInput G::instance()->input
+#define OEScene G::instance()->currentScene
 
 /* Ori Engine */
 using namespace OriGraphics;

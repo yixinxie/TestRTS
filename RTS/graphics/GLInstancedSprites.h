@@ -11,7 +11,8 @@
 using namespace OriGraphics;
 struct SpriteDesc {
 	Vector2 pos;
-	Vector2 rotation_scale;
+	float rotation;
+	Vector2 scale;
 	Vector2 uv;
 	
 	//unsigned int states;
@@ -38,8 +39,10 @@ public:
 	void init(void);
 	void onRender(glm::mat4 proj_view_mat);
 	GLuint newSpriteSheet(unsigned int width, unsigned int height, const char* spritePath);
-	int newSprite(const Vector2 pos, const Vector2 uv);
-	void updateSprite(int spriteId, const Vector2 pos);
+	int newSprite(Vector2 pos, Vector2 uv);
+	void updateSprite(int spriteId, Vector2 pos);
+	void updateSprite(int spriteId, Vector2 pos, float angle, Vector2 scale);
+	
 	void updateBufferFromSpriteDesc(void);
 	void dispose(void);
 	void useTexture(const char* resourceId, unsigned int _width, unsigned int _height);

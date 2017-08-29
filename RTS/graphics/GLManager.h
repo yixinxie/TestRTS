@@ -49,4 +49,6 @@ public:
 	int newSpriteSheet(unsigned int width, unsigned int height, const char* spritePath);
 	int newSprite(int handle, const Vector2 pos, const Vector2 uv);
 	void updateSprite(int textureId, int spriteId, const Vector2 uv);
+	void updateSprite(int textureId, int spriteId, Vector2 pos, float angle, Vector2 scale);
+	
 };

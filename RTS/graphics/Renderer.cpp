@@ -188,3 +188,7 @@ void Renderer::render(){
 void Renderer::postRender(){
 
 }
+void Renderer::updateCamera(Vector2 _pos, float _size) {
+	cameraPos = _pos;
+	cameraSize = _size;
+}

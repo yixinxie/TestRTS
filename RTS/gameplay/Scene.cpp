@@ -26,12 +26,34 @@ void Scene::init(Renderer* _renderer) {
 	
 }
 void Scene::addOObject(OObject* obj) {
+	const char* objName = obj->getName();
+	if (objName[0] != 0) {
+		unsigned int key = CharHelper::charHash(obj->getName());
+		if (objectLookup.find(key) != objectLookup.end()) {
+			assert(false);
+		}
+		else {
+			objectLookup.insert(std::pair<unsigned int, OObject*>(key, obj));
+		}
+	}
 	OObjectArray.push(obj);
+}
+OObject* Scene::getOObjectByName(const char* name) {
+	unsigned int key = CharHelper::charHash(name);
+	if (objectLookup.find(key) != objectLookup.end()) {
+		return objectLookup[key];
+	}
+	return nullptr;
 }
 void Scene::initScene() {
 	G::instance()->currentScene = this;
 	InputManager* inp = newClass<InputManager>("input manager");
 	addOObject(inp);
+
+	SelectorRect* rect = newClass<SelectorRect>();
+	rect->init();
+	addOObject(rect);
+
 
 	Unit* newUnit = newClass<Unit>("units");
 	newUnit->init(Vector2(0.5, 0), Vector2(7, 0));
@@ -53,9 +75,7 @@ void Scene::initScene() {
 	newUnit->init(Vector2(-0.5, -1.5), Vector2(1, 0));
 	units.push(newUnit);
 
-	SelectorRect* rect = newClass<SelectorRect>();
-	rect->init();
-	OObjectArray.push(rect);
+	
 }
 void Scene::update(float timeElapsed) {
 	for (int i = 0; i < OObjectArray.length; ++i) {

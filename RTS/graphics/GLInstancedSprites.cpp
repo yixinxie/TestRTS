@@ -64,7 +64,7 @@ GLuint GLInstancedSprites::newSpriteSheet(unsigned int width, unsigned int heigh
 	return textureId;
 
 }
-int GLInstancedSprites::newSprite(const Vector2 pos, const Vector2 uv) {
+int GLInstancedSprites::newSprite(Vector2 pos, Vector2 uv) {
 	GLuint er;
 	int cur = sprite_count;
 	sprite_count++;
@@ -88,7 +88,8 @@ int GLInstancedSprites::newSprite(const Vector2 pos, const Vector2 uv) {
 	}
 	const float unitUV = 1.0f / 12.0f;
 	spriteDesc[cur].pos = pos;
-	spriteDesc[cur].rotation_scale = Vector2(0, 1);
+	spriteDesc[cur].rotation = 0;
+	spriteDesc[cur].scale = Vector2(1, 1);
 	spriteDesc[cur].uv.x = uv.x * unitUV;
 	spriteDesc[cur].uv.y = uv.y * unitUV;
 	glBindBuffer(GL_ARRAY_BUFFER, instance_buffer);
@@ -96,8 +97,14 @@ int GLInstancedSprites::newSprite(const Vector2 pos, const Vector2 uv) {
 	glBufferSubData(GL_ARRAY_BUFFER, 0, sprite_max * sizeof(SpriteDesc), spriteDesc);
 	return cur;
 }
-void GLInstancedSprites::updateSprite(int spriteId, const Vector2 pos) {
+void GLInstancedSprites::updateSprite(int spriteId, Vector2 pos) {
 	spriteDesc[spriteId].pos = pos;
+}
+void GLInstancedSprites::updateSprite(int spriteId, Vector2 pos, float angle, Vector2 scale) {
+	spriteDesc[spriteId].pos = pos;
+	spriteDesc[spriteId].rotation = angle;
+	spriteDesc[spriteId].scale = scale;
+
 }
 void GLInstancedSprites::updateBufferFromSpriteDesc() {
 	glBindBuffer(GL_ARRAY_BUFFER, instance_buffer);
@@ -154,37 +161,49 @@ void GLInstancedSprites::onRender(glm::mat4 proj_view_mat){
 		sizeof(SpriteDesc),
 		BUFFER_OFFSET(0)
 		);
-	// rotation scale
+	// rotation
 	glEnableVertexAttribArray(3);
 	glVertexAttribPointer(
-		3, 
-		2, 
+		3,
+		1,
 		GL_FLOAT,
 		GL_FALSE,
 		sizeof(SpriteDesc),
 		BUFFER_OFFSET(sizeof(GLfloat) * 2)
 		);
-	// instance uv
+	// scale
 	glEnableVertexAttribArray(4);
 	glVertexAttribPointer(
-		4,
+		4, 
+		2, 
+		GL_FLOAT,
+		GL_FALSE,
+		sizeof(SpriteDesc),
+		BUFFER_OFFSET(sizeof(GLfloat) * 3)
+		);
+	// instance uv
+	glEnableVertexAttribArray(5);
+	glVertexAttribPointer(
+		5,
 		2,
 		GL_FLOAT,
 		GL_FALSE,
 		sizeof(SpriteDesc),
-		BUFFER_OFFSET(sizeof(GLfloat) * 4)
+		BUFFER_OFFSET(sizeof(GLfloat) * 5)
 		);
 	glVertexAttribDivisor(0, 0);
 	glVertexAttribDivisor(1, 0);
 	glVertexAttribDivisor(2, 1);
 	glVertexAttribDivisor(3, 1);
 	glVertexAttribDivisor(4, 1);
+	glVertexAttribDivisor(5, 1);
 	glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 4, sprite_count);
 	glDisableVertexAttribArray(0);
 	glDisableVertexAttribArray(1);
 	glDisableVertexAttribArray(2);
 	glDisableVertexAttribArray(3);
 	glDisableVertexAttribArray(4);
+	glDisableVertexAttribArray(5);
 	err = glGetError();
 }
 GLuint GLInstancedSprites::createTexture(unsigned int width, unsigned int height, const unsigned char* initialData){

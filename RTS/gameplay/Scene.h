@@ -11,8 +11,10 @@ using namespace OriGraphics;
 class Scene {
 private:
 	Renderer* renderer;
+	std::unordered_map<unsigned int, OObject*> objectLookup;
 	ArrayPtr<OObject*> OObjectArray;
 	ArrayPtr<Unit*> units;
+
 	void (*f)();
 public:
 	Scene(void);
@@ -21,6 +23,7 @@ public:
 	void initScene(void);
 	void update(float timeElapsed);
 	void addOObject(OObject* obj);
+	OObject* getOObjectByName(const char* name);
 	void addUnit(Vector2 pos, Vector2 uv);
 	//void setTimer(void);
 };

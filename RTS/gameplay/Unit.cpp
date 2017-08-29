@@ -1,6 +1,6 @@
 #include "Unit.h"
 #include "../misc/G.h"
-Unit::Unit() {
+Unit::Unit(){
 
 }
 Unit::~Unit() {

@@ -7,9 +7,13 @@
 // 
 class OObject {
 private:
+	char name[32];
+	
 public:
 	OObject(void);
+	virtual ~OObject();
+	void setName(const char* str);
+	const char* getName(void);
+	
 	virtual void update(float deltaTime) = 0;
-	void constructor(void);
-	void destructor(void);
 };

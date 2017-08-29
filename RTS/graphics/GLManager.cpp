@@ -3,6 +3,8 @@
 #include <assert.h>
 GLManager::GLManager(void) : window(nullptr){
 	//ZeroMemory((void*)this, sizeof(GLManager));
+	cameraSize = 10.0f;
+	cameraPos = Vector2::zero();
 }
 GLManager::~GLManager()
 {
@@ -102,15 +104,16 @@ void GLManager::prepareCamera(){
 
 	// Or, for an ortho camera :
 	float aspect = (float)width / (float)height;
-	float size = 10.0f;
-	glm::mat4 proj_mat = glm::ortho(-size * aspect, size * aspect,
-		-size,  size,
+	glm::mat4 proj_mat = glm::ortho(-cameraSize * aspect, cameraSize * aspect,
+		-cameraSize, cameraSize,
 		0.0f,100.0f); // In world coordinates
-
+	glm::vec3 cam_pos = glm::vec3(cameraPos.x, cameraPos.y, 1);
+	glm::vec3 lookat = cam_pos;
+	lookat.z -= 1.0f;
 	// Camera matrix
 	glm::mat4 view_mat = glm::lookAt(
-		glm::vec3(0, 0, 1), // Camera's pos in World Space
-		glm::vec3(0, 0, 0), // lookat
+		cam_pos, // Camera's pos in World Space
+		lookat, // lookat
 		glm::vec3(0, 1, 0)  // up vector (set to 0,-1,0 to look upside-down)
 		);
 
@@ -153,6 +156,9 @@ int GLManager::newSprite(int handle, const Vector2 pos, const Vector2 uv) {
 }
 void GLManager::updateSprite(int textureId, int spriteId, const Vector2 pos) {
 	instancedSprites[textureId]->updateSprite(spriteId, pos);
+}
+void GLManager::updateSprite(int textureId, int spriteId, Vector2 pos, float angle, Vector2 scale) {
+	instancedSprites[textureId]->updateSprite(spriteId, pos, angle, scale);
 }
 void GLManager::addLine2D(Vector2 pos0, Vector2 pos1, unsigned int color) {
 

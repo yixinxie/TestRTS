@@ -5,12 +5,20 @@
 #include "../misc/Macros.h"
 #include "../misc/ArrayT.h"
 #include "OObject.h"
+
 class SelectorRect : public OObject {
 private:
 	bool leftButtonDown; // selecting
+	Vector2 pos;
+	Vector2 scale;
+	int textureId;
+	int spriteId;
+
 public:
 	SelectorRect(void);
 	~SelectorRect();
 	void init(void);
 	void update(float deltaTime);
+	void updateRectScale(Vector2 scale);
+	void updateRectPos(Vector2 pos);
 };

@@ -5,15 +5,16 @@
 #include "../misc/Macros.h"
 #include "../misc/ArrayT.h"
 #include "OObject.h"
-#include "SelectorRect.h"
-class InputManager : public OObject {
+
+class Camera : public OObject {
 private:
-	bool leftButtonDown; // selecting
-	Vector2 mouseDownPos;
-	SelectorRect* rect;
+	Vector2 pos;
+	float size;
 public:
-	InputManager(void);
-	~InputManager();
+	Camera(void);
+	~Camera();
 	void init(void);
 	void update(float deltaTime);
+	void setSize(float size);
+	void setPos(Vector2 pos);
 };
