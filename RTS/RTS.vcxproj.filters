@@ -117,6 +117,9 @@
     <ClInclude Include="gameplay\Camera.h">
       <Filter>Source Files\gameplay</Filter>
     </ClInclude>
+    <ClInclude Include="gameplay\StaticCollision.h">
+      <Filter>Source Files\gameplay</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -189,6 +192,9 @@
       <Filter>Source Files\gameplay</Filter>
     </ClCompile>
     <ClCompile Include="gameplay\Camera.cpp">
+      <Filter>Source Files\gameplay</Filter>
+    </ClCompile>
+    <ClCompile Include="gameplay\StaticCollision.cpp">
       <Filter>Source Files\gameplay</Filter>
     </ClCompile>
   </ItemGroup>

@@ -23,18 +23,27 @@ void InputManager::update(float deltaTime) {
 		if (leftButtonDown == false)
 		{
 			leftButtonDown = true;
-			
-			mouseDownPos.x = mx;
-			mouseDownPos.y = my;
-		}
-		else {
-			Vector2 currentPos;
+			IntVector2 currentPos;
 			currentPos.x = mx;
 			currentPos.y = my;
-			rect->updateRectScale(currentPos - mouseDownPos);
+			OERenderer->mousePosToWorldSpace(currentPos, &mouseDownPos);
+			
+		}
+		else {
+			IntVector2 currentPos;
+			Vector2 worldPos;
+			currentPos.x = mx;
+			currentPos.y = my;
+			OERenderer->mousePosToWorldSpace(currentPos, &worldPos);
+			
+			rect->updateRectScale((worldPos - mouseDownPos) / 2.0f);
+			rect->updateRectPos(mouseDownPos + (worldPos - mouseDownPos) / 2.0f);
+			//rect->updateRectPos(mouseDownPos);
+			//printf_s("%d %d\n", mx, my);
 		}
 	}
 	else{
+		rect->updateRectScale(Vector2::zero());
 		leftButtonDown = false;
 	}
 }

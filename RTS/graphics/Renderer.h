@@ -17,7 +17,7 @@ namespace OriGraphics{
 	*/
 	class Renderer{
 	protected:
-		// screen width and height
+		// screen width and height, or buffer width/height
 		int width;
 		int height;
 
@@ -25,16 +25,6 @@ namespace OriGraphics{
 		int windowWidth;
 		int windowHeight;
 
-		//vector<CameraDesc*> cameras;
-
-		//int objectIndexIncrementer;
-		//std::unordered_map<int, ObjectTransformDesc*> instancedObjects;
-
-		//int spriteIndexIncrementer;
-		//std::unordered_map<int, ObjectRectTransformDesc*> spriteObjects;
-
-		//int lightIndexIncrementer;
-		//std::unordered_map<int, LightSourceDesc*> lightSources;
 		Vector2 cameraPos;
 		float cameraSize; // orthogonal Size
 
@@ -59,5 +49,7 @@ namespace OriGraphics{
 		virtual void updateSprite(int textureId, int spriteId, Vector2 uv) = 0;
 		virtual void updateSprite(int textureId, int spriteId, Vector2 pos, float angle, Vector2 scale) = 0;
 		virtual void updateCamera(Vector2 pos, float size);
+
+		void mousePosToWorldSpace(const IntVector2& pos, Vector2* posWorldSpace);
 	};
 }
