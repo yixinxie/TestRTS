@@ -120,6 +120,9 @@ public:
 	~ArrayStruct() {
 		deallocND(arrayData);
 	}
+	int allocatedSize(void) const {
+		return arraySize;
+	}
 	void reserve(int defaultSize = 4) {
 		if (arrayData != nullptr) {
 			deallocT(arrayData);
@@ -131,12 +134,12 @@ public:
 	void clear(void) {
 		length = 0;
 	}
-	void push(T val) {
+	void push(const T& val) {
 		if (length == arraySize) {
 			resize();
 		}
 		int unit_size = sizeof(T);
-		memcpy(arrayData[length], val, unit_size);
+		memcpy(&arrayData[length], &val, unit_size);
 		length++;
 	}
 	void removeAt(int idx) {
@@ -161,7 +164,7 @@ public:
 		assert(idx >= 0 && idx < length);
 		return arrayData[idx];
 	}
-	T* getPtr() {
+	T* getPtr() const {
 		return arrayData;
 	}
 };

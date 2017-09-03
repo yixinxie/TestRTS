@@ -17,7 +17,10 @@ struct SpriteDesc {
 	
 	//unsigned int states;
 };
-
+/*
+currently the class is instantiated multiple times.
+vertex_buffer, shaders can be shared among the instances.
+*/
 class GLInstancedSprites{
 private:
 	GLuint vertex_buffer; // base vertex buffer
@@ -25,9 +28,8 @@ private:
 
 	
 	GLuint textureId;
-	SpriteDesc* spriteDesc;
-	int sprite_count;
-	int sprite_max;
+	ArrayStruct<SpriteDesc> spriteDesc;
+	int sprite_max; // number of sprite desc on gpu.
 	GLuint samplerVarHnd;
 	GLuint viewprojMatrixHnd;
 	GLuint shaderHnd;

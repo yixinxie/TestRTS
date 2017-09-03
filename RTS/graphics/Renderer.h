@@ -28,9 +28,6 @@ namespace OriGraphics{
 		Vector2 cameraPos;
 		float cameraSize; // orthogonal Size
 
-		void updateRectTransforms(int idx, int parentLeft, int parentBottom, int parentRight, int parentTop);
-		virtual void preRender(void);
-		virtual void postRender(void);
 	public:
 		Renderer();
 		virtual ~Renderer();
@@ -39,10 +36,9 @@ namespace OriGraphics{
 		inline int getPixelWidth(void) { return width; }
 		inline int getPixelHeight(void) { return height; }
 		
-		void render(void);
-		virtual void platformRender(void) = 0;
+		virtual void render(void) = 0;
 
-		virtual void addLine2D(Vector2 pos0, Vector2 pos1, unsigned int color) = 0;
+		virtual void line2D(Vector2 pos0, Vector2 pos1, Color color) = 0;
 
 		virtual int newSpriteSheet(unsigned int width, unsigned int height, const char* spritePath) = 0;
 		virtual int newSprite(int handle, Vector2 pos, Vector2 uv) = 0;

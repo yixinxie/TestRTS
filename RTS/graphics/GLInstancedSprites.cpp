@@ -12,15 +12,15 @@ void GLInstancedSprites::dispose(){
 	disposeBuffers[1] = vertex_buffer;
 	glDeleteBuffers(2, disposeBuffers);
 
-	deallocND(spriteDesc);
+	//deallocND(spriteDesc);
 }
 void GLInstancedSprites::init(){
 	vertex_buffer = 0;
 	instance_buffer = 0;
 
-	sprite_count = 0;
-	sprite_max = 4;
-	spriteDesc = allocArray<SpriteDesc>(sprite_max, "init");
+	//sprite_count = 0;
+	sprite_max = 0;
+	//spriteDesc = allocArray<SpriteDesc>(sprite_max, "init");
 
 	GLuint VertexArrayID;
 	glGenVertexArrays(1, &VertexArrayID);
@@ -66,8 +66,8 @@ GLuint GLInstancedSprites::newSpriteSheet(unsigned int width, unsigned int heigh
 }
 int GLInstancedSprites::newSprite(Vector2 pos, Vector2 uv) {
 	GLuint er;
-	int cur = sprite_count;
-	sprite_count++;
+	int cur = spriteDesc.length;
+	/*sprite_count++;
 	if (cur >= sprite_max) {
 		
 		GLuint singleBuffer[1];
@@ -85,16 +85,18 @@ int GLInstancedSprites::newSprite(Vector2 pos, Vector2 uv) {
 		//glBindBuffer(GL_ARRAY_BUFFER, instance_buffer);
 		//glBufferData(GL_ARRAY_BUFFER, sprite_max * sizeof(SpriteDesc), spriteDesc, GL_STREAM_DRAW);
 
-	}
+	}*/
 	const float unitUV = 1.0f / 12.0f;
-	spriteDesc[cur].pos = pos;
-	spriteDesc[cur].rotation = 0;
-	spriteDesc[cur].scale = Vector2(1, 1);
-	spriteDesc[cur].uv.x = uv.x * unitUV;
-	spriteDesc[cur].uv.y = uv.y * unitUV;
-	glBindBuffer(GL_ARRAY_BUFFER, instance_buffer);
-	glBufferData(GL_ARRAY_BUFFER, sprite_max * sizeof(SpriteDesc), NULL, GL_STREAM_DRAW); // Buffer orphaning, a common way to improve streaming perf. See above link for details.
-	glBufferSubData(GL_ARRAY_BUFFER, 0, sprite_max * sizeof(SpriteDesc), spriteDesc);
+	SpriteDesc newDesc;
+	newDesc.pos = pos;
+	newDesc.rotation = 0;
+	newDesc.scale = Vector2(1, 1);
+	newDesc.uv.x = uv.x * unitUV;
+	newDesc.uv.y = uv.y * unitUV;
+	spriteDesc.push(newDesc);
+	//glBindBuffer(GL_ARRAY_BUFFER, instance_buffer);
+	//glBufferData(GL_ARRAY_BUFFER, sprite_max * sizeof(SpriteDesc), NULL, GL_STREAM_DRAW); // Buffer orphaning, a common way to improve streaming perf. See above link for details.
+	//glBufferSubData(GL_ARRAY_BUFFER, 0, sprite_max * sizeof(SpriteDesc), spriteDesc);
 	return cur;
 }
 void GLInstancedSprites::updateSprite(int spriteId, Vector2 pos) {
@@ -107,9 +109,20 @@ void GLInstancedSprites::updateSprite(int spriteId, Vector2 pos, float angle, Ve
 
 }
 void GLInstancedSprites::updateBufferFromSpriteDesc() {
+	if (spriteDesc.allocatedSize() != sprite_max) {
+
+		if (sprite_max != 0) {
+			GLuint singleBuffer[1];
+			singleBuffer[0] = instance_buffer;
+			glDeleteBuffers(1, singleBuffer);
+		}
+
+		glGenBuffers(1, &instance_buffer);
+		sprite_max = spriteDesc.allocatedSize();
+	}
 	glBindBuffer(GL_ARRAY_BUFFER, instance_buffer);
 	glBufferData(GL_ARRAY_BUFFER, sprite_max * sizeof(SpriteDesc), NULL, GL_STREAM_DRAW); // Buffer orphaning, a common way to improve streaming perf. See above link for details.
-	glBufferSubData(GL_ARRAY_BUFFER, 0, sprite_max * sizeof(SpriteDesc), spriteDesc);
+	glBufferSubData(GL_ARRAY_BUFFER, 0, sprite_max * sizeof(SpriteDesc), spriteDesc.getPtr());
 }
 void GLInstancedSprites::onRender(glm::mat4 proj_view_mat){
 	GLuint err;
@@ -191,13 +204,14 @@ void GLInstancedSprites::onRender(glm::mat4 proj_view_mat){
 		sizeof(SpriteDesc),
 		BUFFER_OFFSET(sizeof(GLfloat) * 5)
 		);
+
 	glVertexAttribDivisor(0, 0);
 	glVertexAttribDivisor(1, 0);
 	glVertexAttribDivisor(2, 1);
 	glVertexAttribDivisor(3, 1);
 	glVertexAttribDivisor(4, 1);
 	glVertexAttribDivisor(5, 1);
-	glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 4, sprite_count);
+	glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 4, spriteDesc.length);
 	glDisableVertexAttribArray(0);
 	glDisableVertexAttribArray(1);
 	glDisableVertexAttribArray(2);

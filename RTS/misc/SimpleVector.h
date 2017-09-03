@@ -1,4 +1,6 @@
 #pragma once
+typedef int int32;
+struct Vector3;
 struct Vector2{
 	float x, y;
 	Vector2(const float _x, const float _y) :x(_x), y(_y) {
@@ -45,6 +47,10 @@ struct Vector2{
 		this->y -= rhs.y;
 		return *this;
 	}
+	//Vector3 toVector3(void)
+	//{
+	//	return Vector3(x, y, 0);
+	//}
 	static Vector2 zero(void) {
 		return Vector2(0.0f, 0.0f);
 	}
@@ -55,11 +61,11 @@ struct Vector2{
 };
 struct Vector3{
 	float x, y, z;
-	Vector3(const float _x, const float _y, const float _z) :x(_x), y(_y), z(_z) {
+	Vector3(float _x, float _y, float _z) :x(_x), y(_y), z(_z) {
 	}
-	Vector3() :x(0), y(0), z(0){}
+	Vector3() :x(0.0f), y(0.0f), z(0.0f){}
 
-	Vector3 operator*(const float val)
+	Vector3 operator*(float val)
 	{
 		Vector3 vec;
 		vec.x = this->x * val;
@@ -89,6 +95,8 @@ struct Vector4{
 	}
 	Vector4(const Vector3 vec) :x(vec.x), y(vec.y), z(vec.z), w(1) {
 	}
+	Vector4() :x(0.0f), y(0.0f), z(0.0f), w(0.0f) {
+	}
 };
 struct IntVector2{
 	int x, y;
@@ -97,4 +105,43 @@ struct IntVector2{
 	IntVector2(const long _x, const long _y) :x(_x), y(_y){
 	}
 	IntVector2() :x(0), y(0){}
+};
+struct Color{
+	unsigned char r;
+	unsigned char g;
+	unsigned char b;
+	unsigned char a;
+	Color(void) : r(0), g(0), b(0), a(0) {
+	}
+	Color(unsigned char _r, unsigned char _g, unsigned char _b, unsigned char _a) : r(_r), g(_g), b(_b), a(_a) {
+	}
+	Color(unsigned char _r, unsigned char _g, unsigned char _b) : r(_r), g(_g), b(_b), a(255) {
+	}
+	Vector4 toVec4(void) {
+		return Vector4(r / 255.0f, g / 255.0f, b / 255.0f, a / 255.0f);
+	}
+	static Color red() {
+		return Color(255, 0, 0);
+	}
+	static Color green() {
+		return Color(0, 255, 0);
+	}
+	static Color blue() {
+		return Color(0, 0, 255);
+	}
+	static Color yellow() {
+		return Color(255, 255, 0);
+	}
+	static Color black() {
+		return Color(0, 0, 0);
+	}
+	static Color white() {
+		return Color(255, 255, 255);
+	}
+	static Color cyan() {
+		return Color(0, 255, 255);
+	}
+	static Color magenta() {
+		return Color(255, 0, 255);
+	}
 };

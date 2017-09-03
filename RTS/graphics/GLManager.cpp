@@ -14,7 +14,7 @@ GLManager::~GLManager()
 		instancedSprites[i]->dispose();
 		deallocT(instancedSprites[i]);
 	}
-	
+	deallocT(debugRender);
 	Renderer::dispose();
 	glfwTerminate();
 	
@@ -38,7 +38,7 @@ bool GLManager::init(HWND hWnd, int _width, int _height)
 		glfwTerminate();
 		return false;
 	}
-
+	
 	/* Make the window's context current */
 	glfwMakeContextCurrent(window);
 	glewExperimental = true;
@@ -48,20 +48,16 @@ bool GLManager::init(HWND hWnd, int _width, int _height)
 		return false;
 	}
 	glfwGetFramebufferSize(window, &width, &height);
+
+	debugRender = newClass<GLIMLines>("GLIMLines class");
+	debugRender->init();
 	return true;
 }
 
 void GLManager::initDepthStencil(){
 
 }
-
-void GLManager::renderWithoutShadowMap(){
-
-}
-void GLManager::renderWithShadowMap(){
-	
-}
-void GLManager::platformRender(){
+void GLManager::render(){
 	GLuint err;
 	assembleDrawables();
 	prepareCamera();
@@ -70,27 +66,12 @@ void GLManager::platformRender(){
 	for (int i = 0; i < instancedSprites.length; ++i) {
 		instancedSprites[i]->onRender(proj_view);
 	}
-	//glViewport(0, 0, 640, 480);
-	//glMatrixMode(GL_PROJECTION);
-	//err = glGetError();
-	//glLoadIdentity();
-	//
-	////glMatrixMode(GL_MODELVIEW);
-	////glLoadIdentity();
-	//err = glGetError();
-	glLineWidth(1.5f);
-
-	err = glGetError();
-	glColor3f(1.0f, 0.0f, 0.0f);
-	err = glGetError();
-	glBegin(GL_LINES);
-	err = glGetError();
-	glVertex2f(0.0, 0.5);
-	err = glGetError();
-	glVertex2f(15, 0);
-	err = glGetError();
+	debugRender->onRender(proj_view);
+	glBegin(GL_LINE_LOOP);
+	glVertex3f(0.0, 0.0, 0.0);
+	glVertex3f(15, 0, 0);
 	glEnd();
-	err = glGetError();
+
 	glfwSwapBuffers(window);
 	glfwPollEvents();
 	err = glGetError();
@@ -130,7 +111,7 @@ void GLManager::assembleDrawables(){
 	for (int i = 0; i < instancedSprites.length; ++i) {
 		instancedSprites[i]->updateBufferFromSpriteDesc();
 	}
-
+	debugRender->updateBuffer();
 }
 int GLManager::newSpriteSheet(unsigned int width, unsigned int height, const char* spritePath) {
 	int ret = 0;
@@ -138,7 +119,6 @@ int GLManager::newSpriteSheet(unsigned int width, unsigned int height, const cha
 
 	auto it = textureIds.find(hash);
 	if (it == textureIds.end()) {
-		TextureMeta newMeta;
 		GLInstancedSprites* newSpriteInstance = newClass<GLInstancedSprites>();
 		newSpriteInstance->init();
 		newSpriteInstance->newSpriteSheet(width, height, spritePath);
@@ -151,15 +131,15 @@ int GLManager::newSpriteSheet(unsigned int width, unsigned int height, const cha
 	}
 	return ret;
 }
-int GLManager::newSprite(int handle, const Vector2 pos, const Vector2 uv) {
+int GLManager::newSprite(int handle, Vector2 pos, Vector2 uv) {
 	return instancedSprites[handle]->newSprite(pos, uv);
 }
-void GLManager::updateSprite(int textureId, int spriteId, const Vector2 pos) {
+void GLManager::updateSprite(int textureId, int spriteId, Vector2 pos) {
 	instancedSprites[textureId]->updateSprite(spriteId, pos);
 }
 void GLManager::updateSprite(int textureId, int spriteId, Vector2 pos, float angle, Vector2 scale) {
 	instancedSprites[textureId]->updateSprite(spriteId, pos, angle, scale);
 }
-void GLManager::addLine2D(Vector2 pos0, Vector2 pos1, unsigned int color) {
-
+void GLManager::line2D(Vector2 pos0, Vector2 pos1, Color color) {
+	debugRender->drawLine(pos0, pos1, color);
 }

@@ -11,19 +11,6 @@ Renderer::~Renderer() {
 void Renderer::dispose(void){
 
 }
-void Renderer::preRender(){
-	
-
-}
-void Renderer::render(){
-	//pre render
-	//updateRectTransforms(0, 0, 0, width, height);
-	platformRender();
-	postRender();
-}
-void Renderer::postRender(){
-
-}
 void Renderer::updateCamera(Vector2 _pos, float _size) {
 	cameraPos = _pos;
 	cameraSize = _size;

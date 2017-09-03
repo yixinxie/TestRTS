@@ -172,6 +172,8 @@
     <ClInclude Include="gameplay\SelectorRect.h" />
     <ClInclude Include="gameplay\StaticCollision.h" />
     <ClInclude Include="gameplay\Unit.h" />
+    <ClInclude Include="graphics\GLIMCubes.h" />
+    <ClInclude Include="graphics\GLIMLines.h" />
     <ClInclude Include="graphics\GLInstancedSprites.h" />
     <ClInclude Include="graphics\GLManager.h" />
     <ClInclude Include="graphics\Renderer.h" />
@@ -202,6 +204,8 @@
     <ClCompile Include="gameplay\SelectorRect.cpp" />
     <ClCompile Include="gameplay\StaticCollision.cpp" />
     <ClCompile Include="gameplay\Unit.cpp" />
+    <ClCompile Include="graphics\GLIMCubes.cpp" />
+    <ClCompile Include="graphics\GLIMLines.cpp" />
     <ClCompile Include="graphics\GLInstancedSprites.cpp" />
     <ClCompile Include="graphics\GLManager.cpp" />
     <ClCompile Include="graphics\Renderer.cpp" />
@@ -222,6 +226,10 @@
     <ClCompile Include="stdafx.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\x64\Debug\shaders\cube_fs.glsl" />
+    <None Include="..\x64\Debug\shaders\cube_vs.glsl" />
+    <None Include="..\x64\Debug\shaders\line_fs.glsl" />
+    <None Include="..\x64\Debug\shaders\line_vs.glsl" />
     <None Include="..\x64\Debug\shaders\sprite_fs.glsl" />
     <None Include="..\x64\Debug\shaders\sprite_vs.glsl" />
   </ItemGroup>
