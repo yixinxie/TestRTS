@@ -40,7 +40,7 @@ namespace OriGraphics{
 
 		virtual void line2D(Vector2 pos0, Vector2 pos1, Color color) = 0;
 
-		virtual int newSpriteSheet(unsigned int width, unsigned int height, const char* spritePath) = 0;
+		virtual int newSpriteSheet(const char* spritePath) = 0;
 		virtual int newSprite(int handle, Vector2 pos, Vector2 uv) = 0;
 		virtual void updateSprite(int textureId, int spriteId, Vector2 uv) = 0;
 		virtual void updateSprite(int textureId, int spriteId, Vector2 pos, float angle, Vector2 scale) = 0;

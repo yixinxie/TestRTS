@@ -31,6 +31,9 @@
     <Filter Include="Source Files\input">
       <UniqueIdentifier>{e01b957f-8e3a-4e50-835a-453c5964d7ec}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\cimg">
+      <UniqueIdentifier>{0c028dac-9b8e-431a-b0f0-163fec2ed4e1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -126,6 +129,12 @@
     <ClInclude Include="graphics\GLIMCubes.h">
       <Filter>Source Files\graphics</Filter>
     </ClInclude>
+    <ClInclude Include="cimg\CImg.h">
+      <Filter>Source Files\cimg</Filter>
+    </ClInclude>
+    <ClInclude Include="gameplay\Terrain.h">
+      <Filter>Source Files\gameplay</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -208,6 +217,9 @@
     </ClCompile>
     <ClCompile Include="graphics\GLIMCubes.cpp">
       <Filter>Source Files\graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="gameplay\Terrain.cpp">
+      <Filter>Source Files\gameplay</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

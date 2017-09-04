@@ -165,12 +165,14 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="cimg\CImg.h" />
     <ClInclude Include="gameplay\Camera.h" />
     <ClInclude Include="gameplay\InputManager.h" />
     <ClInclude Include="gameplay\OObject.h" />
     <ClInclude Include="gameplay\Scene.h" />
     <ClInclude Include="gameplay\SelectorRect.h" />
     <ClInclude Include="gameplay\StaticCollision.h" />
+    <ClInclude Include="gameplay\Terrain.h" />
     <ClInclude Include="gameplay\Unit.h" />
     <ClInclude Include="graphics\GLIMCubes.h" />
     <ClInclude Include="graphics\GLIMLines.h" />
@@ -203,6 +205,7 @@
     <ClCompile Include="gameplay\Scene.cpp" />
     <ClCompile Include="gameplay\SelectorRect.cpp" />
     <ClCompile Include="gameplay\StaticCollision.cpp" />
+    <ClCompile Include="gameplay\Terrain.cpp" />
     <ClCompile Include="gameplay\Unit.cpp" />
     <ClCompile Include="graphics\GLIMCubes.cpp" />
     <ClCompile Include="graphics\GLIMLines.cpp" />

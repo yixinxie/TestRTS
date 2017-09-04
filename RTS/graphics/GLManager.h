@@ -33,19 +33,16 @@ private:
 	//void prepareViewProjectionCB(ID3D11Buffer** constantBuffer, const Vector3 position, const Vector3 euler, float fieldOfView, float aspectRatio, float nearPlane, float farPlane, ID3D11Buffer** constantBuffer2);
 	void assembleDrawables(void);
 	void restoreRenderTarget(void);
-	GLuint loadShaders(const char* vertex_file_path, const char* fragment_file_path);
 
 public:
 	GLManager(void);
 	~GLManager();
 	// overrides
 	bool init(HWND hWnd, int _width, int _height);
-	void initInstancing(void);
-	void disposeInstancing(void);
 	void render(void);
 
 	void line2D(Vector2 pos0, Vector2 pos1, Color color);
-	int newSpriteSheet(unsigned int width, unsigned int height, const char* spritePath);
+	int newSpriteSheet(const char* spritePath);
 	int newSprite(int handle, Vector2 pos, Vector2 uv);
 	void updateSprite(int textureId, int spriteId, Vector2 uv);
 	void updateSprite(int textureId, int spriteId, Vector2 pos, float angle, Vector2 scale);

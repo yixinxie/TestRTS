@@ -14,9 +14,14 @@ struct SpriteDesc {
 	float rotation;
 	Vector2 scale;
 	Vector2 uv;
-	
 	//unsigned int states;
 };
+// primarily for ui atlas.
+//struct SpriteSheetUV {
+//	char name[32];
+//	Vector2 left_bottom;
+//	Vector2 right_top;
+//};
 /*
 currently the class is instantiated multiple times.
 vertex_buffer, shaders can be shared among the instances.
@@ -40,12 +45,12 @@ public:
 	// overrides
 	void init(void);
 	void onRender(glm::mat4 proj_view_mat);
-	GLuint newSpriteSheet(unsigned int width, unsigned int height, const char* spritePath);
+	GLuint newSpriteSheet(const char* spritePath);
 	int newSprite(Vector2 pos, Vector2 uv);
 	void updateSprite(int spriteId, Vector2 pos);
 	void updateSprite(int spriteId, Vector2 pos, float angle, Vector2 scale);
 	
 	void updateBufferFromSpriteDesc(void);
 	void dispose(void);
-	void useTexture(const char* resourceId, unsigned int _width, unsigned int _height);
+	static void parseUVTxt(const char* content, ArrayStruct<SpriteSheetUV>& out);
 };

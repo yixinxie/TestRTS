@@ -47,6 +47,10 @@ struct Vector2{
 		this->y -= rhs.y;
 		return *this;
 	}
+	bool operator==(const Vector2& rhs)
+	{
+		return this->x == rhs.x && this->y == rhs.y;
+	}
 	//Vector3 toVector3(void)
 	//{
 	//	return Vector3(x, y, 0);
@@ -87,7 +91,10 @@ struct Vector3{
 		this->z -= rhs.z;
 		return *this;
 	}
-
+	bool operator==(const Vector3& rhs)
+	{
+		return this->x == rhs.x && this->y == rhs.y && this->z == rhs.z;
+	}
 };
 struct Vector4{
 	float x, y, z, w;
@@ -96,6 +103,10 @@ struct Vector4{
 	Vector4(const Vector3 vec) :x(vec.x), y(vec.y), z(vec.z), w(1) {
 	}
 	Vector4() :x(0.0f), y(0.0f), z(0.0f), w(0.0f) {
+	}
+	bool operator==(const Vector4& rhs)
+	{
+		return this->x == rhs.x && this->y == rhs.y && this->z == rhs.z && this->w == rhs.w;
 	}
 };
 struct IntVector2{

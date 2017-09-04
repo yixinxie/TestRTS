@@ -2,7 +2,7 @@
 #include "../lodepng/lodepng.h"
 #include <assert.h>
 #define BUFFER_OFFSET(i) ((char *)NULL + (i))
-GLIMLines::GLIMLines(void) : vertex_buffer(0){
+GLIMLines::GLIMLines(void) : vertex_buffer(0), dirty(false){
 	
 }
 GLIMLines::~GLIMLines(){
@@ -20,13 +20,13 @@ void GLIMLines::init(){
 }
 void GLIMLines::drawLine(Vector2 pos0, Vector2 pos1, Color color){
 	IMLineDesc newDesc;
-	newDesc.from_pos.x = pos0.x;
-	newDesc.from_pos.y = pos0.y;
+	newDesc.pos.x = pos0.x;
+	newDesc.pos.y = pos0.y;
 	newDesc.color = color.toVec4();
 	primitiveDesc.push(newDesc);
 
-	newDesc.from_pos.x = pos1.x;
-	newDesc.from_pos.y = pos1.y;
+	newDesc.pos.x = pos1.x;
+	newDesc.pos.y = pos1.y;
 	newDesc.color = color.toVec4();
 	primitiveDesc.push(newDesc);
 }

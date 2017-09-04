@@ -113,7 +113,7 @@ void GLManager::assembleDrawables(){
 	}
 	debugRender->updateBuffer();
 }
-int GLManager::newSpriteSheet(unsigned int width, unsigned int height, const char* spritePath) {
+int GLManager::newSpriteSheet(const char* spritePath) {
 	int ret = 0;
 	int hash = CharHelper::charHash(spritePath);
 
@@ -121,7 +121,7 @@ int GLManager::newSpriteSheet(unsigned int width, unsigned int height, const cha
 	if (it == textureIds.end()) {
 		GLInstancedSprites* newSpriteInstance = newClass<GLInstancedSprites>();
 		newSpriteInstance->init();
-		newSpriteInstance->newSpriteSheet(width, height, spritePath);
+		newSpriteInstance->newSpriteSheet(spritePath);
 		instancedSprites.push(newSpriteInstance);
 		ret = instancedSprites.length - 1;
 		textureIds.insert(std::pair<unsigned int, int>(hash, ret));

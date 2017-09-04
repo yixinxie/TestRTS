@@ -10,9 +10,12 @@
 #include "../misc/ArrayT.h"
 using namespace OriGraphics;
 struct IMLineDesc {
-	Vector3 from_pos;
+	Vector3 pos;
 	Vector4 color;
 	IMLineDesc() {
+	}
+	inline bool equals(const IMLineDesc& other) {
+		return pos == other.pos && color == other.color;
 	}
 };
 
@@ -26,6 +29,7 @@ private:
 	GLuint viewprojMatrixHnd;
 	GLuint shaderHnd;
 	GLuint initShaders(const char* vertex_file_path, const char* fragment_file_path);
+	bool dirty;
 public:
 	GLIMLines(void);
 	~GLIMLines();

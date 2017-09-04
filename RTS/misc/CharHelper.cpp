@@ -1,4 +1,5 @@
 #include "CharHelper.h"
+#include "ArrayT.h"
 
 CharBuffer* CharHelper::loadBinaryFile(std::string File)
 {
@@ -56,13 +57,19 @@ void CharHelper::writeTextFile(const char* fileName, const CharBuffer& charBuffe
 		file.close();
 	}
 }
-std::vector<std::string>& CharHelper::split(const std::string &s, char delim, std::vector<std::string> &elems) {
+void CharHelper::splitToLines(const std::string &s, std::vector<std::string> &lines) {
+	std::stringstream ss(s);
+	std::string item;
+	while (std::getline(ss, item)) {
+		lines.push_back(item);
+	}
+}
+void CharHelper::split(const std::string &s, char delim, std::vector<std::string> &lines) {
 	std::stringstream ss(s);
 	std::string item;
 	while (std::getline(ss, item, delim)) {
-		elems.push_back(item);
+		lines.push_back(item);
 	}
-	return elems;
 }
 
 
@@ -116,8 +123,65 @@ unsigned int CharHelper::charHash(const char* str){
 
 	return hash;
 }
-//void CharHelper::genGUID(OriGUID* guid){
-//	GUID result;
-//	UuidCreate(&result);
-//	memcpy(guid, &result, sizeof(GUID));
-//}
+bool CharHelper::charEndsWith(const char* base_str, const char* cmp_str) {
+	int32 base_length = strlen(base_str);
+	int32 cmp_length = strlen(cmp_str);
+	bool same = true;
+	for (int32 i = 1; i < 1024 && base_length - i >= 0 && cmp_length - i >= 0; ++i) {
+		if (base_str[base_length - i] != cmp_str[cmp_length - i]) {
+			same = false;
+			break;
+		}
+	}
+	return same;
+}
+void CharHelper::parseUVTxt(const char* content, std::vector<SpriteSheetUV>& out) {
+	const std::string content_str(content);
+	std::vector<std::string> lines;
+	splitToLines(content_str, lines);
+	for (int i = 0; i < lines.size(); ++i) {
+		std::vector<std::string> pieces_equal = split(lines[i], '=');
+		SpriteSheetUV newSheetUV;
+		std::string name_str, uv_str;
+		trimString(pieces_equal[0], name_str);
+		strcpy_s(newSheetUV.name, name_str.c_str());
+		trimString(pieces_equal[1], uv_str);
+		std::vector<std::string> pieces_numbers = split(uv_str, ' ');
+
+		newSheetUV.left_bottom.x = charToFloat(pieces_numbers[0].c_str());
+		newSheetUV.left_bottom.y = charToFloat(pieces_numbers[1].c_str());
+
+		newSheetUV.right_top.x = charToFloat(pieces_numbers[2].c_str());
+		newSheetUV.right_top.y = charToFloat(pieces_numbers[3].c_str());
+
+		out.push_back(newSheetUV);
+	}
+}
+void CharHelper::trimString(const std::string& original, std::string& out) {
+	const char* original_char = original.c_str();
+	int32 length = original.length();
+	int32 beginAt, endAt;
+	for (int i = 0; i < length; ++i) {
+		if (original_char[i] == ' ' ||
+			original_char[i] == '\r'){
+
+			
+		}
+		else {
+			beginAt = i;
+			break;
+		}
+	}
+	for (int i = length - 1; i >= 0; --i) {
+		if (original_char[i] == ' ' ||
+			original_char[i] == '\r') {
+
+
+		}
+		else {
+			endAt = i;
+			break;
+		}
+	}
+	out = original.substr(beginAt, endAt - beginAt + 1);
+}

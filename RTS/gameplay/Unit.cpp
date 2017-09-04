@@ -7,7 +7,7 @@ Unit::~Unit() {
 
 }
 void Unit::init(Vector2 pos, Vector2 uv) {
-	textureId = OERenderer->newSpriteSheet(512, 512, "assets/arrows.png");
+	textureId = OERenderer->newSpriteSheet("assets/arrows.png");
 	spriteDescId = OERenderer->newSprite(textureId, pos, uv);
 	this->pos = pos;
 }

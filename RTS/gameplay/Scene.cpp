@@ -1,6 +1,7 @@
 #include "Scene.h"
 #include "SelectorRect.h"
 #include "InputManager.h"
+#include "Terrain.h"
 Scene::Scene(void) {
 
 }
@@ -14,16 +15,6 @@ Scene::~Scene() {
 }
 void Scene::init(Renderer* _renderer) {
 	renderer = _renderer;
-	
-
-		//instancedSprites->newSprite(Vector2(0.5, 0), Vector2(7, 0));
-		//instancedSprites->newSprite(Vector2(-0.5, -0.5), Vector2(1, 0));
-		//instancedSprites->newSprite(Vector2(0.5, -0.5), Vector2(1, 0));
-		//instancedSprites->newSprite(Vector2(-1.5, -0.5), Vector2(1, 0));
-		//instancedSprites->newSprite(Vector2(-0.5, -1.5), Vector2(1, 0));
-
-
-	
 }
 void Scene::addOObject(OObject* obj) {
 	const char* objName = obj->getName();
@@ -54,6 +45,9 @@ void Scene::initScene() {
 	rect->init();
 	addOObject(rect);
 
+	Terrain* terrain = newClass<Terrain>();
+	terrain->init();
+	addOObject(terrain);
 
 	Unit* newUnit = newClass<Unit>("units");
 	newUnit->init(Vector2(0.5, 0), Vector2(7, 0));
@@ -74,8 +68,6 @@ void Scene::initScene() {
 	newUnit = newClass<Unit>("units");
 	newUnit->init(Vector2(-0.5, -1.5), Vector2(1, 0));
 	units.push(newUnit);
-
-	
 }
 void Scene::update(float timeElapsed) {
 	for (int i = 0; i < OObjectArray.length; ++i) {

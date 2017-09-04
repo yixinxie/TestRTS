@@ -1,5 +1,6 @@
 #include "GLInstancedSprites.h"
 #include "../lodepng/lodepng.h"
+#include "../cimg/CImg.h"
 #include <assert.h>
 #define BUFFER_OFFSET(i) ((char *)NULL + (i))
 GLInstancedSprites::GLInstancedSprites(void){
@@ -46,46 +47,53 @@ void GLInstancedSprites::init(){
 	glBindBuffer(GL_ARRAY_BUFFER, instance_buffer);
 	glBufferData(GL_ARRAY_BUFFER, sprite_max * sizeof(SpriteDesc), nullptr, GL_STREAM_DRAW);
 }
-GLuint GLInstancedSprites::newSpriteSheet(unsigned int width, unsigned int height, const char* spritePath){
-	
-	std::vector<unsigned char> pngData; //the raw pixels
-	//unsigned int error = lodepng::load_file(pngData, "assets/arrows.png");
-	unsigned int error = lodepng::load_file(pngData, spritePath);
-	assert(error == 0);
-	std::vector<unsigned char> image;
+GLuint GLInstancedSprites::newSpriteSheet(const char* spritePath){
 	unsigned char* imageBuffer;
-	error = lodepng::decode(image, width, height, pngData);
+	unsigned int w, h;
+	unsigned int error = 0;
+	std::vector<unsigned char> image;
+	if (CharHelper::charEndsWith(spritePath, "png")) {
+		std::vector<unsigned char> pngData; //the raw pixels
+		
+		lodepng::State load_state;
+
+		//lodepng::decode(image, w, h, load_state);
+		error = lodepng::load_file(pngData, spritePath);
+		assert(error == 0);
+		error = lodepng::decode(image, w, h, pngData);
+		CharBuffer* uvTxtBuffer = CharHelper::loadTextFile("assets/terrain_packed.txt");
+		std::vector<SpriteSheetUV> uvDesc;
+		CharHelper::parseUVTxt(uvTxtBuffer->buffer, uvDesc);
+		for (int i = 0; i < uvDesc.size(); ++i) {
+			uvDesc[i].left_bottom.x /= (float)w;
+			uvDesc[i].left_bottom.y /= (float)h;
+
+			uvDesc[i].right_top.x /= (float)w;
+			uvDesc[i].right_top.y /= (float)h;
+		}
+		int sdf = 0;
+		uvTxtBuffer->dispose();
+	}
+	else if (CharHelper::charEndsWith(spritePath, "jpg")) {
+		cimg_library::CImg<unsigned char> jpg_image(spritePath);
+		imageBuffer = jpg_image.data();
+	}
+	else {
+		// unrecognized file format
+		assert(false);
+		return 0;
+	}
+	
 	assert(error == 0);
 	imageBuffer = image.data();
 	// create texture in GPU.
-	//resourceHandle = G::instance()->renderer->createTexture(width, height, imageBuffer);
-	//assert(resourceHandle >= 0);
-	textureId = createTexture(width, height, image.data());
+	textureId = createTexture(w, h, image.data());
 	return textureId;
 
 }
 int GLInstancedSprites::newSprite(Vector2 pos, Vector2 uv) {
 	GLuint er;
 	int cur = spriteDesc.length;
-	/*sprite_count++;
-	if (cur >= sprite_max) {
-		
-		GLuint singleBuffer[1];
-		singleBuffer[0] = instance_buffer;
-		glDeleteBuffers(1, singleBuffer);
-		SpriteDesc* oldptr = spriteDesc;
-		
-
-		sprite_max *= 2;
-		spriteDesc = allocArray<SpriteDesc>(sprite_max, "sprite desc");
-		memcpy(spriteDesc, oldptr, sprite_max / 2 * sizeof(SpriteDesc));
-		deallocND(oldptr);
-		glGenBuffers(1, &instance_buffer);
-
-		//glBindBuffer(GL_ARRAY_BUFFER, instance_buffer);
-		//glBufferData(GL_ARRAY_BUFFER, sprite_max * sizeof(SpriteDesc), spriteDesc, GL_STREAM_DRAW);
-
-	}*/
 	const float unitUV = 1.0f / 12.0f;
 	SpriteDesc newDesc;
 	newDesc.pos = pos;
@@ -94,9 +102,6 @@ int GLInstancedSprites::newSprite(Vector2 pos, Vector2 uv) {
 	newDesc.uv.x = uv.x * unitUV;
 	newDesc.uv.y = uv.y * unitUV;
 	spriteDesc.push(newDesc);
-	//glBindBuffer(GL_ARRAY_BUFFER, instance_buffer);
-	//glBufferData(GL_ARRAY_BUFFER, sprite_max * sizeof(SpriteDesc), NULL, GL_STREAM_DRAW); // Buffer orphaning, a common way to improve streaming perf. See above link for details.
-	//glBufferSubData(GL_ARRAY_BUFFER, 0, sprite_max * sizeof(SpriteDesc), spriteDesc);
 	return cur;
 }
 void GLInstancedSprites::updateSprite(int spriteId, Vector2 pos) {
@@ -307,6 +312,4 @@ GLuint GLInstancedSprites::initShaders(const char* vertex_file_path, const char*
 	viewprojMatrixHnd = glGetUniformLocation(ProgramID, "mat_view_proj");
 	//GLuint err = glGetError();
 	return ProgramID;
-}
-void GLInstancedSprites::useTexture(const char* resourceId, unsigned int _width, unsigned int _height) {
 }
