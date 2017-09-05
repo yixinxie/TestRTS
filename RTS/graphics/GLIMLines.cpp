@@ -1,5 +1,5 @@
 #include "GLIMLines.h"
-#include "../lodepng/lodepng.h"
+#include "lodepng/lodepng.h"
 #include <assert.h>
 #define BUFFER_OFFSET(i) ((char *)NULL + (i))
 GLIMLines::GLIMLines(void) : vertex_buffer(0), dirty(false){

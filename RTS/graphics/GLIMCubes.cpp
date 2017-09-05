@@ -1,5 +1,5 @@
 #include "GLIMCubes.h"
-#include "../lodepng/lodepng.h"
+#include "lodepng/lodepng.h"
 #include <assert.h>
 #define BUFFER_OFFSET(i) ((char *)NULL + (i))
 GLIMCubes::GLIMCubes(void) : vertex_buffer(0), instance_buffer(0){

@@ -5,10 +5,10 @@
 #include "../misc/Macros.h"
 #include "../misc/ArrayT.h"
 #include "OObject.h"
-
+class b2World;
 class StaticCollision : public OObject {
 private:
-
+	b2World* box2DInst;
 public:
 	StaticCollision(void);
 	~StaticCollision();

@@ -1,5 +1,5 @@
 #include "GLManager.h"
-#include "../lodepng/lodepng.h"
+#include "lodepng/lodepng.h"
 #include <assert.h>
 GLManager::GLManager(void) : window(nullptr){
 	//ZeroMemory((void*)this, sizeof(GLManager));

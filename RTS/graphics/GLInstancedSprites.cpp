@@ -1,6 +1,6 @@
 #include "GLInstancedSprites.h"
-#include "../lodepng/lodepng.h"
-#include "../cimg/CImg.h"
+#include "lodepng/lodepng.h"
+#include "cimg/CImg.h"
 #include <assert.h>
 #define BUFFER_OFFSET(i) ((char *)NULL + (i))
 GLInstancedSprites::GLInstancedSprites(void){

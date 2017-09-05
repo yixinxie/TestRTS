@@ -2,6 +2,7 @@
 #include "SelectorRect.h"
 #include "InputManager.h"
 #include "Terrain.h"
+#include "StaticCollision.h"
 Scene::Scene(void) {
 
 }
@@ -48,6 +49,10 @@ void Scene::initScene() {
 	Terrain* terrain = newClass<Terrain>();
 	terrain->init();
 	addOObject(terrain);
+
+	StaticCollision* staticCollision = newClass<StaticCollision>();
+	staticCollision->init();
+	addOObject(staticCollision);
 
 	Unit* newUnit = newClass<Unit>("units");
 	newUnit->init(Vector2(0.5, 0), Vector2(7, 0));
