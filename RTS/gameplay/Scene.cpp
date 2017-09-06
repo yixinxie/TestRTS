@@ -3,6 +3,7 @@
 #include "InputManager.h"
 #include "Terrain.h"
 #include "StaticCollision.h"
+#include "RVOManager.h"
 Scene::Scene(void) {
 
 }
@@ -22,6 +23,7 @@ void Scene::addOObject(OObject* obj) {
 	if (objName[0] != 0) {
 		unsigned int key = CharHelper::charHash(obj->getName());
 		if (objectLookup.find(key) != objectLookup.end()) {
+			// duplicate key found!
 			assert(false);
 		}
 		else {
@@ -53,6 +55,10 @@ void Scene::initScene() {
 	StaticCollision* staticCollision = newClass<StaticCollision>();
 	staticCollision->init();
 	addOObject(staticCollision);
+
+	RVOManager* rvo = newClass<RVOManager>();
+	rvo->init();
+	addOObject(rvo);
 
 	Unit* newUnit = newClass<Unit>("units");
 	newUnit->init(Vector2(0.5, 0), Vector2(7, 0));

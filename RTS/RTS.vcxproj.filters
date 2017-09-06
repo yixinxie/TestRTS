@@ -40,6 +40,9 @@
     <Filter Include="Source Files\plugins\cimg">
       <UniqueIdentifier>{0c028dac-9b8e-431a-b0f0-163fec2ed4e1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\plugins\rvo">
+      <UniqueIdentifier>{9db480f0-da93-4eb3-9007-23b87cdb19eb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -282,6 +285,30 @@
     <ClInclude Include="plugins\cimg\CImg.h">
       <Filter>Source Files\plugins\cimg</Filter>
     </ClInclude>
+    <ClInclude Include="plugins\rvo\KdTree.h">
+      <Filter>Source Files\plugins\rvo</Filter>
+    </ClInclude>
+    <ClInclude Include="plugins\rvo\Obstacle.h">
+      <Filter>Source Files\plugins\rvo</Filter>
+    </ClInclude>
+    <ClInclude Include="plugins\rvo\RVO.h">
+      <Filter>Source Files\plugins\rvo</Filter>
+    </ClInclude>
+    <ClInclude Include="plugins\rvo\RVOSimulator.h">
+      <Filter>Source Files\plugins\rvo</Filter>
+    </ClInclude>
+    <ClInclude Include="plugins\rvo\Vector2.h">
+      <Filter>Source Files\plugins\rvo</Filter>
+    </ClInclude>
+    <ClInclude Include="plugins\rvo\Agent.h">
+      <Filter>Source Files\plugins\rvo</Filter>
+    </ClInclude>
+    <ClInclude Include="plugins\rvo\Definitions.h">
+      <Filter>Source Files\plugins\rvo</Filter>
+    </ClInclude>
+    <ClInclude Include="gameplay\RVOManager.h">
+      <Filter>Source Files\gameplay</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -505,6 +532,21 @@
     </ClCompile>
     <ClCompile Include="plugins\lodepng\pngdetail.cpp">
       <Filter>Source Files\plugins\lodepng</Filter>
+    </ClCompile>
+    <ClCompile Include="plugins\rvo\Agent.cpp">
+      <Filter>Source Files\plugins\rvo</Filter>
+    </ClCompile>
+    <ClCompile Include="plugins\rvo\KdTree.cpp">
+      <Filter>Source Files\plugins\rvo</Filter>
+    </ClCompile>
+    <ClCompile Include="plugins\rvo\Obstacle.cpp">
+      <Filter>Source Files\plugins\rvo</Filter>
+    </ClCompile>
+    <ClCompile Include="plugins\rvo\RVOSimulator.cpp">
+      <Filter>Source Files\plugins\rvo</Filter>
+    </ClCompile>
+    <ClCompile Include="gameplay\RVOManager.cpp">
+      <Filter>Source Files\gameplay</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

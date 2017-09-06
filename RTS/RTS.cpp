@@ -3,6 +3,7 @@
 
 #include "stdio.h"
 #include <string>
+#include <chrono>
 #include "GL/glew.h"
 #include "GLFW/glfw3.h"
 #include "misc/BasicMem.h"
@@ -15,7 +16,7 @@
 BasicMemory basicMem;
 using namespace OriGraphics;
 G* g;
-
+using namespace std::chrono;
 int main()
 {
 	Scene* test;
@@ -31,11 +32,28 @@ int main()
 	test = newClass<Scene>("scene");
 	test->init(G::instance()->renderer);
 	test->initScene();
+	high_resolution_clock::time_point fps0 = high_resolution_clock::now();
+	int32 frames = 0;
 	while (!glfwWindowShouldClose(wnd))
 	{
+		high_resolution_clock::time_point before = high_resolution_clock::now();
 		test->update(0.0167f);
+
 		G::instance()->renderer->render();
-		Sleep(16);
+		high_resolution_clock::time_point after = high_resolution_clock::now();
+		duration<double> time_span = duration_cast<duration<double>>(after - before);
+		double sleepFor = 0.016667 - time_span.count();
+		if (sleepFor > 0.0) {
+
+			Sleep((int32)(sleepFor * 1000));
+		}
+		time_span = duration_cast<duration<double>>(after - fps0);
+		frames++;
+		if (time_span.count() >= 1.0) {
+			printf_s("FPS: %d\n", frames);
+			fps0 = high_resolution_clock::now();
+			frames = 0;
+		}
 	}
 	deallocT(test);
 	deallocT(G::instance()->input);

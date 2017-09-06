@@ -1,4 +1,5 @@
 #pragma once
+#define Math_PI 3.1415927f
 typedef int int32;
 struct Vector3;
 struct Vector2{
