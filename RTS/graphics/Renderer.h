@@ -3,9 +3,6 @@
 #include <windows.h>
 #include <windowsx.h>
 #include <unordered_map>
-//#include "CameraDesc.h"
-//#include "LightSourceDesc.h"
-//#include "ObjectTransformDesc.h"
 #include "../misc/SimpleVector.h"
 using namespace std;
 namespace OriGraphics{

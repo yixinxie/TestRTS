@@ -43,6 +43,12 @@
     <Filter Include="Source Files\plugins\rvo">
       <UniqueIdentifier>{9db480f0-da93-4eb3-9007-23b87cdb19eb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\plugins\recast">
+      <UniqueIdentifier>{7aadda66-3319-4ce4-93ec-4f9a6096cfd3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\gameplay\recast">
+      <UniqueIdentifier>{3d8eaae1-8798-482e-b634-7136296289bf}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -309,6 +315,93 @@
     <ClInclude Include="gameplay\RVOManager.h">
       <Filter>Source Files\gameplay</Filter>
     </ClInclude>
+    <ClInclude Include="gameplay\RecastManager.h">
+      <Filter>Source Files\gameplay</Filter>
+    </ClInclude>
+    <ClInclude Include="plugins\recast\DetourCrowd\Include\DetourCrowd.h">
+      <Filter>Source Files\plugins\recast</Filter>
+    </ClInclude>
+    <ClInclude Include="plugins\recast\DetourCrowd\Include\DetourLocalBoundary.h">
+      <Filter>Source Files\plugins\recast</Filter>
+    </ClInclude>
+    <ClInclude Include="plugins\recast\DetourCrowd\Include\DetourObstacleAvoidance.h">
+      <Filter>Source Files\plugins\recast</Filter>
+    </ClInclude>
+    <ClInclude Include="plugins\recast\DetourCrowd\Include\DetourPathCorridor.h">
+      <Filter>Source Files\plugins\recast</Filter>
+    </ClInclude>
+    <ClInclude Include="plugins\recast\DetourCrowd\Include\DetourPathQueue.h">
+      <Filter>Source Files\plugins\recast</Filter>
+    </ClInclude>
+    <ClInclude Include="plugins\recast\DetourCrowd\Include\DetourProximityGrid.h">
+      <Filter>Source Files\plugins\recast</Filter>
+    </ClInclude>
+    <ClInclude Include="plugins\recast\DetourTileCache\Include\DetourTileCache.h">
+      <Filter>Source Files\plugins\recast</Filter>
+    </ClInclude>
+    <ClInclude Include="plugins\recast\DetourTileCache\Include\DetourTileCacheBuilder.h">
+      <Filter>Source Files\plugins\recast</Filter>
+    </ClInclude>
+    <ClInclude Include="plugins\recast\Recast\Include\Recast.h">
+      <Filter>Source Files\plugins\recast</Filter>
+    </ClInclude>
+    <ClInclude Include="plugins\recast\Recast\Include\RecastAlloc.h">
+      <Filter>Source Files\plugins\recast</Filter>
+    </ClInclude>
+    <ClInclude Include="plugins\recast\Recast\Include\RecastAssert.h">
+      <Filter>Source Files\plugins\recast</Filter>
+    </ClInclude>
+    <ClInclude Include="plugins\recast\DebugUtils\Include\DebugDraw.h">
+      <Filter>Source Files\plugins\recast</Filter>
+    </ClInclude>
+    <ClInclude Include="plugins\recast\DebugUtils\Include\DetourDebugDraw.h">
+      <Filter>Source Files\plugins\recast</Filter>
+    </ClInclude>
+    <ClInclude Include="plugins\recast\DebugUtils\Include\RecastDebugDraw.h">
+      <Filter>Source Files\plugins\recast</Filter>
+    </ClInclude>
+    <ClInclude Include="plugins\recast\DebugUtils\Include\RecastDump.h">
+      <Filter>Source Files\plugins\recast</Filter>
+    </ClInclude>
+    <ClInclude Include="plugins\recast\Detour\Include\DetourAlloc.h">
+      <Filter>Source Files\plugins\recast</Filter>
+    </ClInclude>
+    <ClInclude Include="plugins\recast\Detour\Include\DetourAssert.h">
+      <Filter>Source Files\plugins\recast</Filter>
+    </ClInclude>
+    <ClInclude Include="plugins\recast\Detour\Include\DetourCommon.h">
+      <Filter>Source Files\plugins\recast</Filter>
+    </ClInclude>
+    <ClInclude Include="plugins\recast\Detour\Include\DetourMath.h">
+      <Filter>Source Files\plugins\recast</Filter>
+    </ClInclude>
+    <ClInclude Include="plugins\recast\Detour\Include\DetourNavMesh.h">
+      <Filter>Source Files\plugins\recast</Filter>
+    </ClInclude>
+    <ClInclude Include="plugins\recast\Detour\Include\DetourNavMeshBuilder.h">
+      <Filter>Source Files\plugins\recast</Filter>
+    </ClInclude>
+    <ClInclude Include="plugins\recast\Detour\Include\DetourNavMeshQuery.h">
+      <Filter>Source Files\plugins\recast</Filter>
+    </ClInclude>
+    <ClInclude Include="plugins\recast\Detour\Include\DetourNode.h">
+      <Filter>Source Files\plugins\recast</Filter>
+    </ClInclude>
+    <ClInclude Include="plugins\recast\Detour\Include\DetourStatus.h">
+      <Filter>Source Files\plugins\recast</Filter>
+    </ClInclude>
+    <ClInclude Include="gameplay\recast\ChunkyTriMesh.h">
+      <Filter>Source Files\gameplay\recast</Filter>
+    </ClInclude>
+    <ClInclude Include="gameplay\recast\InputGeom.h">
+      <Filter>Source Files\gameplay\recast</Filter>
+    </ClInclude>
+    <ClInclude Include="gameplay\recast\MeshLoaderObj.h">
+      <Filter>Source Files\gameplay\recast</Filter>
+    </ClInclude>
+    <ClInclude Include="gameplay\recast\SampleInterfaces.h">
+      <Filter>Source Files\gameplay\recast</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -547,6 +640,111 @@
     </ClCompile>
     <ClCompile Include="gameplay\RVOManager.cpp">
       <Filter>Source Files\gameplay</Filter>
+    </ClCompile>
+    <ClCompile Include="gameplay\RecastManager.cpp">
+      <Filter>Source Files\gameplay</Filter>
+    </ClCompile>
+    <ClCompile Include="plugins\recast\DetourCrowd\Source\DetourCrowd.cpp">
+      <Filter>Source Files\plugins\recast</Filter>
+    </ClCompile>
+    <ClCompile Include="plugins\recast\DetourCrowd\Source\DetourLocalBoundary.cpp">
+      <Filter>Source Files\plugins\recast</Filter>
+    </ClCompile>
+    <ClCompile Include="plugins\recast\DetourCrowd\Source\DetourObstacleAvoidance.cpp">
+      <Filter>Source Files\plugins\recast</Filter>
+    </ClCompile>
+    <ClCompile Include="plugins\recast\DetourCrowd\Source\DetourPathCorridor.cpp">
+      <Filter>Source Files\plugins\recast</Filter>
+    </ClCompile>
+    <ClCompile Include="plugins\recast\DetourCrowd\Source\DetourPathQueue.cpp">
+      <Filter>Source Files\plugins\recast</Filter>
+    </ClCompile>
+    <ClCompile Include="plugins\recast\DetourCrowd\Source\DetourProximityGrid.cpp">
+      <Filter>Source Files\plugins\recast</Filter>
+    </ClCompile>
+    <ClCompile Include="plugins\recast\DetourTileCache\Source\DetourTileCache.cpp">
+      <Filter>Source Files\plugins\recast</Filter>
+    </ClCompile>
+    <ClCompile Include="plugins\recast\DetourTileCache\Source\DetourTileCacheBuilder.cpp">
+      <Filter>Source Files\plugins\recast</Filter>
+    </ClCompile>
+    <ClCompile Include="plugins\recast\Recast\Source\Recast.cpp">
+      <Filter>Source Files\plugins\recast</Filter>
+    </ClCompile>
+    <ClCompile Include="plugins\recast\Recast\Source\RecastAlloc.cpp">
+      <Filter>Source Files\plugins\recast</Filter>
+    </ClCompile>
+    <ClCompile Include="plugins\recast\Recast\Source\RecastArea.cpp">
+      <Filter>Source Files\plugins\recast</Filter>
+    </ClCompile>
+    <ClCompile Include="plugins\recast\Recast\Source\RecastAssert.cpp">
+      <Filter>Source Files\plugins\recast</Filter>
+    </ClCompile>
+    <ClCompile Include="plugins\recast\Recast\Source\RecastContour.cpp">
+      <Filter>Source Files\plugins\recast</Filter>
+    </ClCompile>
+    <ClCompile Include="plugins\recast\Recast\Source\RecastFilter.cpp">
+      <Filter>Source Files\plugins\recast</Filter>
+    </ClCompile>
+    <ClCompile Include="plugins\recast\Recast\Source\RecastLayers.cpp">
+      <Filter>Source Files\plugins\recast</Filter>
+    </ClCompile>
+    <ClCompile Include="plugins\recast\Recast\Source\RecastMesh.cpp">
+      <Filter>Source Files\plugins\recast</Filter>
+    </ClCompile>
+    <ClCompile Include="plugins\recast\Recast\Source\RecastMeshDetail.cpp">
+      <Filter>Source Files\plugins\recast</Filter>
+    </ClCompile>
+    <ClCompile Include="plugins\recast\Recast\Source\RecastRasterization.cpp">
+      <Filter>Source Files\plugins\recast</Filter>
+    </ClCompile>
+    <ClCompile Include="plugins\recast\Recast\Source\RecastRegion.cpp">
+      <Filter>Source Files\plugins\recast</Filter>
+    </ClCompile>
+    <ClCompile Include="plugins\recast\DebugUtils\Source\DebugDraw.cpp">
+      <Filter>Source Files\plugins\recast</Filter>
+    </ClCompile>
+    <ClCompile Include="plugins\recast\DebugUtils\Source\DetourDebugDraw.cpp">
+      <Filter>Source Files\plugins\recast</Filter>
+    </ClCompile>
+    <ClCompile Include="plugins\recast\DebugUtils\Source\RecastDebugDraw.cpp">
+      <Filter>Source Files\plugins\recast</Filter>
+    </ClCompile>
+    <ClCompile Include="plugins\recast\DebugUtils\Source\RecastDump.cpp">
+      <Filter>Source Files\plugins\recast</Filter>
+    </ClCompile>
+    <ClCompile Include="plugins\recast\Detour\Source\DetourAlloc.cpp">
+      <Filter>Source Files\plugins\recast</Filter>
+    </ClCompile>
+    <ClCompile Include="plugins\recast\Detour\Source\DetourAssert.cpp">
+      <Filter>Source Files\plugins\recast</Filter>
+    </ClCompile>
+    <ClCompile Include="plugins\recast\Detour\Source\DetourCommon.cpp">
+      <Filter>Source Files\plugins\recast</Filter>
+    </ClCompile>
+    <ClCompile Include="plugins\recast\Detour\Source\DetourNavMesh.cpp">
+      <Filter>Source Files\plugins\recast</Filter>
+    </ClCompile>
+    <ClCompile Include="plugins\recast\Detour\Source\DetourNavMeshBuilder.cpp">
+      <Filter>Source Files\plugins\recast</Filter>
+    </ClCompile>
+    <ClCompile Include="plugins\recast\Detour\Source\DetourNavMeshQuery.cpp">
+      <Filter>Source Files\plugins\recast</Filter>
+    </ClCompile>
+    <ClCompile Include="plugins\recast\Detour\Source\DetourNode.cpp">
+      <Filter>Source Files\plugins\recast</Filter>
+    </ClCompile>
+    <ClCompile Include="gameplay\recast\InputGeom.cpp">
+      <Filter>Source Files\gameplay\recast</Filter>
+    </ClCompile>
+    <ClCompile Include="gameplay\recast\MeshLoaderObj.cpp">
+      <Filter>Source Files\gameplay\recast</Filter>
+    </ClCompile>
+    <ClCompile Include="gameplay\recast\ChunkyTriMesh.cpp">
+      <Filter>Source Files\gameplay\recast</Filter>
+    </ClCompile>
+    <ClCompile Include="gameplay\recast\SampleInterfaces.cpp">
+      <Filter>Source Files\gameplay\recast</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

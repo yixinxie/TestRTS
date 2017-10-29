@@ -2,18 +2,17 @@
 #pragma once
 #include "GL/glew.h"
 #include "GLFW/glfw3.h"
-#include "../graphics/Renderer.h"
-#include "../misc/CharHelper.h"
-#include "../misc/Macros.h"
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
-#include "GLInstancedSprites.h"
-#include "GLIMLines.h"
+#include "misc/ArrayT.h"
+#include "../graphics/Renderer.h"
+class GLInstancedSprites;
 using namespace OriGraphics;
 struct TextureMeta {
 	GLuint textureId;
 	int refCount;
 };
+
 class GLManager : public Renderer{
 public:
 	GLFWwindow* window;
@@ -26,7 +25,7 @@ private:
 	std::unordered_map<unsigned int, int> textureIds;
 
 	ArrayPtr<GLInstancedSprites*> instancedSprites;
-	GLIMLines* debugRender;
+	class GLIMLines* debugRender;
 
 	void initDepthStencil(void);
 	void prepareCamera(void);

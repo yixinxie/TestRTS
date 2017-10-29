@@ -96,6 +96,10 @@ struct Vector3{
 	{
 		return this->x == rhs.x && this->y == rhs.y && this->z == rhs.z;
 	}
+	float* getFirstFloatAddr()
+	{
+		return &x;
+	}
 };
 struct Vector4{
 	float x, y, z, w;

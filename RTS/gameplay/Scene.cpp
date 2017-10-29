@@ -1,9 +1,13 @@
 #include "Scene.h"
+#include "../graphics/Renderer.h"
+#include "Unit.h"
+#include "misc/G.h"
+#include "OObject.h"
 #include "SelectorRect.h"
 #include "InputManager.h"
 #include "Terrain.h"
 #include "StaticCollision.h"
-#include "RVOManager.h"
+#include "RecastManager.h"
 Scene::Scene(void) {
 
 }
@@ -56,9 +60,12 @@ void Scene::initScene() {
 	staticCollision->init();
 	addOObject(staticCollision);
 
-	RVOManager* rvo = newClass<RVOManager>();
-	rvo->init();
-	addOObject(rvo);
+	//RVOManager* rvo = newClass<RVOManager>();
+	//rvo->init();
+	//addOObject(rvo);
+	RecastManager* recastManager = newClass<RecastManager>("recast");
+	recastManager->init();
+	addOObject(recastManager);
 
 	Unit* newUnit = newClass<Unit>("units");
 	newUnit->init(Vector2(0.5, 0), Vector2(7, 0));

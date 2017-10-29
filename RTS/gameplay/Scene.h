@@ -1,19 +1,14 @@
 #pragma once
-#include "../misc/G.h"
 #include "../graphics/Renderer.h"
-#include "../misc/CharHelper.h"
-#include "../misc/Macros.h"
 #include "../misc/ArrayT.h"
-#include "../graphics/Renderer.h"
-#include "Unit.h"
-#include "OObject.h"
+
 using namespace OriGraphics;
 class Scene {
 private:
-	Renderer* renderer;
-	std::unordered_map<unsigned int, OObject*> objectLookup;
-	ArrayPtr<OObject*> OObjectArray;
-	ArrayPtr<Unit*> units;
+	class Renderer* renderer;
+	std::unordered_map<unsigned int, class OObject*> objectLookup;
+	ArrayPtr<class OObject*> OObjectArray;
+	ArrayPtr<class Unit*> units;
 
 	void (*f)();
 public:

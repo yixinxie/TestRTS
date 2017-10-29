@@ -71,22 +71,22 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>D:\dxapp\RTS\RTS;D:\dxapp\RTS\RTS\plugins;$(IncludePath)</IncludePath>
+    <IncludePath>D:\dxapp\RTS\RTS;D:\dxapp\RTS\RTS\plugins;D:\dxapp\RTS\RTS\plugins\recast\Recast\Include;D:\dxapp\RTS\RTS\plugins\recast\Detour\Include;D:\dxapp\RTS\RTS\plugins\recast\DetourTileCache\Include;D:\dxapp\RTS\RTS\plugins\recast\DetourCrowd\Include;D:\dxapp\RTS\RTS\plugins\recast\DebugUtils\Include;$(IncludePath)</IncludePath>
     <LibraryPath>$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>D:\dxapp\RTS\RTS;D:\dxapp\RTS\RTS\plugins;$(IncludePath)</IncludePath>
+    <IncludePath>D:\dxapp\RTS\RTS;D:\dxapp\RTS\RTS\plugins;D:\dxapp\RTS\RTS\plugins\recast\Recast\Include;D:\dxapp\RTS\RTS\plugins\recast\Detour\Include;D:\dxapp\RTS\RTS\plugins\recast\DetourTileCache\Include;D:\dxapp\RTS\RTS\plugins\recast\DetourCrowd\Include;D:\dxapp\RTS\RTS\plugins\recast\DebugUtils\Include;$(IncludePath)</IncludePath>
     <LibraryPath>$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>D:\dxapp\RTS\RTS;D:\dxapp\RTS\RTS\plugins;$(IncludePath)</IncludePath>
+    <IncludePath>D:\dxapp\RTS\RTS;D:\dxapp\RTS\RTS\plugins;D:\dxapp\RTS\RTS\plugins\recast\Recast\Include;D:\dxapp\RTS\RTS\plugins\recast\Detour\Include;D:\dxapp\RTS\RTS\plugins\recast\DetourTileCache\Include;D:\dxapp\RTS\RTS\plugins\recast\DetourCrowd\Include;D:\dxapp\RTS\RTS\plugins\recast\DebugUtils\Include;$(IncludePath)</IncludePath>
     <LibraryPath>$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>D:\dxapp\RTS\RTS;D:\dxapp\RTS\RTS\plugins;$(IncludePath)</IncludePath>
+    <IncludePath>D:\dxapp\RTS\RTS;D:\dxapp\RTS\RTS\plugins;D:\dxapp\RTS\RTS\plugins\recast\Recast\Include;D:\dxapp\RTS\RTS\plugins\recast\Detour\Include;D:\dxapp\RTS\RTS\plugins\recast\DetourTileCache\Include;D:\dxapp\RTS\RTS\plugins\recast\DetourCrowd\Include;D:\dxapp\RTS\RTS\plugins\recast\DebugUtils\Include;$(IncludePath)</IncludePath>
     <LibraryPath>$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -168,6 +168,11 @@
     <ClInclude Include="gameplay\Camera.h" />
     <ClInclude Include="gameplay\InputManager.h" />
     <ClInclude Include="gameplay\OObject.h" />
+    <ClInclude Include="gameplay\RecastManager.h" />
+    <ClInclude Include="gameplay\recast\ChunkyTriMesh.h" />
+    <ClInclude Include="gameplay\recast\InputGeom.h" />
+    <ClInclude Include="gameplay\recast\MeshLoaderObj.h" />
+    <ClInclude Include="gameplay\recast\SampleInterfaces.h" />
     <ClInclude Include="gameplay\RVOManager.h" />
     <ClInclude Include="gameplay\Scene.h" />
     <ClInclude Include="gameplay\SelectorRect.h" />
@@ -243,6 +248,30 @@
     <ClInclude Include="plugins\cimg\CImg.h" />
     <ClInclude Include="plugins\lodepng\lodepng.h" />
     <ClInclude Include="plugins\lodepng\lodepng_util.h" />
+    <ClInclude Include="plugins\recast\DebugUtils\Include\DebugDraw.h" />
+    <ClInclude Include="plugins\recast\DebugUtils\Include\DetourDebugDraw.h" />
+    <ClInclude Include="plugins\recast\DebugUtils\Include\RecastDebugDraw.h" />
+    <ClInclude Include="plugins\recast\DebugUtils\Include\RecastDump.h" />
+    <ClInclude Include="plugins\recast\DetourCrowd\Include\DetourCrowd.h" />
+    <ClInclude Include="plugins\recast\DetourCrowd\Include\DetourLocalBoundary.h" />
+    <ClInclude Include="plugins\recast\DetourCrowd\Include\DetourObstacleAvoidance.h" />
+    <ClInclude Include="plugins\recast\DetourCrowd\Include\DetourPathCorridor.h" />
+    <ClInclude Include="plugins\recast\DetourCrowd\Include\DetourPathQueue.h" />
+    <ClInclude Include="plugins\recast\DetourCrowd\Include\DetourProximityGrid.h" />
+    <ClInclude Include="plugins\recast\DetourTileCache\Include\DetourTileCache.h" />
+    <ClInclude Include="plugins\recast\DetourTileCache\Include\DetourTileCacheBuilder.h" />
+    <ClInclude Include="plugins\recast\Detour\Include\DetourAlloc.h" />
+    <ClInclude Include="plugins\recast\Detour\Include\DetourAssert.h" />
+    <ClInclude Include="plugins\recast\Detour\Include\DetourCommon.h" />
+    <ClInclude Include="plugins\recast\Detour\Include\DetourMath.h" />
+    <ClInclude Include="plugins\recast\Detour\Include\DetourNavMesh.h" />
+    <ClInclude Include="plugins\recast\Detour\Include\DetourNavMeshBuilder.h" />
+    <ClInclude Include="plugins\recast\Detour\Include\DetourNavMeshQuery.h" />
+    <ClInclude Include="plugins\recast\Detour\Include\DetourNode.h" />
+    <ClInclude Include="plugins\recast\Detour\Include\DetourStatus.h" />
+    <ClInclude Include="plugins\recast\Recast\Include\Recast.h" />
+    <ClInclude Include="plugins\recast\Recast\Include\RecastAlloc.h" />
+    <ClInclude Include="plugins\recast\Recast\Include\RecastAssert.h" />
     <ClInclude Include="plugins\rvo\Agent.h" />
     <ClInclude Include="plugins\rvo\Definitions.h" />
     <ClInclude Include="plugins\rvo\KdTree.h" />
@@ -257,6 +286,11 @@
     <ClCompile Include="gameplay\Camera.cpp" />
     <ClCompile Include="gameplay\InputManager.cpp" />
     <ClCompile Include="gameplay\OObject.cpp" />
+    <ClCompile Include="gameplay\RecastManager.cpp" />
+    <ClCompile Include="gameplay\recast\ChunkyTriMesh.cpp" />
+    <ClCompile Include="gameplay\recast\InputGeom.cpp" />
+    <ClCompile Include="gameplay\recast\MeshLoaderObj.cpp" />
+    <ClCompile Include="gameplay\recast\SampleInterfaces.cpp" />
     <ClCompile Include="gameplay\RVOManager.cpp" />
     <ClCompile Include="gameplay\Scene.cpp" />
     <ClCompile Include="gameplay\SelectorRect.cpp" />
@@ -327,6 +361,36 @@
     <ClCompile Include="plugins\lodepng\lodepng.cpp" />
     <ClCompile Include="plugins\lodepng\lodepng_util.cpp" />
     <ClCompile Include="plugins\lodepng\pngdetail.cpp" />
+    <ClCompile Include="plugins\recast\DebugUtils\Source\DebugDraw.cpp" />
+    <ClCompile Include="plugins\recast\DebugUtils\Source\DetourDebugDraw.cpp" />
+    <ClCompile Include="plugins\recast\DebugUtils\Source\RecastDebugDraw.cpp" />
+    <ClCompile Include="plugins\recast\DebugUtils\Source\RecastDump.cpp" />
+    <ClCompile Include="plugins\recast\DetourCrowd\Source\DetourCrowd.cpp" />
+    <ClCompile Include="plugins\recast\DetourCrowd\Source\DetourLocalBoundary.cpp" />
+    <ClCompile Include="plugins\recast\DetourCrowd\Source\DetourObstacleAvoidance.cpp" />
+    <ClCompile Include="plugins\recast\DetourCrowd\Source\DetourPathCorridor.cpp" />
+    <ClCompile Include="plugins\recast\DetourCrowd\Source\DetourPathQueue.cpp" />
+    <ClCompile Include="plugins\recast\DetourCrowd\Source\DetourProximityGrid.cpp" />
+    <ClCompile Include="plugins\recast\DetourTileCache\Source\DetourTileCache.cpp" />
+    <ClCompile Include="plugins\recast\DetourTileCache\Source\DetourTileCacheBuilder.cpp" />
+    <ClCompile Include="plugins\recast\Detour\Source\DetourAlloc.cpp" />
+    <ClCompile Include="plugins\recast\Detour\Source\DetourAssert.cpp" />
+    <ClCompile Include="plugins\recast\Detour\Source\DetourCommon.cpp" />
+    <ClCompile Include="plugins\recast\Detour\Source\DetourNavMesh.cpp" />
+    <ClCompile Include="plugins\recast\Detour\Source\DetourNavMeshBuilder.cpp" />
+    <ClCompile Include="plugins\recast\Detour\Source\DetourNavMeshQuery.cpp" />
+    <ClCompile Include="plugins\recast\Detour\Source\DetourNode.cpp" />
+    <ClCompile Include="plugins\recast\Recast\Source\Recast.cpp" />
+    <ClCompile Include="plugins\recast\Recast\Source\RecastAlloc.cpp" />
+    <ClCompile Include="plugins\recast\Recast\Source\RecastArea.cpp" />
+    <ClCompile Include="plugins\recast\Recast\Source\RecastAssert.cpp" />
+    <ClCompile Include="plugins\recast\Recast\Source\RecastContour.cpp" />
+    <ClCompile Include="plugins\recast\Recast\Source\RecastFilter.cpp" />
+    <ClCompile Include="plugins\recast\Recast\Source\RecastLayers.cpp" />
+    <ClCompile Include="plugins\recast\Recast\Source\RecastMesh.cpp" />
+    <ClCompile Include="plugins\recast\Recast\Source\RecastMeshDetail.cpp" />
+    <ClCompile Include="plugins\recast\Recast\Source\RecastRasterization.cpp" />
+    <ClCompile Include="plugins\recast\Recast\Source\RecastRegion.cpp" />
     <ClCompile Include="plugins\rvo\Agent.cpp" />
     <ClCompile Include="plugins\rvo\KdTree.cpp" />
     <ClCompile Include="plugins\rvo\Obstacle.cpp" />

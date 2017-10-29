@@ -1,6 +1,11 @@
 #include "GLManager.h"
 #include "lodepng/lodepng.h"
 #include <assert.h>
+#include "../misc/CharHelper.h"
+#include "../misc/Macros.h"
+#include "GLInstancedSprites.h"
+#include "GLIMLines.h"
+
 GLManager::GLManager(void) : window(nullptr){
 	//ZeroMemory((void*)this, sizeof(GLManager));
 	cameraSize = 10.0f;

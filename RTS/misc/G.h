@@ -1,7 +1,7 @@
 #pragma once
-#include "../graphics/Renderer.h"
-#include "../misc/WindowsInput.h"
-#include "../gameplay/Scene.h"
+#include "graphics/Renderer.h"
+#include "gameplay/Scene.h"
+#include "misc/WindowsInput.h"
 #define OERenderer G::instance()->renderer
 #define OEInput G::instance()->input
 #define OEScene G::instance()->currentScene
@@ -16,7 +16,7 @@ private:
 	static G* _instance;
 public:
 	static G* instance(void);
-	Renderer* renderer;
-	WindowsInput* input;
-	Scene* currentScene;
+	class Renderer* renderer;
+	class WindowsInput* input;
+	class Scene* currentScene;
 };

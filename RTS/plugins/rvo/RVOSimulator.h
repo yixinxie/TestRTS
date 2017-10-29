@@ -37,7 +37,7 @@
  * \file       RVOSimulator.h
  * \brief      Contains the RVOSimulator class.
  */
-
+#define _OPENMP
 #include <cstddef>
 #include <limits>
 #include <vector>

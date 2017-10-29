@@ -1,5 +1,7 @@
 #include "Unit.h"
 #include "../misc/G.h"
+#include "../misc/CharHelper.h"
+#include "../misc/Macros.h"
 Unit::Unit(){
 
 }

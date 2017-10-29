@@ -1,12 +1,12 @@
 #pragma once
 #include "../graphics/Renderer.h"
-#include "../graphics/Renderer.h"
 #include "../misc/CharHelper.h"
 #include "../misc/Macros.h"
 #include "../misc/ArrayT.h"
-// 
+// used for non-performance critical entities.
 class OObject {
 private:
+	// change this for debug mode.
 	char name[32];
 	
 public:
