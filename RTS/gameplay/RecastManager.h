@@ -19,10 +19,10 @@ protected:
 	struct rcConfig m_cfg;
 	dtQueryFilter m_filter;
 	class InputGeom* m_geom;
-
+	// taken from Sample_TileMesh.h
 	const int m_maxTiles = 128;
 	const int m_maxPolysPerTile = 32768;
-	float m_tileSize;
+	float m_tileSize = 32.0f;
 
 	unsigned int m_tileCol;
 	float m_lastBuiltTileBmin[3];
@@ -31,22 +31,25 @@ protected:
 	float m_tileMemUsage;
 	int m_tileTriCount;
 
-	// constants
-	const float m_cellSize = 1.0f;
-	const float m_cellHeight = 1.0f;
+	// constants from Sample.h
+	const float m_cellSize = 0.3f;
+	const float m_cellHeight = 0.2f;
 
-	const float m_agentMaxSlope = 1.0f;
-	const float m_agentHeight = 1.0f;
-	const float m_agentMaxClimb = 1.0f;
-	const float m_agentRadius = 1.0f;
-	const float m_edgeMaxLen = 1.0f;
-	const float m_edgeMaxError = 64.0f;
-	const float m_regionMinSize = 1.0f;
-	const float m_regionMergeSize = 1.0f;
+	const float m_agentHeight = 5.0f;
+	const float m_agentRadius = 0.6f;
+	const float m_agentMaxClimb = 0.9f;
+	const float m_agentMaxSlope = 45.0f;
+	
+	const float m_regionMinSize = 8.0f;
+	const float m_regionMergeSize = 20.0f;
+	
+	const float m_edgeMaxLen = 12.0f;
+	const float m_edgeMaxError = 1.3f;
+	
 	const int32 m_vertsPerPoly = 6;
 
 
-	const float m_detailSampleDist = 1.0f;
+	const float m_detailSampleDist = 6.0f;
 	const float m_detailSampleMaxError = 1.0f;
 
 	enum PolyAreas : unsigned short

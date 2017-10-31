@@ -476,16 +476,14 @@ int RecastManager::findPath(const Vector3& startPos, const Vector3& endPos) {
 		return -1;
 	dtPolyRef m_startRef;
 	dtPolyRef m_endRef;
-	float* localStartPos = (float*)&startPos;
-	float* localEndPos = (float*)&endPos;
 	float polyPickExtent[3];
-	float nearestPtStart = 0.0f;
-	float nearestPtEnd = 0.0f;
-	polyPickExtent[0] = 2;
-	polyPickExtent[1] = 4;
-	polyPickExtent[2] = 2;
-	navQuery->findNearestPoly(localStartPos, polyPickExtent, &m_filter, &m_startRef, &nearestPtStart);
-	navQuery->findNearestPoly(localEndPos, polyPickExtent, &m_filter, &m_endRef, &nearestPtEnd);
+	float nearestPtStart[3];
+	float nearestPtEnd[3];
+	polyPickExtent[0] = 0.01f;
+	polyPickExtent[1] = 0.01f;
+	polyPickExtent[2] = 0.01f;
+	navQuery->findNearestPoly(&(startPos.x), polyPickExtent, &m_filter, &m_startRef, nearestPtStart);
+	navQuery->findNearestPoly(&(endPos.x), polyPickExtent, &m_filter, &m_endRef, nearestPtEnd);
 
 	const int MAX_POLYS = 256;
 	//m_pathFindStatus = DT_FAILURE;
@@ -496,7 +494,7 @@ int RecastManager::findPath(const Vector3& startPos, const Vector3& endPos) {
 		m_spos[0], m_spos[1], m_spos[2], m_epos[0], m_epos[1], m_epos[2],
 		m_filter.getIncludeFlags(), m_filter.getExcludeFlags());
 #endif
-	navQuery->findPath(m_startRef, m_endRef, localStartPos, localEndPos, &m_filter, result, &pathCount, MAX_POLYS);
+	navQuery->findPath(m_startRef, m_endRef, &(startPos.x), &(endPos.x), &m_filter, result, &pathCount, MAX_POLYS);
 	//if (pathCount)
 	//{
 	//	// In case of partial path, make sure the end point is clamped to the last polygon.
