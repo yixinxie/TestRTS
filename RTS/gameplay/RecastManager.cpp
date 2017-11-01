@@ -28,6 +28,11 @@ void RecastManager::init() {
 	m_tileSize = 100.0f;
 	BuildContext rcContext;
 	m_geom = new InputGeom();
+	if (m_geom->load(&rcContext, "D:/unity_rts_7/terrain.bin") == false) { 
+		return; 
+	}
+
+
 	navQuery = dtAllocNavMeshQuery();
 	crowd = dtAllocCrowd();
 	navMesh = dtAllocNavMesh();
@@ -38,10 +43,7 @@ void RecastManager::init() {
 	}
 	
 	dtNavMeshParams params;
-	//rcVcopy(params.orig, m_geom->getNavMeshBoundsMin());
-	params.orig[0] = 0.0f;
-	params.orig[1] = 0.0f;
-	params.orig[2] = 0.0f;
+	rcVcopy(params.orig, m_geom->getNavMeshBoundsMin());
 	params.tileWidth = m_tileSize*m_cellSize;
 	params.tileHeight = m_tileSize*m_cellSize;
 	params.maxTiles = m_maxTiles;
@@ -62,7 +64,7 @@ void RecastManager::init() {
 		printf_s("buildTiledNavigation: Could not init Detour navmesh query");
 	}
 	//if (m_geom->load(&rcContext, "assets/terrain.obj") == false)return;
-	if (m_geom->load(&rcContext, "D:/unity_rts_7/terrain.bin") == false)return;
+	
 
 	//inlining buildAllTiles();
 	const float* bmin = m_geom->getNavMeshBoundsMin();
@@ -495,18 +497,18 @@ int RecastManager::findPath(const Vector3& startPos, const Vector3& endPos) {
 		m_filter.getIncludeFlags(), m_filter.getExcludeFlags());
 #endif
 	navQuery->findPath(m_startRef, m_endRef, &(startPos.x), &(endPos.x), &m_filter, result, &pathCount, MAX_POLYS);
-	//if (pathCount)
-	//{
-	//	// In case of partial path, make sure the end point is clamped to the last polygon.
-	//	float epos[3];
-	//	dtVcopy(epos, m_epos);
-	//	if (result[pathCount - 1] != m_endRef)
-	//		navQuery->closestPointOnPoly(result[pathCount - 1], m_epos, epos, 0);
+	if (pathCount > 0)
+	{
+		// In case of partial path, make sure the end point is clamped to the last polygon.
+		float epos[3];
+		//dtVcopy(epos, m_epos);
+		if (result[pathCount - 1] != m_endRef)
+			navQuery->closestPointOnPoly(result[pathCount - 1], &(endPos.x), epos, 0);
 
-	//	navQuery->findStraightPath(m_spos, epos, m_polys, pathCount,
-	//		m_straightPath, m_straightPathFlags,
-	//		m_straightPathPolys, &m_nstraightPath, MAX_POLYS, m_straightPathOptions);
-	//}
+		navQuery->findStraightPath(&(startPos.x), epos, m_polys, pathCount,
+			m_straightPath, m_straightPathFlags,
+			m_straightPathPolys, &m_nstraightPath, MAX_POLYS, m_straightPathOptions);
+	}
 	printf("path count: %d\n", pathCount);
 	return pathCount;
 }
