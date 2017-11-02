@@ -33,7 +33,8 @@ protected:
 
 	// constants from Sample.h
 	const float m_cellSize = 0.3f;
-	const float m_cellHeight = 0.2f;
+	const float m_cellHeight = 0.25f;
+	//const float m_cellHeight = 5.0f;
 
 	const float m_agentHeight = 5.0f;
 	const float m_agentRadius = 0.6f;

@@ -497,18 +497,26 @@ int RecastManager::findPath(const Vector3& startPos, const Vector3& endPos) {
 		m_filter.getIncludeFlags(), m_filter.getExcludeFlags());
 #endif
 	navQuery->findPath(m_startRef, m_endRef, &(startPos.x), &(endPos.x), &m_filter, result, &pathCount, MAX_POLYS);
+	unsigned char m_straightPathFlags[MAX_POLYS];
+	float m_straightPath[MAX_POLYS];
+	dtPolyRef PathRefs[MAX_POLYS];
 	if (pathCount > 0)
 	{
 		// In case of partial path, make sure the end point is clamped to the last polygon.
 		float epos[3];
-		//dtVcopy(epos, m_epos);
+		int straightPathCount = 0;
 		if (result[pathCount - 1] != m_endRef)
 			navQuery->closestPointOnPoly(result[pathCount - 1], &(endPos.x), epos, 0);
 
-		navQuery->findStraightPath(&(startPos.x), epos, m_polys, pathCount,
-			m_straightPath, m_straightPathFlags,
-			m_straightPathPolys, &m_nstraightPath, MAX_POLYS, m_straightPathOptions);
+		navQuery->findStraightPath(
+			//const float* startPos, const float* endPos, const dtPolyRef* path, const int pathSize,
+			&(startPos.x), &(endPos.x), result, pathCount,
+			//float* straightPath, unsigned char* straightPathFlags, dtPolyRef* straightPathRefs, int* straightPathCount, 
+			m_straightPath, m_straightPathFlags, PathRefs, &straightPathCount,
+			//const int maxStraightPath, const int options)
+			MAX_POLYS);
+		printf("path count: %d\n", straightPathCount);
 	}
-	printf("path count: %d\n", pathCount);
+	printf("triangle count: %d\n", pathCount);
 	return pathCount;
 }

@@ -199,7 +199,6 @@ bool rcMeshLoaderObj::load(const std::string& filename)
 			x = (float*)src;
 			y = (float*)(src + 4);
 			z = (float*)(src + 8);
-			printf_s("%f, %f, %f\n", *x, *y, *z);
 			src += 12;
 			addVertex(*x, *y, *z, vcap);
 		}
