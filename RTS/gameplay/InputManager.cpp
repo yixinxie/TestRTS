@@ -1,6 +1,8 @@
 #include "InputManager.h"
+#include "SelectorRect.h"
 #include "../misc/G.h"
 #include "../misc/WindowsInput.h"
+
 InputManager::InputManager() {
 	leftButtonDown = false;
 	setName("input_manager");

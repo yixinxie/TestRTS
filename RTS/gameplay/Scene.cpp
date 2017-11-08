@@ -68,24 +68,26 @@ void Scene::initScene() {
 	addOObject(recastManager);
 
 	Unit* newUnit = newClass<Unit>("units");
-	newUnit->init(Vector2(0.5, 0), Vector2(7, 0));
+	newUnit->init(Vector2(0, 0), "green");
 	units.push(newUnit);
 
 	newUnit = newClass<Unit>("units");
-	newUnit->init(Vector2(-0.5, -0.5), Vector2(1, 0));
+	newUnit->init(Vector2(2, 0), "yellow");
 	units.push(newUnit);
 
 	newUnit = newClass<Unit>("units");
-	newUnit->init(Vector2(0.5, -0.5), Vector2(1, 0));
+	newUnit->init(Vector2(4, 0), "red");
 	units.push(newUnit);
 
 	newUnit = newClass<Unit>("units");
-	newUnit->init(Vector2(-1.5, 0.5), Vector2(1, 0));
+	newUnit->init(Vector2(6, 0), "blue");
 	units.push(newUnit);
 
-	newUnit = newClass<Unit>("units");
-	newUnit->init(Vector2(-0.5, -1.5), Vector2(1, 0));
+	/*newUnit = newClass<Unit>("units");
+	newUnit->init(Vector2(0.5, -0.5), "blue");
 	units.push(newUnit);
+
+	*/
 }
 void Scene::update(float timeElapsed) {
 	for (int i = 0; i < OObjectArray.length; ++i) {
@@ -95,8 +97,8 @@ void Scene::update(float timeElapsed) {
 		units[i]->update(timeElapsed);
 	}
 }
-void Scene::addUnit(Vector2 pos, Vector2 uv){
+void Scene::addUnit(Vector2 pos, const char* id){
 	Unit* newUnit = newClass<Unit>("units");
-	newUnit->init(pos, uv);
+	newUnit->init(pos, id);
 	units.push(newUnit);
 }

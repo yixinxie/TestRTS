@@ -60,6 +60,6 @@ int main()
 	G::instance()->renderer->dispose();
 	deallocT(G::instance()->renderer);
 	basicMem.report();
-	getchar();
+	//getchar();
 	return 0;
 }

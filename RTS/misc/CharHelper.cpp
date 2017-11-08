@@ -135,7 +135,7 @@ bool CharHelper::charEndsWith(const char* base_str, const char* cmp_str) {
 	}
 	return same;
 }
-void CharHelper::parseUVTxt(const char* content, std::vector<SpriteSheetUV>& out) {
+void CharHelper::parseUVTxt(const char* content, ArrayStruct<SpriteSheetUV>& out) {
 	const std::string content_str(content);
 	std::vector<std::string> lines;
 	splitToLines(content_str, lines);
@@ -154,7 +154,7 @@ void CharHelper::parseUVTxt(const char* content, std::vector<SpriteSheetUV>& out
 		newSheetUV.right_top.x = charToFloat(pieces_numbers[2].c_str());
 		newSheetUV.right_top.y = charToFloat(pieces_numbers[3].c_str());
 
-		out.push_back(newSheetUV);
+		out.push(newSheetUV);
 	}
 }
 void CharHelper::trimString(const std::string& original, std::string& out) {

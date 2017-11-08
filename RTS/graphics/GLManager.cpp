@@ -139,6 +139,9 @@ int GLManager::newSpriteSheet(const char* spritePath) {
 int GLManager::newSprite(int handle, Vector2 pos, Vector2 uv) {
 	return instancedSprites[handle]->newSprite(pos, uv);
 }
+int GLManager::newSprite(int handle, Vector2 pos, const char* id) {
+	return instancedSprites[handle]->newSpriteWithUVId(pos, id);
+}
 void GLManager::updateSprite(int textureId, int spriteId, Vector2 pos) {
 	instancedSprites[textureId]->updateSprite(spriteId, pos);
 }

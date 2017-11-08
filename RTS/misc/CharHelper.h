@@ -3,6 +3,7 @@
 #include <sstream>
 #include <vector>
 #include "../misc/SimpleVector.h"
+#include "../misc/ArrayT.h"
 #define TRACE(x)	do {std::stringstream s; s << x; OutputDebugStringA(s.str().c_str()); printf(s.str().c_str());} while (0)
 //#pragma comment(lib, "Rpcrt4.lib")
 // not using the memory allocator
@@ -43,7 +44,7 @@ public:
 	static IntVector2 charToIntVec2(const char* chars);
 	static unsigned int charHash(const char* chars);
 	static bool charEndsWith(const char* base_str, const char* cmp_str);
-	static void parseUVTxt(const char* content, std::vector<SpriteSheetUV>& out);
+	static void parseUVTxt(const char* content, ArrayStruct<SpriteSheetUV>& out);
 	static void CharHelper::trimString(const std::string& original, std::string& out);
 	//static void genGUID(OriGUID* guid);
 };

@@ -19,6 +19,6 @@ public:
 	void update(float timeElapsed);
 	void addOObject(OObject* obj);
 	OObject* getOObjectByName(const char* name);
-	void addUnit(Vector2 pos, Vector2 uv);
+	void addUnit(Vector2 pos, const char* id);
 	//void setTimer(void);
 };

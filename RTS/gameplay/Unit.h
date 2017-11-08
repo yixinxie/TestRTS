@@ -20,6 +20,6 @@ private:
 public:
 	Unit(void);
 	~Unit();
-	void init(Vector2 pos, Vector2 uv);
+	void init(Vector2 pos, const char* id);
 	void update(float deltaTime);
 };

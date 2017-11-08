@@ -30,13 +30,17 @@ class GLInstancedSprites{
 private:
 	GLuint vertex_buffer; // base vertex buffer
 	GLuint instance_buffer; // per instance data and states.
-
-	
 	GLuint textureId;
 	ArrayStruct<SpriteDesc> spriteDesc;
+	ArrayStruct<SpriteSheetUV> uvDesc;
 	int sprite_max; // number of sprite desc on gpu.
+
+	// shader uniform variables
+	Vector2 spriteUVCoeff;
+
 	GLuint samplerVarHnd;
 	GLuint viewprojMatrixHnd;
+	GLuint spriteUVCoeffHnd;
 	GLuint shaderHnd;
 	GLuint initShaders(const char* vertex_file_path, const char* fragment_file_path);
 	GLuint createTexture(unsigned int width, unsigned int height, const unsigned char* initialData);
@@ -47,6 +51,7 @@ public:
 	void onRender(glm::mat4 proj_view_mat);
 	GLuint newSpriteSheet(const char* spritePath);
 	int newSprite(Vector2 pos, Vector2 uv);
+	int newSpriteWithUVId(Vector2 pos, const char* uvId);
 	void updateSprite(int spriteId, Vector2 pos);
 	void updateSprite(int spriteId, Vector2 pos, float angle, Vector2 scale);
 	

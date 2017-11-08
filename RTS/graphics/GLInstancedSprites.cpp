@@ -52,27 +52,32 @@ GLuint GLInstancedSprites::newSpriteSheet(const char* spritePath){
 	unsigned int w, h;
 	unsigned int error = 0;
 	std::vector<unsigned char> image;
+	spriteUVCoeff = Vector2(1.0f, 1.0f);
 	if (CharHelper::charEndsWith(spritePath, "png")) {
 		std::vector<unsigned char> pngData; //the raw pixels
-		
-		lodepng::State load_state;
-
-		//lodepng::decode(image, w, h, load_state);
 		error = lodepng::load_file(pngData, spritePath);
 		assert(error == 0);
 		error = lodepng::decode(image, w, h, pngData);
-		CharBuffer* uvTxtBuffer = CharHelper::loadTextFile("assets/terrain_packed.txt");
-		std::vector<SpriteSheetUV> uvDesc;
-		CharHelper::parseUVTxt(uvTxtBuffer->buffer, uvDesc);
-		for (int i = 0; i < uvDesc.size(); ++i) {
-			uvDesc[i].left_bottom.x /= (float)w;
-			uvDesc[i].left_bottom.y /= (float)h;
+		// attempt to load the atlas info file.
+		char atlasInfoFileName[256];
+		strcpy_s(atlasInfoFileName, 256, spritePath);
+		strcat_s(atlasInfoFileName, 256, ".atlas");
+		CharBuffer* uvTxtBuffer = CharHelper::loadTextFile(atlasInfoFileName);
+		if (uvTxtBuffer != nullptr) {
+			CharHelper::parseUVTxt(uvTxtBuffer->buffer, uvDesc);
+			spriteUVCoeff = uvDesc[0].left_bottom;
+			for (int i = 1; i < uvDesc.length; ++i) {
+				
+				uvDesc[i].left_bottom.x /= (float)w;
+				uvDesc[i].left_bottom.y /= (float)h;
 
-			uvDesc[i].right_top.x /= (float)w;
-			uvDesc[i].right_top.y /= (float)h;
+				uvDesc[i].right_top.x /= (float)w;
+				uvDesc[i].right_top.y /= (float)h;
+				SpriteSheetUV cur = uvDesc[i];
+				int sdf = 0;
+			}
+			uvTxtBuffer->dispose();
 		}
-		int sdf = 0;
-		uvTxtBuffer->dispose();
 	}
 	else if (CharHelper::charEndsWith(spritePath, "jpg")) {
 		cimg_library::CImg<unsigned char> jpg_image(spritePath);
@@ -89,18 +94,42 @@ GLuint GLInstancedSprites::newSpriteSheet(const char* spritePath){
 	// create texture in GPU.
 	textureId = createTexture(w, h, image.data());
 	return textureId;
-
 }
 int GLInstancedSprites::newSprite(Vector2 pos, Vector2 uv) {
 	GLuint er;
 	int cur = spriteDesc.length;
-	const float unitUV = 1.0f / 12.0f;
+	//const float unitUV = 1.0f / 12.0f;
 	SpriteDesc newDesc;
 	newDesc.pos = pos;
 	newDesc.rotation = 0;
 	newDesc.scale = Vector2(1, 1);
-	newDesc.uv.x = uv.x * unitUV;
-	newDesc.uv.y = uv.y * unitUV;
+	newDesc.uv.x = uv.x;
+	newDesc.uv.y = uv.y;
+	spriteDesc.push(newDesc);
+	return cur;
+}
+
+int GLInstancedSprites::newSpriteWithUVId(Vector2 pos, const char* uvId) {
+	GLuint er;
+	int cur = spriteDesc.length;
+	Vector2 uv = Vector2::zero();
+	bool found = false;
+	for (int i = 0; i < uvDesc.length; ++i) {
+		if (strcmp(uvId, uvDesc[i].name) == 0) {
+			found = true;
+			uv = uvDesc[i].left_bottom;
+			break;
+		}
+	}
+
+	if (found == false)return -1;
+
+	SpriteDesc newDesc;
+	newDesc.pos = pos;
+	newDesc.rotation = 0;
+	newDesc.scale = Vector2(1, 1);
+	newDesc.uv = uv;
+	//newDesc.uv = Vector2(0.0f, 0.0f);
 	spriteDesc.push(newDesc);
 	return cur;
 }
@@ -135,6 +164,8 @@ void GLInstancedSprites::onRender(glm::mat4 proj_view_mat){
 	glUseProgram(shaderHnd);
 	//glEnable(GL_CULL_FACE);
 	glUniformMatrix4fv(viewprojMatrixHnd, 1, GL_FALSE, &proj_view_mat[0][0]);
+	glUniform2fv(spriteUVCoeffHnd, 1, &(spriteUVCoeff.x));
+	
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
@@ -310,6 +341,7 @@ GLuint GLInstancedSprites::initShaders(const char* vertex_file_path, const char*
 
 	samplerVarHnd = glGetUniformLocation(ProgramID, "myTextureSampler");
 	viewprojMatrixHnd = glGetUniformLocation(ProgramID, "mat_view_proj");
+	spriteUVCoeffHnd = glGetUniformLocation(ProgramID, "sprite_uv_coeff");
 	//GLuint err = glGetError();
 	return ProgramID;
 }

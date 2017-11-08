@@ -18,6 +18,6 @@ public:
 	~Terrain();
 	void init(void);
 	void update(float deltaTime);
-	void updateRectScale(Vector2 scale);
-	void updateRectPos(Vector2 pos);
+	/*void updateRectScale(Vector2 scale);
+	void updateRectPos(Vector2 pos);*/
 };

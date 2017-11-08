@@ -11,7 +11,7 @@ SelectorRect::~SelectorRect() {
 void SelectorRect::init() {
 	textureId = G::instance()->renderer->newSpriteSheet("assets/greenbar.png");
 	pos = Vector2(0.0f, 0.0f);
-	spriteId = G::instance()->renderer->newSprite(textureId, pos, Vector2(0,0));
+	spriteId = G::instance()->renderer->newSprite(textureId, pos, "bar");
 }
 void SelectorRect::update(float deltaTime) {
 	
