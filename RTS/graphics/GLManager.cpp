@@ -8,9 +8,9 @@
 
 GLManager::GLManager(void) : window(nullptr){
 	//ZeroMemory((void*)this, sizeof(GLManager));
-	cameraSize = 10.0f;
-	cameraPos = Vector2::zero();
+	
 }
+
 GLManager::~GLManager()
 {
 	// close and release all existing COM objects
@@ -24,6 +24,7 @@ GLManager::~GLManager()
 	glfwTerminate();
 	
 }
+
 bool GLManager::init(HWND hWnd, int _width, int _height)
 {
 
@@ -62,6 +63,7 @@ bool GLManager::init(HWND hWnd, int _width, int _height)
 void GLManager::initDepthStencil(){
 
 }
+
 void GLManager::render(){
 	GLuint err;
 	assembleDrawables();
@@ -82,9 +84,11 @@ void GLManager::render(){
 	err = glGetError();
 
 }
+
 void GLManager::restoreRenderTarget(){
 	
 }
+
 void GLManager::prepareCamera(){
 	//glm::mat4 Projection = glm::perspective(glm::radians(45.0f), (float)width / (float)height, 0.1f, 100.0f);
 
@@ -118,6 +122,7 @@ void GLManager::assembleDrawables(){
 	}
 	debugRender->updateBuffer();
 }
+
 int GLManager::newSpriteSheet(const char* spritePath) {
 	int ret = 0;
 	int hash = CharHelper::charHash(spritePath);
@@ -136,18 +141,27 @@ int GLManager::newSpriteSheet(const char* spritePath) {
 	}
 	return ret;
 }
+
 int GLManager::newSprite(int handle, Vector2 pos, Vector2 uv) {
 	return instancedSprites[handle]->newSprite(pos, uv);
 }
+
 int GLManager::newSprite(int handle, Vector2 pos, const char* id) {
 	return instancedSprites[handle]->newSpriteWithUVId(pos, id);
 }
+
 void GLManager::updateSprite(int textureId, int spriteId, Vector2 pos) {
 	instancedSprites[textureId]->updateSprite(spriteId, pos);
 }
+
+void GLManager::updateSprite(int textureId, int spriteId, Vector2 pos, float angle) {
+	instancedSprites[textureId]->updateSprite(spriteId, pos, angle);
+}
+
 void GLManager::updateSprite(int textureId, int spriteId, Vector2 pos, float angle, Vector2 scale) {
 	instancedSprites[textureId]->updateSprite(spriteId, pos, angle, scale);
 }
+
 void GLManager::line2D(Vector2 pos0, Vector2 pos1, Color color) {
 	debugRender->drawLine(pos0, pos1, color);
 }

@@ -78,7 +78,7 @@ public:
 		}
 	}
 	
-	T& operator[] (int idx) {
+	T operator[] (int idx) {
 		assert(idx >= 0 && idx < length);
 		return arrayData[idx];
 	}

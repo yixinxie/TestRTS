@@ -62,6 +62,16 @@ struct Vector2{
 	static Vector2 one(void) {
 		return Vector2(1.0f, 1.0f);
 	}
+	void normalize()
+	{
+		float mag = sqrt(x * x + y * y);
+		x /= mag;
+		y /= mag;
+	}
+	float simpleMag()
+	{
+		return abs(x) + abs(y);
+	}
 
 };
 struct Vector3{

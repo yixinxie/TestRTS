@@ -41,6 +41,7 @@ namespace OriGraphics{
 		virtual int newSprite(int handle, Vector2 pos, Vector2 uv) = 0;
 		virtual int newSprite(int handle, Vector2 pos, const char* id) = 0;
 		virtual void updateSprite(int textureId, int spriteId, Vector2 pos) = 0;
+		virtual void updateSprite(int textureId, int spriteId, Vector2 pos, float angle) = 0;
 		virtual void updateSprite(int textureId, int spriteId, Vector2 pos, float angle, Vector2 scale) = 0;
 		virtual void updateCamera(Vector2 pos, float size);
 

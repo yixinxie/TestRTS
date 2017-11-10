@@ -4,7 +4,12 @@
 #define INPUT_ARROW_DOWN GLFW_KEY_DOWN
 class WindowsInput
 {
+protected:
 	GLFWwindow* glfwWindow;
+	static void scrollCallback(GLFWwindow* _window, double xoffset, double yoffset);
+	bool canReset;
+	float scrollValue;
+
 public:
 	WindowsInput();
 	~WindowsInput();
@@ -12,7 +17,9 @@ public:
 	bool getKey(int key);
 	void mousePos(int* x, int* y);
 	bool mouseButton(int idx);
-
+	float getScrollValue() const;
+	void markReset();
+	void resetEvents();
 };
 
 enum InputKeys {

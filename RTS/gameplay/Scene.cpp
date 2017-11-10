@@ -1,4 +1,5 @@
 #include "Scene.h"
+#include "../misc/SimpleVector.h"
 #include "../graphics/Renderer.h"
 #include "Unit.h"
 #include "misc/G.h"
@@ -8,9 +9,12 @@
 #include "Terrain.h"
 #include "StaticCollision.h"
 #include "RecastManager.h"
+#include "Camera.h"
+
 Scene::Scene(void) {
 
 }
+
 Scene::~Scene() {
 	for (int i = 0; i < OObjectArray.length; ++i) {
 		deallocT(OObjectArray[i]);
@@ -19,9 +23,11 @@ Scene::~Scene() {
 		deallocT(units[i]);
 	}
 }
+
 void Scene::init(Renderer* _renderer) {
 	renderer = _renderer;
 }
+
 void Scene::addOObject(OObject* obj) {
 	const char* objName = obj->getName();
 	if (objName[0] != 0) {
@@ -36,6 +42,7 @@ void Scene::addOObject(OObject* obj) {
 	}
 	OObjectArray.push(obj);
 }
+
 OObject* Scene::getOObjectByName(const char* name) {
 	unsigned int key = CharHelper::charHash(name);
 	if (objectLookup.find(key) != objectLookup.end()) {
@@ -43,10 +50,15 @@ OObject* Scene::getOObjectByName(const char* name) {
 	}
 	return nullptr;
 }
+
 void Scene::initScene() {
 	G::instance()->currentScene = this;
 	InputManager* inp = newClass<InputManager>("input manager");
 	addOObject(inp);
+
+	Camera* camera = newClass<Camera>("camera");
+	camera->init();
+	addOObject(camera);
 
 	SelectorRect* rect = newClass<SelectorRect>();
 	rect->init();
@@ -67,21 +79,13 @@ void Scene::initScene() {
 	recastManager->init();
 	addOObject(recastManager);
 
-	Unit* newUnit = newClass<Unit>("units");
-	newUnit->init(Vector2(0, 0), "green");
-	units.push(newUnit);
+	addUnit(Vector2(0, 0), "green");
 
-	newUnit = newClass<Unit>("units");
-	newUnit->init(Vector2(2, 0), "yellow");
-	units.push(newUnit);
+	addUnit(Vector2(2, 0), "yellow");
 
-	newUnit = newClass<Unit>("units");
-	newUnit->init(Vector2(4, 0), "red");
-	units.push(newUnit);
+	addUnit(Vector2(4, 0), "red");
 
-	newUnit = newClass<Unit>("units");
-	newUnit->init(Vector2(6, 0), "blue");
-	units.push(newUnit);
+	addUnit(Vector2(6, 0), "blue");
 
 	/*newUnit = newClass<Unit>("units");
 	newUnit->init(Vector2(0.5, -0.5), "blue");
@@ -89,6 +93,7 @@ void Scene::initScene() {
 
 	*/
 }
+
 void Scene::update(float timeElapsed) {
 	for (int i = 0; i < OObjectArray.length; ++i) {
 		OObjectArray[i]->update(timeElapsed);
@@ -97,8 +102,32 @@ void Scene::update(float timeElapsed) {
 		units[i]->update(timeElapsed);
 	}
 }
+
 void Scene::addUnit(Vector2 pos, const char* id){
 	Unit* newUnit = newClass<Unit>("units");
 	newUnit->init(pos, id);
 	units.push(newUnit);
+}
+
+void Scene::findUnitsByArea(Vector2 min, Vector2 max, ArrayPtr<Unit*>& outUnits){
+	for (int i = 0; i < units.length; ++i) {
+		const Vector2& unitPos = units[i]->getPos();
+		if (unitPos.x > min.x && unitPos.y > min.y &&
+			unitPos.x < max.x && unitPos.y < max.y) {
+			outUnits.push(units[i]);
+		}
+	}
+}
+
+void Scene::setSelectedUnits(ArrayPtr<Unit*>& _units){
+	selectedUnits.clear();
+	for (int i = 0; i < _units.length; ++i) {
+		selectedUnits.push(_units[i]);
+	}
+}
+
+void Scene::orderMove(const Vector2& targetPos) {
+	for (int i = 0; i < selectedUnits.length; ++i) {
+		selectedUnits[i]->setMoveTarget(targetPos);
+	}
 }

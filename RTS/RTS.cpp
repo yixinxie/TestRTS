@@ -38,8 +38,9 @@ int main()
 	{
 		high_resolution_clock::time_point before = high_resolution_clock::now();
 		test->update(0.0167f);
-
 		G::instance()->renderer->render();
+		G::instance()->input->resetEvents();
+		
 		high_resolution_clock::time_point after = high_resolution_clock::now();
 		duration<double> time_span = duration_cast<duration<double>>(after - before);
 		double sleepFor = 0.016667 - time_span.count();
@@ -50,7 +51,7 @@ int main()
 		time_span = duration_cast<duration<double>>(after - fps0);
 		frames++;
 		if (time_span.count() >= 1.0) {
-			printf_s("FPS: %d\n", frames);
+			//printf_s("FPS: %d\n", frames);
 			fps0 = high_resolution_clock::now();
 			frames = 0;
 		}

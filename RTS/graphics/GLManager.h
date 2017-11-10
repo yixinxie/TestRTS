@@ -46,6 +46,7 @@ public:
 	int newSprite(int handle, Vector2 pos, const char* id);
 	
 	void updateSprite(int textureId, int spriteId, Vector2 pos);
+	void updateSprite(int textureId, int spriteId, Vector2 pos, float angle);
 	void updateSprite(int textureId, int spriteId, Vector2 pos, float angle, Vector2 scale);
 	
 };

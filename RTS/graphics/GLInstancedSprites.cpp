@@ -136,6 +136,10 @@ int GLInstancedSprites::newSpriteWithUVId(Vector2 pos, const char* uvId) {
 void GLInstancedSprites::updateSprite(int spriteId, Vector2 pos) {
 	spriteDesc[spriteId].pos = pos;
 }
+void GLInstancedSprites::updateSprite(int spriteId, Vector2 pos, float angle) {
+	spriteDesc[spriteId].pos = pos;
+	spriteDesc[spriteId].rotation = angle;
+}
 void GLInstancedSprites::updateSprite(int spriteId, Vector2 pos, float angle, Vector2 scale) {
 	spriteDesc[spriteId].pos = pos;
 	spriteDesc[spriteId].rotation = angle;

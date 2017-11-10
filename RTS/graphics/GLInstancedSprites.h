@@ -53,6 +53,7 @@ public:
 	int newSprite(Vector2 pos, Vector2 uv);
 	int newSpriteWithUVId(Vector2 pos, const char* uvId);
 	void updateSprite(int spriteId, Vector2 pos);
+	void updateSprite(int spriteId, Vector2 pos, float angle);
 	void updateSprite(int spriteId, Vector2 pos, float angle, Vector2 scale);
 	
 	void updateBufferFromSpriteDesc(void);

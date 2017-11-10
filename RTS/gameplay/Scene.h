@@ -2,13 +2,17 @@
 #include "../graphics/Renderer.h"
 #include "../misc/ArrayT.h"
 
+class Unit;
+class OObject;
+
 using namespace OriGraphics;
 class Scene {
 private:
 	class Renderer* renderer;
-	std::unordered_map<unsigned int, class OObject*> objectLookup;
-	ArrayPtr<class OObject*> OObjectArray;
-	ArrayPtr<class Unit*> units;
+	std::unordered_map<unsigned int, OObject*> objectLookup;
+	ArrayPtr<OObject*> OObjectArray;
+	ArrayPtr<Unit*> units;
+	ArrayPtr<Unit*> selectedUnits;
 
 	void (*f)();
 public:
@@ -20,5 +24,7 @@ public:
 	void addOObject(OObject* obj);
 	OObject* getOObjectByName(const char* name);
 	void addUnit(Vector2 pos, const char* id);
-	//void setTimer(void);
+	void findUnitsByArea(Vector2 min, Vector2 max, ArrayPtr<Unit*>& units);
+	void setSelectedUnits(ArrayPtr<Unit*>& units);
+	void orderMove(const Vector2& targetPos);
 };
