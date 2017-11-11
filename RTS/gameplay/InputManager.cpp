@@ -12,7 +12,7 @@ InputManager::~InputManager() {
 
 }
 void InputManager::init() {
-
+	cam = (Camera*)OEScene->getOObjectByName("camera");
 }
 void InputManager::update(float deltaTime) {
 	int mx, my;
@@ -73,13 +73,35 @@ void InputManager::update(float deltaTime) {
 		OEScene->orderMove(worldPos);
 	}
 
+	updateMouseScroll(deltaTime);
+	updateCameraPosAdjustment(deltaTime);
+}
+
+void InputManager::updateCameraPosAdjustment(float deltaTime) {
+	Vector2 adjustVec = Vector2::zero();
+	if (OEInput->getKey(InputKeys::A)) {
+		adjustVec.x = -1.0f;
+	}
+	else if (OEInput->getKey(InputKeys::D)) {
+		adjustVec.x = 1.0f;
+	}
+	if (OEInput->getKey(InputKeys::W)) {
+		adjustVec.y = 1.0f;
+	}
+	if (OEInput->getKey(InputKeys::S)) {
+		adjustVec.y = -1.0f;
+	}
+	Vector2 camPos = cam->getPos();
+	camPos += adjustVec * deltaTime * cameraMoveSpeed;
+	cam->setPos(camPos);
+}
+
+void InputManager::updateMouseScroll(float deltaTime) {
 	float scrollValue = OEInput->getScrollValue();
 	if (scrollValue != 0.0f) {
-		Camera* cam = (Camera*)OEScene->getOObjectByName("camera");
+
 		float newSize = cam->getSize();
 		newSize -= scrollValue;
 		cam->setSize(newSize);
 	}
-	OEInput->markReset();
-
 }

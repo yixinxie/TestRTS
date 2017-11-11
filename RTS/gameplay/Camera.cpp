@@ -27,3 +27,7 @@ void Camera::setPos(Vector2 _pos) {
 	pos = _pos;
 	G::instance()->renderer->updateCamera(pos, size);
 }
+
+Vector2 Camera::getPos() const {
+	return pos;
+}

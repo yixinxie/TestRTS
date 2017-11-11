@@ -43,10 +43,10 @@ float WindowsInput::getScrollValue() const {
 }
 
 void WindowsInput::resetEvents(){
-	if (canReset) {
-		scrollValue = 0.0f;
-		canReset = false;
-	}
+	//if (canReset) {
+	scrollValue = 0.0f;
+	canReset = false;
+	//}
 }
 
 void WindowsInput::markReset() {

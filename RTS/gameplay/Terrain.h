@@ -12,8 +12,9 @@ private:
 	Vector2 scale;
 	int textureId;
 	int spriteId;
-
+	byte* grid;
 public:
+	const int32 dim = 64;
 	Terrain(void);
 	~Terrain();
 	void init(void);

@@ -37,6 +37,7 @@ int main()
 	while (!glfwWindowShouldClose(wnd))
 	{
 		high_resolution_clock::time_point before = high_resolution_clock::now();
+		glfwPollEvents();
 		test->update(0.0167f);
 		G::instance()->renderer->render();
 		G::instance()->input->resetEvents();

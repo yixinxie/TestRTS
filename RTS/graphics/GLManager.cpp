@@ -80,7 +80,7 @@ void GLManager::render(){
 	glEnd();
 
 	glfwSwapBuffers(window);
-	glfwPollEvents();
+	//
 	err = glGetError();
 
 }

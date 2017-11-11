@@ -53,12 +53,14 @@ OObject* Scene::getOObjectByName(const char* name) {
 
 void Scene::initScene() {
 	G::instance()->currentScene = this;
-	InputManager* inp = newClass<InputManager>("input manager");
-	addOObject(inp);
 
 	Camera* camera = newClass<Camera>("camera");
 	camera->init();
 	addOObject(camera);
+
+	InputManager* inp = newClass<InputManager>("input manager");
+	inp->init();
+	addOObject(inp);
 
 	SelectorRect* rect = newClass<SelectorRect>();
 	rect->init();

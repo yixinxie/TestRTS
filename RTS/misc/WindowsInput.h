@@ -1,7 +1,5 @@
 #pragma once
 #include "GLFW/glfw3.h"
-#define INPUT_ARROW_UP GLFW_KEY_UP
-#define INPUT_ARROW_DOWN GLFW_KEY_DOWN
 class WindowsInput
 {
 protected:
@@ -25,4 +23,10 @@ public:
 enum InputKeys {
 	arrowUp = GLFW_KEY_UP,
 	arrowDown = GLFW_KEY_DOWN,
+
+	W = GLFW_KEY_W,
+	A = GLFW_KEY_A,
+	S = GLFW_KEY_S,
+	D = GLFW_KEY_D,
+
 };

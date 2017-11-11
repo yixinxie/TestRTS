@@ -28,7 +28,7 @@ void RecastManager::init() {
 	m_tileSize = 100.0f;
 	BuildContext rcContext;
 	m_geom = new InputGeom();
-	if (m_geom->load(&rcContext, "D:/unity_rts_7/terrain.bin") == false) { 
+	if (m_geom->load(&rcContext, "assets/terrain.bin") == false) { 
 		return; 
 	}
 

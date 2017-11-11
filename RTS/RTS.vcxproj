@@ -71,22 +71,22 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>D:\dxapp\RTS\RTS;D:\dxapp\RTS\RTS\plugins;D:\dxapp\RTS\RTS\plugins\recast\Recast\Include;D:\dxapp\RTS\RTS\plugins\recast\Detour\Include;D:\dxapp\RTS\RTS\plugins\recast\DetourTileCache\Include;D:\dxapp\RTS\RTS\plugins\recast\DetourCrowd\Include;D:\dxapp\RTS\RTS\plugins\recast\DebugUtils\Include;$(IncludePath)</IncludePath>
+    <IncludePath>.;plugins;plugins\recast\Recast\Include;plugins\recast\Detour\Include\;plugins\recast\DetourTileCache\Include;plugins\recast\DetourCrowd\Include;plugins\recast\DebugUtils\Include;gl\headers;$(IncludePath)</IncludePath>
     <LibraryPath>$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>D:\dxapp\RTS\RTS;D:\dxapp\RTS\RTS\plugins;D:\dxapp\RTS\RTS\plugins\recast\Recast\Include;D:\dxapp\RTS\RTS\plugins\recast\Detour\Include;D:\dxapp\RTS\RTS\plugins\recast\DetourTileCache\Include;D:\dxapp\RTS\RTS\plugins\recast\DetourCrowd\Include;D:\dxapp\RTS\RTS\plugins\recast\DebugUtils\Include;$(IncludePath)</IncludePath>
+    <IncludePath>.;plugins;plugins\recast\Recast\Include;plugins\recast\Detour\Include\;plugins\recast\DetourTileCache\Include;plugins\recast\DetourCrowd\Include;plugins\recast\DebugUtils\Include;gl\headers;$(IncludePath)</IncludePath>
     <LibraryPath>$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>D:\dxapp\RTS\RTS;D:\dxapp\RTS\RTS\plugins;D:\dxapp\RTS\RTS\plugins\recast\Recast\Include;D:\dxapp\RTS\RTS\plugins\recast\Detour\Include;D:\dxapp\RTS\RTS\plugins\recast\DetourTileCache\Include;D:\dxapp\RTS\RTS\plugins\recast\DetourCrowd\Include;D:\dxapp\RTS\RTS\plugins\recast\DebugUtils\Include;$(IncludePath)</IncludePath>
+    <IncludePath>.;plugins;plugins\recast\Recast\Include;plugins\recast\Detour\Include\;plugins\recast\DetourTileCache\Include;plugins\recast\DetourCrowd\Include;plugins\recast\DebugUtils\Include;gl\headers;$(IncludePath)</IncludePath>
     <LibraryPath>$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>D:\dxapp\RTS\RTS;D:\dxapp\RTS\RTS\plugins;D:\dxapp\RTS\RTS\plugins\recast\Recast\Include;D:\dxapp\RTS\RTS\plugins\recast\Detour\Include;D:\dxapp\RTS\RTS\plugins\recast\DetourTileCache\Include;D:\dxapp\RTS\RTS\plugins\recast\DetourCrowd\Include;D:\dxapp\RTS\RTS\plugins\recast\DebugUtils\Include;$(IncludePath)</IncludePath>
+    <IncludePath>.;plugins;plugins\recast\Recast\Include;plugins\recast\Detour\Include\;plugins\recast\DetourTileCache\Include;plugins\recast\DetourCrowd\Include;plugins\recast\DebugUtils\Include;gl\headers;$(IncludePath)</IncludePath>
     <LibraryPath>$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -96,7 +96,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>D:\dxapp\RTS\RTS\gl\headers;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -112,7 +112,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>D:\dxapp\RTS\RTS\gl\headers;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -130,7 +130,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>D:\dxapp\RTS\RTS\gl\headers;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -150,7 +150,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>D:\dxapp\RTS\RTS\gl\headers;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

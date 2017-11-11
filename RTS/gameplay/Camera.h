@@ -16,5 +16,6 @@ public:
 	void update(float deltaTime);
 	void setSize(float size);
 	float getSize() const;
+	Vector2 getPos() const;
 	void setPos(Vector2 pos);
 };
