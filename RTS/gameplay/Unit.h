@@ -3,13 +3,16 @@
 #include <Windows.h>
 #include "../misc/ArrayT.h"
 #include "../misc/SimpleVector.h"
+
+class RecastManager;
+
 enum UnitAnimStates : byte{
 	Idle,
 	Moving,
 	Attacking,
 };
 class Unit {
-private:
+protected:
 	// motion states
 	Vector2 pos;
 	float facing; // rotation
@@ -25,6 +28,11 @@ private:
 	int textureId;
 	int spriteDescId;
 	int frame;
+
+	// pathfinding
+	RecastManager* recast;
+	Vector2 pathPoints[32];
+
 public:
 	Unit(void);
 	~Unit();

@@ -16,7 +16,7 @@
 #include "recast/SampleInterfaces.h"
 
 RecastManager::RecastManager() {
-	setName("recast_manager");
+	setName("recast");
 }
 RecastManager::~RecastManager() {
 	delete m_geom;
@@ -101,8 +101,6 @@ void RecastManager::init() {
 			}
 		}
 	}
-
-	findPath(Vector3(10.0f, 0.0f, 10.0f), Vector3(-2.0f, 0.0f, -3.5f));
 }
 int32 RecastManager::add(Vector2 pos) {
 	return 0;
@@ -473,9 +471,14 @@ unsigned char* RecastManager::buildTileMesh(const int tx, const int ty, const fl
 	dataSize = navDataSize;
 	return navData;
 }
-int RecastManager::findPath(const Vector3& startPos, const Vector3& endPos) {
-	if (!navMesh)
+int RecastManager::findPath(const Vector2& fromPos, const Vector2& toPos, Vector2* results) {
+	if (navMesh == nullptr)
 		return -1;
+
+
+	const Vector3 startPos = Vector3(fromPos.x, 0.0f, fromPos.y);
+	const Vector3 endPos = Vector3(toPos.x, 0.0f, toPos.y);
+
 	dtPolyRef m_startRef;
 	dtPolyRef m_endRef;
 	float polyPickExtent[3];
@@ -490,6 +493,7 @@ int RecastManager::findPath(const Vector3& startPos, const Vector3& endPos) {
 	const int MAX_POLYS = 256;
 	//m_pathFindStatus = DT_FAILURE;
 	int pathCount = 0;
+	int straightPathCount = 0;
 	dtPolyRef result[MAX_POLYS];
 #ifdef DUMP_REQS
 	printf("ps  %f %f %f  %f %f %f  0x%x 0x%x\n",
@@ -504,7 +508,7 @@ int RecastManager::findPath(const Vector3& startPos, const Vector3& endPos) {
 	{
 		// In case of partial path, make sure the end point is clamped to the last polygon.
 		float epos[3];
-		int straightPathCount = 0;
+		
 		if (result[pathCount - 1] != m_endRef)
 			navQuery->closestPointOnPoly(result[pathCount - 1], &(endPos.x), epos, 0);
 
@@ -515,8 +519,13 @@ int RecastManager::findPath(const Vector3& startPos, const Vector3& endPos) {
 			m_straightPath, m_straightPathFlags, PathRefs, &straightPathCount,
 			//const int maxStraightPath, const int options)
 			MAX_POLYS);
-		printf("path count: %d\n", straightPathCount);
+
+		for (int i = 0; i < straightPathCount; ++i) {
+			results[i].x = m_straightPath[i * 3];
+			results[i].y = m_straightPath[i * 3 + 2];
+		}
+		//printf_s("path count: %d\n", straightPathCount);
 	}
-	printf("triangle count: %d\n", pathCount);
-	return pathCount;
+	//printf_s("triangle count: %d\n", pathCount);
+	return straightPathCount;
 }

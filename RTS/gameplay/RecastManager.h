@@ -32,7 +32,7 @@ protected:
 	int m_tileTriCount;
 
 	// constants from Sample.h
-	const float m_cellSize = 0.3f;
+	const float m_cellSize = 1.0f;
 	const float m_cellHeight = 0.25f;
 	//const float m_cellHeight = 5.0f;
 
@@ -80,5 +80,5 @@ public:
 	int32 add(Vector2 pos);
 	void updateVelocity(int32 handle, Vector2 preferredVelocity);
 	
-	int findPath(const Vector3& startPos, const Vector3& endPos);
+	int findPath(const Vector2& fromPos, const Vector2& toPos, Vector2* results);
 };
