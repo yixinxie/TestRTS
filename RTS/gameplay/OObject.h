@@ -15,5 +15,5 @@ public:
 	void setName(const char* str);
 	const char* getName(void);
 	
-	virtual void update(float deltaTime) = 0;
+	virtual void update(float deltaTime);
 };

@@ -76,7 +76,6 @@ public:
 	RecastManager(void);
 	~RecastManager();
 	void init(void);
-	void update(float deltaTime);
 	int32 add(Vector2 pos);
 	void updateVelocity(int32 handle, Vector2 preferredVelocity);
 	

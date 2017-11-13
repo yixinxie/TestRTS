@@ -13,7 +13,7 @@ public:
 	Camera(void);
 	~Camera();
 	void init(void);
-	void update(float deltaTime);
+	//void update(float deltaTime);
 	void setSize(float size);
 	float getSize() const;
 	Vector2 getPos() const;

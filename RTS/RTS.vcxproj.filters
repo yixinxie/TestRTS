@@ -49,6 +49,12 @@
     <Filter Include="Source Files\gameplay\recast">
       <UniqueIdentifier>{3d8eaae1-8798-482e-b634-7136296289bf}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\aabb">
+      <UniqueIdentifier>{0eeca8f8-5b98-405c-ad50-39f4eb52f232}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\plugins\aabb">
+      <UniqueIdentifier>{5e645ead-5016-41ad-a422-9b0e3e14a322}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -402,6 +408,15 @@
     <ClInclude Include="gameplay\recast\SampleInterfaces.h">
       <Filter>Source Files\gameplay\recast</Filter>
     </ClInclude>
+    <ClInclude Include="gameplay\AABBManager.h">
+      <Filter>Source Files\gameplay</Filter>
+    </ClInclude>
+    <ClInclude Include="aabb\AABBNode.h">
+      <Filter>Source Files\aabb</Filter>
+    </ClInclude>
+    <ClInclude Include="plugins\aabbcc\AABB.h">
+      <Filter>Source Files\plugins\aabb</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -745,6 +760,15 @@
     </ClCompile>
     <ClCompile Include="gameplay\recast\SampleInterfaces.cpp">
       <Filter>Source Files\gameplay\recast</Filter>
+    </ClCompile>
+    <ClCompile Include="gameplay\AABBManager.cpp">
+      <Filter>Source Files\gameplay</Filter>
+    </ClCompile>
+    <ClCompile Include="aabb\AABBNode.cpp">
+      <Filter>Source Files\aabb</Filter>
+    </ClCompile>
+    <ClCompile Include="plugins\aabbcc\AABB.cpp">
+      <Filter>Source Files\plugins\aabb</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

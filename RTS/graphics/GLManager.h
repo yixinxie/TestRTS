@@ -7,6 +7,7 @@
 #include "misc/ArrayT.h"
 #include "../graphics/Renderer.h"
 class GLInstancedSprites;
+class GLIMLines;
 using namespace OriGraphics;
 struct TextureMeta {
 	GLuint textureId;
@@ -25,11 +26,10 @@ private:
 	std::unordered_map<unsigned int, int> textureIds;
 
 	ArrayPtr<GLInstancedSprites*> instancedSprites;
-	class GLIMLines* debugRender;
+	GLIMLines* debugRender;
 
 	void initDepthStencil(void);
 	void prepareCamera(void);
-	//void prepareViewProjectionCB(ID3D11Buffer** constantBuffer, const Vector3 position, const Vector3 euler, float fieldOfView, float aspectRatio, float nearPlane, float farPlane, ID3D11Buffer** constantBuffer2);
 	void assembleDrawables(void);
 	void restoreRenderTarget(void);
 

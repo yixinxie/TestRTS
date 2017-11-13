@@ -1,6 +1,7 @@
 #pragma once
 #define Math_PI 3.1415927f
 typedef int int32;
+typedef short int int16;
 struct Vector3;
 struct Vector2{
 	float x, y;

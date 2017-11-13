@@ -97,6 +97,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -113,6 +114,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -131,6 +133,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -151,6 +154,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -165,8 +169,10 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="aabb\AABBNode.h" />
     <ClInclude Include="gameplay\Camera.h" />
     <ClInclude Include="gameplay\InputManager.h" />
+    <ClInclude Include="gameplay\AABBManager.h" />
     <ClInclude Include="gameplay\OObject.h" />
     <ClInclude Include="gameplay\RecastManager.h" />
     <ClInclude Include="gameplay\recast\ChunkyTriMesh.h" />
@@ -198,6 +204,7 @@
     <ClInclude Include="misc\SimpleVector.h" />
     <ClInclude Include="misc\Timer.h" />
     <ClInclude Include="misc\WindowsInput.h" />
+    <ClInclude Include="plugins\aabbcc\AABB.h" />
     <ClInclude Include="plugins\Box2D\Box2D.h" />
     <ClInclude Include="plugins\Box2D\Collision\b2BroadPhase.h" />
     <ClInclude Include="plugins\Box2D\Collision\b2Collision.h" />
@@ -283,8 +290,10 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="aabb\AABBNode.cpp" />
     <ClCompile Include="gameplay\Camera.cpp" />
     <ClCompile Include="gameplay\InputManager.cpp" />
+    <ClCompile Include="gameplay\AABBManager.cpp" />
     <ClCompile Include="gameplay\OObject.cpp" />
     <ClCompile Include="gameplay\RecastManager.cpp" />
     <ClCompile Include="gameplay\recast\ChunkyTriMesh.cpp" />
@@ -312,6 +321,7 @@
     <ClCompile Include="misc\GUID.cpp" />
     <ClCompile Include="misc\Timer.cpp" />
     <ClCompile Include="misc\WindowsInput.cpp" />
+    <ClCompile Include="plugins\aabbcc\AABB.cpp" />
     <ClCompile Include="plugins\Box2D\Collision\b2BroadPhase.cpp" />
     <ClCompile Include="plugins\Box2D\Collision\b2CollideCircle.cpp" />
     <ClCompile Include="plugins\Box2D\Collision\b2CollideEdge.cpp" />

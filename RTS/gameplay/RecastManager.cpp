@@ -107,8 +107,6 @@ int32 RecastManager::add(Vector2 pos) {
 }
 void RecastManager::updateVelocity(int32 handle, Vector2 preferredVelocity) {
 }
-void RecastManager::update(float deltaTime) {
-}
 unsigned char* RecastManager::buildTileMesh(const int tx, const int ty, const float* bmin, const float* bmax, int& dataSize, BuildContext* rcContext)
 {
 

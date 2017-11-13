@@ -14,7 +14,7 @@ public:
 	RVOManager(void);
 	~RVOManager();
 	void init(void);
-	void update(float deltaTime);
+	virtual void update(float deltaTime) override;
 	int32 add(Vector2 pos);
 	void updateVelocity(int32 handle, Vector2 preferredVelocity);
 };

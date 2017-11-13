@@ -18,7 +18,7 @@ public:
 	SelectorRect(void);
 	~SelectorRect();
 	void init(void);
-	void update(float deltaTime);
+	virtual void update(float deltaTime) override;
 	void updateRectScale(Vector2 scale);
 	void updateRectPos(Vector2 pos);
 };

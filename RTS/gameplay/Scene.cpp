@@ -10,6 +10,7 @@
 #include "StaticCollision.h"
 #include "RecastManager.h"
 #include "Camera.h"
+#include "AABBManager.h"
 
 Scene::Scene(void) {
 
@@ -65,6 +66,10 @@ void Scene::initScene() {
 	SelectorRect* rect = newClass<SelectorRect>();
 	rect->init();
 	addOObject(rect);
+
+	AABBManager* aabb = newClass<AABBManager>();
+	aabb->init();
+	addOObject(aabb);
 
 	Terrain* terrain = newClass<Terrain>();
 	terrain->init();

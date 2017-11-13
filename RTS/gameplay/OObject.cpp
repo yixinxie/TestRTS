@@ -11,3 +11,6 @@ void OObject::setName(const char* str) {
 const char* OObject::getName(void) {
 	return name;
 }
+
+void OObject::update(float deltaTime) {
+}

@@ -74,10 +74,10 @@ void GLManager::render(){
 		instancedSprites[i]->onRender(proj_view);
 	}
 	debugRender->onRender(proj_view);
-	glBegin(GL_LINE_LOOP);
+	/*glBegin(GL_LINE_LOOP);
 	glVertex3f(0.0, 0.0, 0.0);
 	glVertex3f(15, 0, 0);
-	glEnd();
+	glEnd();*/
 
 	glfwSwapBuffers(window);
 	//

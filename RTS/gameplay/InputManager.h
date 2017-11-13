@@ -21,5 +21,5 @@ public:
 	InputManager(void);
 	~InputManager();
 	void init(void);
-	void update(float deltaTime);
+	virtual void update(float deltaTime) override;
 };
