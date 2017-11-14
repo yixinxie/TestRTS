@@ -33,65 +33,71 @@ namespace aabb
     {
         //assert((dimension == 2) || (dimension == 3));
 
-        lowerBound.resize(AABB_DIM);
-        upperBound.resize(AABB_DIM);
+        //lowerBound.resize(AABB_DIM);
+        //upperBound.resize(AABB_DIM);
     }
 
-    AABB::AABB(const std::vector<double>& lowerBound_, const std::vector<double>& upperBound_) :
-        lowerBound(lowerBound_), upperBound(upperBound_)
+    AABB::AABB(const aabbReal* lowerBound_, const aabbReal* upperBound_)
+        //:lowerBound(lowerBound_), upperBound(upperBound_)
     {
+		lowerBound[0] = lowerBound_[0];
+		lowerBound[1] = lowerBound_[1];
+
+		upperBound[0] = upperBound_[0];
+		upperBound[1] = upperBound_[1];
+
         surfaceArea = computeSurfaceArea();
-        centre = computeCentre();
+        computeCentre(centre);
     }
 
-    double AABB::computeSurfaceArea() const
+    aabbReal AABB::computeSurfaceArea() const
     {
         // Calculate the perimeter of the 2D AABB.
-        if (lowerBound.size() == 2)
-        {
-            double wx = upperBound[0] - lowerBound[0];
-            double wy = upperBound[1] - lowerBound[1];
+        //if (lowerBound.size() == 2)
+        //{
+            aabbReal wx = upperBound[0] - lowerBound[0];
+            aabbReal wy = upperBound[1] - lowerBound[1];
             return 2.0 * (wx + wy);
-        }
+        //}
 
-        // Calculate the surface area of the 3D AABB.
-        else
-        {
-            double wx = upperBound[0] - lowerBound[0];
-            double wy = upperBound[1] - lowerBound[1];
-            double wz = upperBound[2] - lowerBound[2];
-            return 2.0 * (wx*wy + wx*wz + wy*wz);
-        }
+        //// Calculate the surface area of the 3D AABB.
+        //else
+        //{
+        //    aabbReal wx = upperBound[0] - lowerBound[0];
+        //    aabbReal wy = upperBound[1] - lowerBound[1];
+        //    aabbReal wz = upperBound[2] - lowerBound[2];
+        //    return 2.0 * (wx*wy + wx*wz + wy*wz);
+        //}
     }
 
-    double AABB::getSurfaceArea() const
+    aabbReal AABB::getSurfaceArea() const
     {
         return surfaceArea;
     }
 
     void AABB::merge(const AABB& aabb1, const AABB& aabb2)
     {
-        assert(aabb1.lowerBound.size() == aabb2.lowerBound.size());
-        assert(aabb1.upperBound.size() == aabb2.upperBound.size());
+        //assert(aabb1.lowerBound.size() == aabb2.lowerBound.size());
+        //assert(aabb1.upperBound.size() == aabb2.upperBound.size());
 
-        lowerBound.resize(aabb1.lowerBound.size());
-        upperBound.resize(aabb1.lowerBound.size());
+ /*       lowerBound.resize(aabb1.lowerBound.size());
+        upperBound.resize(aabb1.lowerBound.size());*/
 
-        for (unsigned int i=0;i<lowerBound.size();i++)
+        for (unsigned int i=0;i<AABB_DIM;i++)
         {
             lowerBound[i] = std::min(aabb1.lowerBound[i], aabb2.lowerBound[i]);
             upperBound[i] = std::max(aabb1.upperBound[i], aabb2.upperBound[i]);
         }
 
         surfaceArea = computeSurfaceArea();
-        centre = computeCentre();
+        computeCentre(centre);
     }
 
     bool AABB::contains(const AABB& aabb) const
     {
-        assert(aabb.lowerBound.size() == lowerBound.size());
+        //assert(aabb.lowerBound.size() == lowerBound.size());
 
-        for (unsigned int i=0;i<lowerBound.size();i++)
+        for (unsigned int i=0;i<AABB_DIM;i++)
         {
             if (lowerBound[i] < aabb.lowerBound[i]) return false;
             if (upperBound[i] > aabb.upperBound[i]) return false;
@@ -102,16 +108,16 @@ namespace aabb
 
     bool AABB::overlaps(const AABB& aabb) const
     {
-        assert(aabb.lowerBound.size() == lowerBound.size());
+        //assert(aabb.lowerBound.size() == lowerBound.size());
 
-        if (lowerBound.size() == 2)
-        {
+        /*if (lowerBound.size() == 2)
+        {*/
             return !(   aabb.upperBound[0] < lowerBound[0]
                      || aabb.lowerBound[0] > upperBound[0]
                      || aabb.upperBound[1] < lowerBound[1]
                      || aabb.lowerBound[1] > upperBound[1]
                     );
-        }
+        /*}
         else
         {
             return !(   aabb.upperBound[0] < lowerBound[0]
@@ -121,17 +127,13 @@ namespace aabb
                      || aabb.upperBound[2] < lowerBound[2]
                      || aabb.lowerBound[2] > upperBound[2]
                     );
-        }
+        }*/
     }
 
-    std::vector<double> AABB::computeCentre()
+    void AABB::computeCentre(aabbReal* outVal)
     {
-        std::vector<double> position(lowerBound.size());
-
-        for (unsigned int i=0;i<position.size();i++)
-            position[i] = 0.5 * (lowerBound[i] + upperBound[i]);
-
-        return position;
+        for (unsigned int i=0;i<AABB_DIM;i++)
+			outVal[i] = 0.5 * (lowerBound[i] + upperBound[i]);
     }
 
     //void AABB::setDimension(unsigned int dimension)
@@ -151,7 +153,7 @@ namespace aabb
         return (left == NULL_NODE);
     }
 
-    Tree::Tree(double skinThickness_,
+    Tree::Tree(aabbReal skinThickness_,
                unsigned int nParticles) :
 		isPeriodic(false), skinThickness(skinThickness_)
     {
@@ -163,8 +165,10 @@ namespace aabb
         //}
 
         // Initialise the periodicity vector.
-        periodicity.resize(AABB_DIM);
-        std::fill(periodicity.begin(), periodicity.end(), false);
+        //periodicity.resize(AABB_DIM);
+        //std::fill(periodicity.begin(), periodicity.end(), false);
+		periodicity[0] = false;
+		periodicity[1] = false;
 
         // Initialise the tree.
         root = NULL_NODE;
@@ -185,12 +189,17 @@ namespace aabb
         freeList = 0;
     }
 
-    Tree::Tree(double skinThickness_,
-               const std::vector<bool>& periodicity_,
-               const std::vector<double>& boxSize_,
+    Tree::Tree(aabbReal skinThickness_,
+               const bool* periodicity_,
+               const aabbReal* boxSize_,
                unsigned int nParticles) :
-        skinThickness(skinThickness_), periodicity(periodicity_), boxSize(boxSize_)
+        skinThickness(skinThickness_)//, periodicity(periodicity_)//, boxSize(boxSize_)
     {
+		boxSize[0] = boxSize_[0];
+		boxSize[1] = boxSize_[1];
+
+		periodicity[0] = periodicity_[0];
+		periodicity[1] = periodicity_[1];
         // Validate the dimensionality.
         /*if ((dimension != 2) && (dimension != 3))
         {
@@ -199,11 +208,11 @@ namespace aabb
         }*/
 
         // Validate the dimensionality of the vectors.
-        if ((periodicity.size() != AABB_DIM) || (boxSize.size() != AABB_DIM))
-        {
-            std::cerr << "[ERROR]: Dimensionality mismatch!" << '\n';
-            exit(EXIT_FAILURE);
-        }
+        //if ((periodicity.size() != AABB_DIM) || (boxSize.size() != AABB_DIM))
+        //{
+        //    std::cerr << "[ERROR]: Dimensionality mismatch!" << '\n';
+        //    exit(EXIT_FAILURE);
+        //}
 
         // Initialise the tree.
         root = NULL_NODE;
@@ -225,8 +234,8 @@ namespace aabb
 
         // Check periodicity.
         isPeriodic = false;
-        posMinImage.resize(AABB_DIM);
-        negMinImage.resize(AABB_DIM);
+        //posMinImage.resize(AABB_DIM);
+        //negMinImage.resize(AABB_DIM);
         for (unsigned int i=0;i<AABB_DIM;i++)
         {
             posMinImage[i] =  0.5*boxSize[i];
@@ -237,14 +246,16 @@ namespace aabb
         }
     }
 
-    void Tree::setPeriodicity(const std::vector<bool>& periodicity_)
+    void Tree::setPeriodicity(const bool* periodicity_)
     {
-        periodicity = periodicity_;
+        periodicity[0] = periodicity_[0];
+		periodicity[1] = periodicity_[1];
     }
 
-    void Tree::setBoxSize(const std::vector<double>& boxSize_)
+    void Tree::setBoxSize(const aabbReal* boxSize_)
     {
-        boxSize = boxSize_;
+        boxSize[0] = boxSize_[0];
+		boxSize[1] = boxSize_[1];
     }
 
     unsigned int Tree::allocateNode()
@@ -295,27 +306,27 @@ namespace aabb
         nodeCount--;
     }
 
-    void Tree::insertParticle(unsigned int particle, std::vector<double>& position, double radius)
+    void Tree::insertParticle(unsigned int particle, aabbReal* position, aabbReal radius)
     {
         // Make sure the particle doesn't already exist.
         if (particleMap.count(particle) != 0)
         {
-            std::cerr << "[ERROR]: Particle already exists in tree!" << '\n';
-            exit(EXIT_FAILURE);
+            //std::cerr << "[ERROR]: Particle already exists in tree!" << '\n';
+			return;
         }
 
         // Validate the dimensionality of the position vector.
-        if (position.size() != AABB_DIM)
-        {
-            std::cerr << "[ERROR]: Dimensionality mismatch!" << '\n';
-            exit(EXIT_FAILURE);
-        }
+        //if (position.size() != AABB_DIM)
+        //{
+        //    std::cerr << "[ERROR]: Dimensionality mismatch!" << '\n';
+        //    exit(EXIT_FAILURE);
+        //}
 
         // Allocate a new node for the particle.
         unsigned int node = allocateNode();
 
         // AABB size in each dimension.
-        double size[AABB_DIM];
+        aabbReal size[AABB_DIM];
 
         // Compute the AABB limits.
         for (unsigned i=0;i<AABB_DIM;i++)
@@ -332,7 +343,7 @@ namespace aabb
             nodes[node].aabb.upperBound[i] += skinThickness * size[i];
         }
         nodes[node].aabb.surfaceArea = nodes[node].aabb.computeSurfaceArea();
-        nodes[node].aabb.centre = nodes[node].aabb.computeCentre();
+        nodes[node].aabb.computeCentre(nodes[node].aabb.centre);
 
         // Zero the height.
         nodes[node].height = 0;
@@ -347,27 +358,28 @@ namespace aabb
         nodes[node].particle = particle;
     }
 
-    void Tree::insertParticle(unsigned int particle, std::vector<double>& lowerBound, std::vector<double>& upperBound)
+    void Tree::insertParticle(unsigned int particle, aabbReal* lowerBound, aabbReal* upperBound)
     {
         // Make sure the particle doesn't already exist.
         if (particleMap.count(particle) != 0)
         {
-            std::cerr << "[ERROR]: Particle already exists in tree!" << '\n';
-            exit(EXIT_FAILURE);
+            //std::cerr << "[ERROR]: Particle already exists in tree!" << '\n';
+            //exit(EXIT_FAILURE);
+			return;
         }
 
         // Validate the dimensionality of the bounds vectors.
-        if ((lowerBound.size() != AABB_DIM) || (upperBound.size() != AABB_DIM))
-        {
-            std::cerr << "[ERROR]: Dimensionality mismatch!" << '\n';
-            exit(EXIT_FAILURE);
-        }
+        //if ((lowerBound.size() != AABB_DIM) || (upperBound.size() != AABB_DIM))
+        //{
+        //    std::cerr << "[ERROR]: Dimensionality mismatch!" << '\n';
+        //    exit(EXIT_FAILURE);
+        //}
 
         // Allocate a new node for the particle.
         unsigned int node = allocateNode();
 
         // AABB size in each dimension.
-        double size[AABB_DIM];
+        aabbReal size[AABB_DIM];
 
         // Compute the AABB limits.
         for (unsigned i=0;i<AABB_DIM;i++)
@@ -375,8 +387,9 @@ namespace aabb
             // Validate the bound.
             if (lowerBound[i] >= upperBound[i])
             {
-                std::cerr << "[ERROR]: AABB lower bound is greater than the upper bound!" << '\n';
-                exit(EXIT_FAILURE);
+                /*std::cerr << "[ERROR]: AABB lower bound is greater than the upper bound!" << '\n';
+                exit(EXIT_FAILURE);*/
+				assert(false);
             }
 
             nodes[node].aabb.lowerBound[i] = lowerBound[i];
@@ -391,7 +404,7 @@ namespace aabb
             nodes[node].aabb.upperBound[i] += skinThickness * size[i];
         }
         nodes[node].aabb.surfaceArea = nodes[node].aabb.computeSurfaceArea();
-        nodes[node].aabb.centre = nodes[node].aabb.computeCentre();
+        nodes[node].aabb.computeCentre(nodes[node].aabb.centre);
 
         // Zero the height.
         nodes[node].height = 0;
@@ -417,8 +430,9 @@ namespace aabb
         // The particle doesn't exist.
         if (it == particleMap.end())
         {
-            std::cerr << "[ERROR]: Invalid particle index!" << '\n';
-            exit(EXIT_FAILURE);
+            //std::cerr << "[ERROR]: Invalid particle index!" << '\n';
+            //exit(EXIT_FAILURE);
+			return;
         }
 
         // Extract the node index.
@@ -434,18 +448,18 @@ namespace aabb
         freeNode(node);
     }
 
-    bool Tree::updateParticle(unsigned int particle, std::vector<double>& position, double radius)
+    bool Tree::updateParticle(unsigned int particle, aabbReal* position, aabbReal radius)
     {
         // Validate the dimensionality of the position vector.
-        if (position.size() != AABB_DIM)
-        {
-            std::cerr << "[ERROR]: Dimensionality mismatch!" << '\n';
-            exit(EXIT_FAILURE);
-        }
+        //if (position.size() != AABB_DIM)
+        //{
+        //    std::cerr << "[ERROR]: Dimensionality mismatch!" << '\n';
+        //    exit(EXIT_FAILURE);
+        //}
 
         // AABB bounds vectors.
-        std::vector<double> lowerBound(AABB_DIM);
-        std::vector<double> upperBound(AABB_DIM);
+        aabbReal lowerBound[AABB_DIM];
+		aabbReal upperBound[AABB_DIM];
 
         // Compute the AABB limits.
         for (unsigned i=0;i<AABB_DIM;i++)
@@ -458,14 +472,14 @@ namespace aabb
         return updateParticle(particle, lowerBound, upperBound);
     }
 
-    bool Tree::updateParticle(unsigned int particle, std::vector<double>& lowerBound, std::vector<double>& upperBound)
+    bool Tree::updateParticle(unsigned int particle, aabbReal* lowerBound, aabbReal* upperBound)
     {
         // Validate the dimensionality of the bounds vectors.
-        if ((lowerBound.size() != AABB_DIM) && (upperBound.size() != AABB_DIM))
-        {
-            std::cerr << "[ERROR]: Dimensionality mismatch!" << '\n';
-            exit(EXIT_FAILURE);
-        }
+        //if ((lowerBound.size() != AABB_DIM) && (upperBound.size() != AABB_DIM))
+        //{
+        //    std::cerr << "[ERROR]: Dimensionality mismatch!" << '\n';
+        //    exit(EXIT_FAILURE);
+        //}
 
         // Map iterator.
         std::map<unsigned int, unsigned int>::iterator it;
@@ -476,8 +490,9 @@ namespace aabb
         // The particle doesn't exist.
         if (it == particleMap.end())
         {
-            std::cerr << "[ERROR]: Invalid particle index!" << '\n';
-            exit(EXIT_FAILURE);
+            //std::cerr << "[ERROR]: Invalid particle index!" << '\n';
+            //exit(EXIT_FAILURE);
+			return false;
         }
 
         // Extract the node index.
@@ -487,7 +502,7 @@ namespace aabb
         assert(nodes[node].isLeaf());
 
         // AABB size in each dimension.
-        double size[AABB_DIM];
+        aabbReal size[AABB_DIM];
 
         // Compute the AABB limits.
         for (unsigned i=0;i<AABB_DIM;i++)
@@ -495,8 +510,9 @@ namespace aabb
             // Validate the bound.
             if (lowerBound[i] >= upperBound[i])
             {
-                std::cerr << "[ERROR]: AABB lower bound is greater than the upper bound!" << '\n';
-                exit(EXIT_FAILURE);
+                /*std::cerr << "[ERROR]: AABB lower bound is greater than the upper bound!" << '\n';
+                exit(EXIT_FAILURE);*/
+				assert(false);
             }
 
             size[i] = upperBound[i] - lowerBound[i];
@@ -523,7 +539,7 @@ namespace aabb
 
         // Update the surface area and centroid.
         nodes[node].aabb.surfaceArea = nodes[node].aabb.computeSurfaceArea();
-        nodes[node].aabb.centre = nodes[node].aabb.computeCentre();
+        nodes[node].aabb.computeCentre(nodes[node].aabb.centre);
 
         // Insert a new leaf node.
         insertLeaf(node);
@@ -536,8 +552,9 @@ namespace aabb
         // Make sure that this is a valid particle.
         if (particleMap.count(particle) == 0)
         {
-            std::cerr << "[ERROR]: Invalid particle index!" << '\n';
-            exit(EXIT_FAILURE);
+            //std::cerr << "[ERROR]: Invalid particle index!" << '\n';
+            //exit(EXIT_FAILURE);
+			assert(false);
         }
 
         // Test overlap of particle AABB against all other particles.
@@ -564,8 +581,8 @@ namespace aabb
 
             if (isPeriodic)
             {
-                std::vector<double> separation(AABB_DIM);
-                std::vector<double> shift(AABB_DIM);
+                aabbReal separation[AABB_DIM];
+				aabbReal shift[AABB_DIM];
                 for (unsigned int i=0;i<AABB_DIM;i++)
                     separation[i] = nodeAABB.centre[i] - aabb.centre[i];
 
@@ -640,20 +657,20 @@ namespace aabb
             unsigned int left  = nodes[index].left;
             unsigned int right = nodes[index].right;
 
-            double surfaceArea = nodes[index].aabb.getSurfaceArea();
+            aabbReal surfaceArea = nodes[index].aabb.getSurfaceArea();
 
             AABB combinedAABB;
             combinedAABB.merge(nodes[index].aabb, leafAABB);
-            double combinedSurfaceArea = combinedAABB.getSurfaceArea();
+            aabbReal combinedSurfaceArea = combinedAABB.getSurfaceArea();
 
             // Cost of creating a new parent for this node and the new leaf.
-            double cost = 2.0 * combinedSurfaceArea;
+            aabbReal cost = 2.0 * combinedSurfaceArea;
 
             // Minimum cost of pushing the leaf further down the tree.
-            double inheritanceCost = 2.0 * (combinedSurfaceArea - surfaceArea);
+            aabbReal inheritanceCost = 2.0 * (combinedSurfaceArea - surfaceArea);
 
             // Cost of descending to the left.
-            double costLeft;
+            aabbReal costLeft;
             if (nodes[left].isLeaf())
             {
                 AABB aabb;
@@ -664,13 +681,13 @@ namespace aabb
             {
                 AABB aabb;
                 aabb.merge(leafAABB, nodes[left].aabb);
-                double oldArea = nodes[left].aabb.getSurfaceArea();
-                double newArea = aabb.getSurfaceArea();
+                aabbReal oldArea = nodes[left].aabb.getSurfaceArea();
+                aabbReal newArea = aabb.getSurfaceArea();
                 costLeft = (newArea - oldArea) + inheritanceCost;
             }
 
             // Cost of descending to the right.
-            double costRight;
+            aabbReal costRight;
             if (nodes[right].isLeaf())
             {
                 AABB aabb;
@@ -681,8 +698,8 @@ namespace aabb
             {
                 AABB aabb;
                 aabb.merge(leafAABB, nodes[right].aabb);
-                double oldArea = nodes[right].aabb.getSurfaceArea();
-                double newArea = aabb.getSurfaceArea();
+                aabbReal oldArea = nodes[right].aabb.getSurfaceArea();
+                aabbReal newArea = aabb.getSurfaceArea();
                 costRight = (newArea - oldArea) + inheritanceCost;
             }
 
@@ -959,12 +976,12 @@ namespace aabb
         return maxBalance;
     }
 
-    double Tree::computeSurfaceAreaRatio() const
+    aabbReal Tree::computeSurfaceAreaRatio() const
     {
         if (root == NULL_NODE) return 0.0;
 
-        double rootArea = nodes[root].aabb.computeSurfaceArea();
-        double totalArea = 0.0;
+        aabbReal rootArea = nodes[root].aabb.computeSurfaceArea();
+        aabbReal totalArea = 0.0;
 
         for (unsigned int i=0; i<nodeCapacity;i++)
         {
@@ -1020,7 +1037,7 @@ namespace aabb
 
         while (count > 1)
         {
-            double minCost = std::numeric_limits<double>::max();
+            aabbReal minCost = std::numeric_limits<aabbReal>::max();
             int iMin = -1, jMin = -1;
 
             for (unsigned int i=0;i<count;i++)
@@ -1032,7 +1049,7 @@ namespace aabb
                     AABB aabbj = nodes[nodeIndices[j]].aabb;
                     AABB aabb;
                     aabb.merge(aabbi, aabbj);
-                    double cost = aabb.getSurfaceArea();
+                    aabbReal cost = aabb.getSurfaceArea();
 
                     if (cost < minCost)
                     {
@@ -1129,7 +1146,7 @@ namespace aabb
         validateMetrics(right);
     }
 
-    void Tree::periodicBoundaries(std::vector<double>& position)
+    void Tree::periodicBoundaries(aabbReal* position)
     {
         for (unsigned int i=0;i<AABB_DIM;i++)
         {
@@ -1147,7 +1164,7 @@ namespace aabb
         }
     }
 
-    bool Tree::minimumImage(std::vector<double>& separation, std::vector<double>& shift)
+    bool Tree::minimumImage(aabbReal* separation, aabbReal* shift)
     {
         bool isShifted = false;
 

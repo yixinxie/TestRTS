@@ -4,8 +4,8 @@
 #include "../misc/ArrayT.h"
 #include "../misc/SimpleVector.h"
 
+class AABBManager;
 class RecastManager;
-
 enum UnitAnimStates : byte{
 	Idle,
 	Moving,
@@ -30,7 +30,9 @@ protected:
 	int frame;
 
 	// pathfinding
+	AABBManager* aabb;
 	RecastManager* recast;
+	int32 aabbId;
 	Vector2 pathPoints[32];
 
 public:

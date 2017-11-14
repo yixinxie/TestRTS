@@ -7,7 +7,7 @@
 #include "SelectorRect.h"
 #include "InputManager.h"
 #include "Terrain.h"
-#include "StaticCollision.h"
+//#include "StaticCollision.h"
 #include "RecastManager.h"
 #include "Camera.h"
 #include "AABBManager.h"
@@ -74,10 +74,6 @@ void Scene::initScene() {
 	Terrain* terrain = newClass<Terrain>();
 	terrain->init();
 	addOObject(terrain);
-
-	StaticCollision* staticCollision = newClass<StaticCollision>();
-	staticCollision->init();
-	addOObject(staticCollision);
 
 	//RVOManager* rvo = newClass<RVOManager>();
 	//rvo->init();

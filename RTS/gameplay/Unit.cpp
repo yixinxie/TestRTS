@@ -1,4 +1,5 @@
 #include "Unit.h"
+#include "AABBManager.h"
 #include "RecastManager.h"
 #include "../misc/G.h"
 #include "../misc/CharHelper.h"
@@ -15,6 +16,10 @@ void Unit::init(Vector2 pos, const char* id) {
 	this->pos = pos;
 
 	recast = (RecastManager*)OEScene->getOObjectByName("recast");
+
+	aabb = (AABBManager*)OEScene->getOObjectByName("aabb");
+	aabbId = aabb->addAgent(pos, collisionRadius);
+	collisionRadius = 1.0f;
 }
 void Unit::update(float deltaTime) {
 	const float speed = 2.5f;
@@ -30,6 +35,10 @@ void Unit::update(float deltaTime) {
 		}
 
 		pos += dir * deltaTime * speed;
+
+		aabb->query(pos, collisionRadius);
+		aabb->updateAgent(aabbId, pos, collisionRadius);
+		// calculate rotation
 		float rot = atan2(dir.y, dir.x) - Math_PI / 2.0f;
 		OERenderer->updateSprite(textureId, spriteDescId, pos, rot);
 	}
@@ -46,8 +55,6 @@ void Unit::setMoveTarget(const Vector2& _targetPos) {
 
 	OERenderer->line2D(pos, _targetPos, Color::blue());
 	
-
-	//recast->findPath(Vector3(10.0f, 0.0f, 10.0f), Vector3(-2.0f, 0.0f, -3.5f));
 	int pathCount = recast->findPath(pos, _targetPos, pathPoints);
 	for (int i = 0; i < pathCount - 1; ++i) {
 		OERenderer->line2D(pathPoints[i], pathPoints[i + 1], Color::green());

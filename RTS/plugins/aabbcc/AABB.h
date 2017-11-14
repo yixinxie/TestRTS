@@ -38,7 +38,8 @@
 /// Null node flag.
 const unsigned int NULL_NODE = 0xffffffff;
 const unsigned int AABB_DIM = 2;
-//typedef double aabbFloat
+typedef float aabbReal;
+//typedef double aabbReal;
 namespace aabb
 {
     /*! \brief The axis-aligned bounding box object.
@@ -69,13 +70,13 @@ namespace aabb
             \param upperBound_
                 The upper bound in each dimension.
          */
-        AABB(const std::vector<double>&, const std::vector<double>&);
+        AABB(const aabbReal*, const aabbReal*);
 
         /// Compute the surface area of the box.
-        double computeSurfaceArea() const;
+        aabbReal computeSurfaceArea() const;
 
         /// Get the surface area of the box.
-        double getSurfaceArea() const;
+        aabbReal getSurfaceArea() const;
 
         //! Merge two AABBs into this one.
         /*! \param aabb1
@@ -108,7 +109,7 @@ namespace aabb
         /*! \returns
                 The position vector of the AABB centre.
          */
-        std::vector<double> computeCentre();
+        void computeCentre(aabbReal*);
 
         //! Set the dimensionality of the AABB.
         /*! \param dimension
@@ -117,16 +118,16 @@ namespace aabb
         //void setDimension(unsigned int);
 
         /// Lower bound of AABB in each dimension.
-        std::vector<double> lowerBound;
+		aabbReal lowerBound[AABB_DIM];
 
         /// Upper bound of AABB in each dimension.
-        std::vector<double> upperBound;
+		aabbReal upperBound[AABB_DIM];
 
         /// The position of the AABB centre.
-        std::vector<double> centre;
+		aabbReal centre[AABB_DIM];
 
         /// The AABB's surface area.
-        double surfaceArea;
+        aabbReal surfaceArea;
     };
 
     /*! \brief A node of the AABB tree.
@@ -196,7 +197,7 @@ namespace aabb
             \param nParticles
                 The number of particles (for fixed particle number systems).
          */
-        Tree(double skinThickness_ = 0.05, unsigned int nParticles = 16);
+        Tree(aabbReal skinThickness_ = 0.05, unsigned int nParticles = 16);
 
         //! Constructor (custom periodicity).
         /*! \param dimension_
@@ -215,19 +216,19 @@ namespace aabb
             \param nParticles
                 The number of particles (for fixed particle number systems).
          */
-        Tree(double, const std::vector<bool>&, const std::vector<double>&, unsigned int nParticles = 16);
+        Tree(aabbReal, const bool*, const aabbReal*, unsigned int nParticles = 16);
 
         //! Set the periodicity of the simulation box.
         /*! \param periodicity_
                 Whether the system is periodic in each dimension.
          */
-        void setPeriodicity(const std::vector<bool>&);
+        void setPeriodicity(const bool*);
 
         //! Set the size of the simulation box.
         /*! \param boxSize_
                 The size of the simulation box in each dimension.
          */
-        void setBoxSize(const std::vector<double>&);
+        void setBoxSize(const aabbReal*);
 
         //! Insert a particle into the tree (point particle).
         /*! \param index
@@ -239,7 +240,7 @@ namespace aabb
             \param radius
                 The radius of the particle.
          */
-        void insertParticle(unsigned int, std::vector<double>&, double);
+        void insertParticle(unsigned int, aabbReal*, aabbReal);
 
         //! Insert a particle into the tree (arbitrary shape with bounding box).
         /*! \param index
@@ -251,7 +252,7 @@ namespace aabb
             \param upperBound
                 The upper bound in each dimension.
          */
-        void insertParticle(unsigned int, std::vector<double>&, std::vector<double>&);
+        void insertParticle(unsigned int, aabbReal*, aabbReal*);
 
         //! Remove a particle from the tree.
         /*! \param particle
@@ -272,7 +273,7 @@ namespace aabb
             \return
                 Whether the particle was reinserted.
          */
-        bool updateParticle(unsigned int, std::vector<double>&, double);
+        bool updateParticle(unsigned int, aabbReal*, aabbReal);
 
         //! Update the tree if a particle moves outside its fattened AABB.
         /*! \param particle
@@ -285,7 +286,7 @@ namespace aabb
                 The upper bound in each dimension.
 
          */
-        bool updateParticle(unsigned int, std::vector<double>&, std::vector<double>&);
+        bool updateParticle(unsigned int, aabbReal*, aabbReal*);
 
         //! Query the tree to find candidate interactions for a particle.
         /*! \param particle
@@ -347,7 +348,7 @@ namespace aabb
                 The ratio of the sum of the node surface area to the surface
                 area of the root node.
          */
-        double computeSurfaceAreaRatio() const;
+        aabbReal computeSurfaceAreaRatio() const;
 
         /// Validate the tree.
         void validate() const;
@@ -380,19 +381,19 @@ namespace aabb
         bool isPeriodic;
 
         /// The skin thickness of the fattened AABBs, as a fraction of the AABB base length.
-        double skinThickness;
+        aabbReal skinThickness;
 
         /// Whether the system is periodic along each axis.
-        std::vector<bool> periodicity;
+		bool periodicity[AABB_DIM];
 
         /// The size of the system in each dimension.
-        std::vector<double> boxSize;
+		aabbReal boxSize[AABB_DIM];
 
         /// The position of the negative minimum image.
-        std::vector<double> negMinImage;
+		aabbReal negMinImage[AABB_DIM];
 
         /// The position of the positive minimum image.
-        std::vector<double> posMinImage;
+		aabbReal posMinImage[AABB_DIM];
 
         /// A map between particle and node indices.
         std::map<unsigned int, unsigned int> particleMap;
@@ -458,7 +459,7 @@ namespace aabb
         /* \param position
                 The position vector.
          */
-        void periodicBoundaries(std::vector<double>&);
+        void periodicBoundaries(aabbReal*);
 
         //! Compute minimum image separation.
         /*! \param separation
@@ -470,7 +471,7 @@ namespace aabb
             \return
                 Whether a periodic shift has been applied.
          */
-        bool minimumImage(std::vector<double>&, std::vector<double>&);
+        bool minimumImage(aabbReal*, aabbReal*);
 
 		
     };
