@@ -11,3 +11,7 @@ RTS/RTS.vcxproj
 *.log
 *.pdb
 *.idb
+*.vcxproj
+RTS/RTS.vcxproj.user
+RTS/RTS.vcxproj
+RTS/RTS.vcxproj
