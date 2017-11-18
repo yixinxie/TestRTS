@@ -7,7 +7,7 @@
 #include "SelectorRect.h"
 #include "InputManager.h"
 #include "Terrain.h"
-//#include "StaticCollision.h"
+#include "StaticCollision.h"
 #include "RecastManager.h"
 #include "Camera.h"
 #include "AABBManager.h"
@@ -67,17 +67,18 @@ void Scene::initScene() {
 	rect->init();
 	addOObject(rect);
 
-	AABBManager* aabb = newClass<AABBManager>();
-	aabb->init();
-	addOObject(aabb);
+	//AABBManager* aabb = newClass<AABBManager>();
+	//aabb->init();
+	//addOObject(aabb);
 
 	Terrain* terrain = newClass<Terrain>();
 	terrain->init();
 	addOObject(terrain);
 
-	//RVOManager* rvo = newClass<RVOManager>();
-	//rvo->init();
-	//addOObject(rvo);
+	StaticCollision* rvo = newClass<StaticCollision>("b2");
+	rvo->init();
+	addOObject(rvo);
+
 	RecastManager* recastManager = newClass<RecastManager>("recast");
 	recastManager->init();
 	addOObject(recastManager);

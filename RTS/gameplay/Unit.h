@@ -6,6 +6,8 @@
 
 class AABBManager;
 class RecastManager;
+class StaticCollision;
+class b2Body;
 enum UnitAnimStates : byte{
 	Idle,
 	Moving,
@@ -31,9 +33,14 @@ protected:
 
 	// pathfinding
 	AABBManager* aabb;
-	RecastManager* recast;
 	int32 aabbId;
+
+	RecastManager* recast;
 	Vector2 pathPoints[32];
+	StaticCollision* phys;
+	b2Body* b2body;
+
+
 
 public:
 	Unit(void);

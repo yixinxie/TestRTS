@@ -86,3 +86,16 @@ void AABBManager::query(Vector2 _pos, float _radius) {
 
 	}
 }
+
+//void AABBManager::raycast(Vector2 _pos, float _radius ) {
+//	aabbReal test_lowerBound[2] = { _pos.x - _radius, _pos.y - _radius };
+//	aabbReal test_upperBound[2] = { _pos.x + _radius, _pos.y + _radius };
+//
+//	AABB aabbQuery(test_lowerBound, test_upperBound);
+//
+//	std::vector<unsigned int> result = aabbTree.query(aabbQuery);
+//	for (int i = 0; i < result.size(); ++i) {
+//		int sdf = 0;
+//
+//	}
+//}
