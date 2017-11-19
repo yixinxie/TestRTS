@@ -23,7 +23,7 @@ public:
 	void update(float timeElapsed);
 	void addOObject(OObject* obj);
 	OObject* getOObjectByName(const char* name);
-	void addUnit(Vector2 pos, const char* id);
+	Unit* addUnit(Vector2 pos, const char* id);
 	void findUnitsByArea(Vector2 min, Vector2 max, ArrayPtr<Unit*>& units);
 	void setSelectedUnits(ArrayPtr<Unit*>& units);
 	void orderMove(const Vector2& targetPos);

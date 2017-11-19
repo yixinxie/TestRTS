@@ -36,6 +36,7 @@ namespace OriGraphics{
 		virtual void render(void) = 0;
 
 		virtual void line2D(Vector2 pos0, Vector2 pos1, Color color) = 0;
+		virtual void circle(Vector2 pos0, float, Color color) = 0;
 
 		virtual int newSpriteSheet(const char* spritePath) = 0;
 		virtual int newSprite(int handle, Vector2 pos, Vector2 uv) = 0;

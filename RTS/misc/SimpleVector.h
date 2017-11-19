@@ -73,6 +73,14 @@ struct Vector2{
 	{
 		return abs(x) + abs(y);
 	}
+	float magSquared()
+	{
+		return x * x + y * y;
+	}
+	float distanceTo(const Vector2& other) const
+	{
+		return sqrtf(ret);
+	}
 
 };
 struct Vector3{

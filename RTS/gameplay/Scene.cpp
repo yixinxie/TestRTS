@@ -83,13 +83,17 @@ void Scene::initScene() {
 	recastManager->init();
 	addOObject(recastManager);
 
-	addUnit(Vector2(0, 0), "green");
+	Unit* one = addUnit(Vector2(0, 0), "green");
+	one->dbgid = 0;
 
-	addUnit(Vector2(2, 0), "yellow");
+	one = addUnit(Vector2(2, 0), "yellow");
+	one->dbgid = 1;
 
-	addUnit(Vector2(4, 0), "red");
+	one = addUnit(Vector2(4, 0), "red");
+	one->dbgid = 2;
 
-	addUnit(Vector2(6, 0), "blue");
+	one = addUnit(Vector2(6, 0), "blue");
+	one->dbgid = 3;
 
 	/*newUnit = newClass<Unit>("units");
 	newUnit->init(Vector2(0.5, -0.5), "blue");
@@ -107,10 +111,11 @@ void Scene::update(float timeElapsed) {
 	}
 }
 
-void Scene::addUnit(Vector2 pos, const char* id){
+Unit* Scene::addUnit(Vector2 pos, const char* id){
 	Unit* newUnit = newClass<Unit>("units");
 	newUnit->init(pos, id);
 	units.push(newUnit);
+	return newUnit;
 }
 
 void Scene::findUnitsByArea(Vector2 min, Vector2 max, ArrayPtr<Unit*>& outUnits){

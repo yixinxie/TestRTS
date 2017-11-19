@@ -12,14 +12,16 @@ enum UnitAnimStates : byte{
 	Idle,
 	Moving,
 	Attacking,
+	MakingSpace,
 };
 class Unit {
 protected:
 	// motion states
+	Vector2 lastPos;
 	Vector2 pos;
 	float facing; // rotation
-	float moveSpeed;
 	float collisionRadius;
+	float speed;
 
 	Vector2 targetPos;
 
@@ -36,13 +38,17 @@ protected:
 	int32 aabbId;
 
 	RecastManager* recast;
-	Vector2 pathPoints[32];
+	int32 pathCount;
+	int32 pathPointIndex;
+	Vector2 pathPoints[32]; // reference path
 	StaticCollision* phys;
 	b2Body* b2body;
 
-
+	Vector2 updateMovement(Vector2 desiredVelocity);
+	void makeSpace(Vector2 _dir);
 
 public:
+	int dbgid;
 	Unit(void);
 	~Unit();
 	void init(Vector2 pos, const char* id);

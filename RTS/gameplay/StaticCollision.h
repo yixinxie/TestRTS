@@ -13,21 +13,22 @@ public:
 	~StaticCollision();
 	void init(void);
 	//virtual void update(float deltaTime) override;
-	b2Body* addAgent(Vector2 pos);
+	b2Body* addAgent(Vector2 pos, void* userData);
 	void updateAgent(b2Body*, Vector2 pos);
 	bool raycast(Vector2 from, Vector2 to, RTSRaycastCallback* result);
+	int overlap(Vector2 center, float radius, b2QueryCallback* result);
 };
 
 class RTSRaycastCallback : public b2RayCastCallback {
 public:
 	bool hit;
-	b2Fixture* fixture;
+	void* userData;
 	b2Vec2 point;
 	b2Vec2 normal;
 	float32 fraction;
 	RTSRaycastCallback() {
 		hit = false;
-		fixture = nullptr;
+		userData = nullptr;
 	}
 
 	virtual float32 ReportFixture(

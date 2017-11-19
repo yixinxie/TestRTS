@@ -165,3 +165,22 @@ void GLManager::updateSprite(int textureId, int spriteId, Vector2 pos, float ang
 void GLManager::line2D(Vector2 pos0, Vector2 pos1, Color color) {
 	debugRender->drawLine(pos0, pos1, color);
 }
+
+void GLManager::circle(Vector2 pos0, float radius, Color color) {
+	const int segments = 4;
+	float segmentRadians = Math_PI / 2.0f / segments;
+	for (int i = 0; i < segments; i++) {
+		Vector2 offset0, offset1;
+		offset0.x = cosf(i * segmentRadians);
+		offset0.y = sinf(i * segmentRadians);
+
+		offset1.x += cosf((i + 1) * segmentRadians);
+		offset1.y += sinf((i + 1) * segmentRadians);
+		debugRender->drawLine(pos0 + offset0, pos0 + offset1, color);
+		debugRender->drawLine(pos0 - offset0, pos0 - offset1, color);
+
+		debugRender->drawLine(pos0 + Vector2(-offset0.y, offset0.x), pos0 + Vector2(-offset1.y, offset1.x), color);
+		debugRender->drawLine(pos0 + Vector2(offset0.y, -offset0.x), pos0 + Vector2(offset1.y, -offset1.x), color);
+
+	}
+}

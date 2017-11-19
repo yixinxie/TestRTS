@@ -66,7 +66,7 @@ void StaticCollision::init() {
 		box2DInst->CreateBody(&myBodyDef)->CreateFixture(&myFixtureDef);*/
 }
 
-b2Body* StaticCollision::addAgent(Vector2 pos){
+b2Body* StaticCollision::addAgent(Vector2 pos, void* userData){
 	b2BodyDef agentBodyDef;
 	agentBodyDef.type = b2_kinematicBody;
 	agentBodyDef.position.Set(pos.x, pos.y);
@@ -79,8 +79,8 @@ b2Body* StaticCollision::addAgent(Vector2 pos){
 	b2FixtureDef boxFixtureDef;
 	boxFixtureDef.shape = &circle;
 	boxFixtureDef.density = 1;
+	boxFixtureDef.userData = userData;
 	kinBody->CreateFixture(&boxFixtureDef);
-	//kinBody->SetTransform(b2Vec2(pos.x, pos.y), 0.0f);
 	return kinBody;
 }
 
@@ -88,9 +88,17 @@ void StaticCollision::updateAgent(b2Body* b2body, Vector2 pos){
 	b2body->SetTransform(b2Vec2(pos.x, pos.y), 0.0f);
 }
 
- bool StaticCollision::raycast(Vector2 from, Vector2 to, RTSRaycastCallback* result) {
+bool StaticCollision::raycast(Vector2 from, Vector2 to, RTSRaycastCallback* result) {
 	box2DInst->RayCast(result, b2Vec2(from.x, from.y), b2Vec2(to.x, to.y));
 	return result->hit;
+}
+
+int StaticCollision::overlap(Vector2 center, float radius, b2QueryCallback* result) {
+	b2AABB aabb;
+	aabb.lowerBound = b2Vec2(center.x - radius, center.y - radius);
+	aabb.upperBound = b2Vec2(center.x + radius, center.y + radius);
+	box2DInst->QueryAABB(result, aabb);
+	return result->count;
 }
 //void StaticCollision::update(float deltaTime) {
 	//box2DInst->Step(deltaTime, 1, 1);
@@ -99,7 +107,7 @@ void StaticCollision::updateAgent(b2Body* b2body, Vector2 pos){
 float32 RTSRaycastCallback::ReportFixture(b2Fixture* _fixture, const b2Vec2& _point,
 	const b2Vec2& _normal, float32 _fraction){
 	hit = true;
-	fixture = _fixture;
+	userData = _fixture->GetUserData();
 	point = _point;
 	normal = _normal;
 	fraction = _fraction;

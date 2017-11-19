@@ -20,6 +20,7 @@
 #define B2_WORLD_CALLBACKS_H
 
 #include "Box2D/Common/b2Settings.h"
+#include "Box2D/Dynamics/b2Fixture.h"
 
 struct b2Vec2;
 struct b2Transform;
@@ -117,17 +118,28 @@ public:
 		B2_NOT_USED(impulse);
 	}
 };
-
 /// Callback class for AABB queries.
 /// See b2World::Query
 class b2QueryCallback
 {
+	
 public:
-	virtual ~b2QueryCallback() {}
+	static const int MaxOverlapCount = 8;
+	int count;
+	void* userData[MaxOverlapCount];
 
+	b2QueryCallback() : count(0) {
+
+	}
 	/// Called for each fixture found in the query AABB.
 	/// @return false to terminate the query.
-	virtual bool ReportFixture(b2Fixture* fixture) = 0;
+	bool ReportFixture(b2Fixture* fixture) {
+		if (count == MaxOverlapCount)return false;
+
+		userData[count] = fixture->GetUserData();
+		count++;
+		return true;
+	}
 };
 
 /// Callback class for ray casts.
