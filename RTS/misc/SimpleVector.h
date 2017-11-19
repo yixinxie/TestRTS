@@ -79,6 +79,7 @@ struct Vector2{
 	}
 	float distanceTo(const Vector2& other) const
 	{
+		float ret = (x - other.x) * (x - other.x) + (y - other.y) * (y - other.y);
 		return sqrtf(ret);
 	}
 
