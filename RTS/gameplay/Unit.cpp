@@ -29,7 +29,36 @@ void Unit::init(Vector2 _pos, const char* id) {
 
 	phys = (StaticCollision*)OEScene->getOObjectByName("static_collision");
 	b2body = phys->addAgent(pos, (void*)this);
+
+	Vector2 res = pointToLine(Vector2(0, 0), Vector2(1, 1), Vector2(1, 0));
+	int sdf = 0;
 }
+Vector2 Unit::pointToLine(Vector2 line_pos, Vector2 line_vec, Vector2 point_pos) const{
+	Vector2 ret;
+	Vector2 dir = line_vec;
+	Vector2 perp;
+	perp.x = -dir.y;
+	perp.y = dir.x;
+	float t = 0.0f;
+	if (dir.x == 0.0f) {
+		// the line is vertical
+		ret.x = line_pos.x;
+		ret.y = point_pos.y;
+	}
+	else if (dir.y == 0.0f) {
+		// the line is horizontal
+		ret.x = point_pos.x;
+		ret.y = line_pos.y;
+	}
+	else {
+		t = (dir.x * point_pos.y - dir.x * line_pos.y - point_pos.x * dir.y + line_pos.x * dir.y) / (perp.x * dir.y - dir.x * perp.y);
+		ret.x = point_pos.x + t * perp.x;
+		ret.y = point_pos.y + t * perp.y;
+	}
+	return ret;
+}
+
+
 void Unit::update(float deltaTime) {
 	
 	if (dbgid == 1) {
@@ -38,12 +67,17 @@ void Unit::update(float deltaTime) {
 	if (animState == UnitAnimStates::Moving)
 	{
 		Vector2 dir = targetPos - pos;
-		if (dir.magSquared() < 0.44f) {
-			if (pathPointIndex == -1){
+		if (pathPointIndex == -1) {
+			if (dir.magSquared() < 0.44f) {
 				animState = UnitAnimStates::Idle;
 			}
-			else {
+		}
+		else{
+			Vector2 projected = pointToLine(targetPos, pathTurnPointNormals[pathPointIndex], pos);
+			float distToTurnLine = projected.distanceTo(pos);
+			if (distToTurnLine < 0.2f) { // could use dist squared here.
 				pathPointIndex++;
+				assert(pathPointIndex <= pathCount);
 				if (pathPointIndex == pathCount) {
 					animState = UnitAnimStates::Idle;
 				}
@@ -51,10 +85,9 @@ void Unit::update(float deltaTime) {
 					targetPos = pathPoints[pathPointIndex];
 				}
 			}
+			
 		}
-		else {
-			dir.normalize();
-		}
+		dir.normalize();
 		dir = updateMovement(dir);// adjusted dir
 		pos += dir * deltaTime * speed;
 		phys->updateAgent(b2body, pos);
@@ -66,6 +99,7 @@ void Unit::update(float deltaTime) {
 
 		for (int i = 0; i < pathCount - 1; ++i) {
 			OERenderer->line2D(pathPoints[i], pathPoints[i + 1], Color::green());
+			OERenderer->line2D(pathPoints[i], pathPoints[i] + pathTurnPointNormals[i], Color::blue());
 		}
 		
 	}
@@ -127,14 +161,29 @@ const Vector2& Unit::getPos(void) const {
 void Unit::setMoveTarget(const Vector2& _targetPos) {
 	
 	//printf_s("%f, %f\n", _targetPos.x, _targetPos.y);
-	
 	OERenderer->line2D(pos, _targetPos, Color::blue());
-	
-	pathCount = recast->findPath(pos, _targetPos, pathPoints);
-	if (pathCount > 1) {
+	int32 thisPathCount = recast->findPath(pos, _targetPos, pathPoints);
+	if (thisPathCount > 1) {
+		pathCount = thisPathCount;
 		animState = UnitAnimStates::Moving;
 		pathPointIndex = 1;
 		targetPos = pathPoints[pathPointIndex];
+		Vector2 lastNormal = pathPoints[1] - pathPoints[0];
+		lastNormal.normalize();
+		lastNormal.rotateClockwise90();
+		pathTurnPointNormals[0] = Vector2::zero();// not used!
+		for (int i = 1; i < pathCount - 1; ++i) {
+			Vector2 thisDir = pathPoints[i + 1] - pathPoints[i];
+			thisDir.normalize();
+			thisDir.rotateClockwise90();
+			Vector2 avgDir = thisDir + lastNormal;
+			avgDir.normalize();
+			pathTurnPointNormals[i] = avgDir;
+			lastNormal = thisDir;
+		}
+	}
+	else {
+		int sdf = 0;
 	}
 	
 }

@@ -65,7 +65,7 @@ struct Vector2{
 	}
 	void normalize()
 	{
-		float mag = sqrt(x * x + y * y);
+		float mag = sqrtf(x * x + y * y);
 		x /= mag;
 		y /= mag;
 	}
@@ -81,6 +81,11 @@ struct Vector2{
 	{
 		float ret = (x - other.x) * (x - other.x) + (y - other.y) * (y - other.y);
 		return sqrtf(ret);
+	}
+	void rotateClockwise90() {
+		float tmp = x;
+		x = y;
+		y = -tmp;
 	}
 
 };

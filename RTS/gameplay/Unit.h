@@ -15,7 +15,8 @@ enum UnitAnimStates : byte{
 	MakingSpace,
 };
 class Unit {
-protected:
+private:
+	static const int32 MaxPathCount = 32;
 	// motion states
 	Vector2 lastPos;
 	Vector2 pos;
@@ -40,12 +41,14 @@ protected:
 	RecastManager* recast;
 	int32 pathCount;
 	int32 pathPointIndex;
-	Vector2 pathPoints[32]; // reference path
+	Vector2 pathPoints[MaxPathCount]; // reference path
+	Vector2 pathTurnPointNormals[MaxPathCount];
 	StaticCollision* phys;
 	b2Body* b2body;
 
 	Vector2 updateMovement(Vector2 desiredVelocity);
 	void makeSpace(Vector2 _dir);
+	Vector2 pointToLine(Vector2 line_pos, Vector2 line_vec, Vector2 point_pos) const;
 
 public:
 	int dbgid;

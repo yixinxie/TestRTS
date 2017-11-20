@@ -9,7 +9,6 @@
 /* Ori Engine */
 using namespace OriGraphics;
 // G is the global variable holder.
-class Scene;
 class G{
 private:
 	G(void);

@@ -15,7 +15,7 @@ void Renderer::updateCamera(Vector2 _pos, float _size) {
 	cameraPos = _pos;
 	cameraSize = _size;
 }
-void Renderer::mousePosToWorldSpace(const IntVector2& pos, Vector2* posWorldSpace) {
+void Renderer::mousePosToWorldSpace(const IntVector2& pos, Vector2* posWorldSpace) const {
 	// opengl implementation, should probably move to GLManager
 	float aspect = (float)width / (float)height;
 	float xDelta = pos.x - width / 2;

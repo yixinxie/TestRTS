@@ -46,6 +46,6 @@ namespace OriGraphics{
 		virtual void updateSprite(int textureId, int spriteId, Vector2 pos, float angle, Vector2 scale) = 0;
 		virtual void updateCamera(Vector2 pos, float size);
 
-		void mousePosToWorldSpace(const IntVector2& pos, Vector2* posWorldSpace);
+		void mousePosToWorldSpace(const IntVector2& pos, Vector2* posWorldSpace) const;
 	};
 }
