@@ -5,7 +5,7 @@
 #include "../misc/Macros.h"
 #include "../misc/ArrayT.h"
 #include "OObject.h"
-
+// the rendering of terrain.
 class Terrain : public OObject {
 private:
 	Vector2 pos;

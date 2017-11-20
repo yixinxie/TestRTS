@@ -17,6 +17,7 @@ public:
 	void updateAgent(b2Body*, Vector2 pos);
 	bool raycast(Vector2 from, Vector2 to, RTSRaycastCallback* result);
 	int overlap(Vector2 center, float radius, b2QueryCallback* result);
+	void addStatic(Vector2 _pos, Vector2 _size);
 };
 
 class RTSRaycastCallback : public b2RayCastCallback {

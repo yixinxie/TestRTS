@@ -2,6 +2,8 @@
 #include "../misc/CharHelper.h"
 #include "../misc/Macros.h"
 #include "misc/G.h"
+#include "StaticCollision.h"
+
 #include "Recast.h"
 #include "RecastDebugDraw.h"
 #include "DetourDebugDraw.h"
@@ -22,6 +24,7 @@ RecastManager::~RecastManager() {
 	delete m_geom;
 }
 void RecastManager::init() {
+	StaticCollision* b2 = (StaticCollision*)OEScene->getOObjectByName("static_collision");
 	//if (!m_geom || !m_geom->getMesh())
 	m_filter.setIncludeFlags(SAMPLE_POLYFLAGS_ALL ^ SAMPLE_POLYFLAGS_DISABLED);
 	m_filter.setExcludeFlags(0);

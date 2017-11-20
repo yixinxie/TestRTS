@@ -70,14 +70,13 @@ void Scene::initScene() {
 	//AABBManager* aabb = newClass<AABBManager>();
 	//aabb->init();
 	//addOObject(aabb);
+	StaticCollision* rvo = newClass<StaticCollision>("b2");
+	rvo->init();
+	addOObject(rvo);
 
 	Terrain* terrain = newClass<Terrain>();
 	terrain->init();
 	addOObject(terrain);
-
-	StaticCollision* rvo = newClass<StaticCollision>("b2");
-	rvo->init();
-	addOObject(rvo);
 
 	RecastManager* recastManager = newClass<RecastManager>("recast");
 	recastManager->init();

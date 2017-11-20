@@ -15,6 +15,7 @@ void Terrain::init() {
 	textureId = G::instance()->renderer->newSpriteSheet("assets/terrain_packed.png");
 	const char* walkableId = "dirt";
 	const char* obstacleId = "water";
+
 	//printf_s("\n");
 	for (int32 y = 0; y < dim; ++y) {
 		for (int32 x = 0; x < dim; ++x) {

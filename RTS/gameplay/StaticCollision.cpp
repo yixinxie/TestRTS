@@ -83,6 +83,23 @@ b2Body* StaticCollision::addAgent(Vector2 pos, void* userData){
 	kinBody->CreateFixture(&boxFixtureDef);
 	return kinBody;
 }
+void StaticCollision::addStatic(Vector2 _pos, Vector2 _size) {
+	b2BodyDef agentBodyDef;
+	agentBodyDef.type = b2_staticBody;
+	agentBodyDef.position.Set(_pos.x, _pos.y);
+	b2Body* kinBody = box2DInst->CreateBody(&agentBodyDef);
+
+	
+	b2PolygonShape rect;
+	rect.SetAsBox(_size.x, _size.y);
+
+
+	b2FixtureDef boxFixtureDef;
+	boxFixtureDef.shape = &rect;
+	boxFixtureDef.density = 1;
+	boxFixtureDef.userData = nullptr;
+	kinBody->CreateFixture(&boxFixtureDef);
+}
 
 void StaticCollision::updateAgent(b2Body* b2body, Vector2 pos){
 	b2body->SetTransform(b2Vec2(pos.x, pos.y), 0.0f);

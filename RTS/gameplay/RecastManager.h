@@ -3,6 +3,7 @@
 #include "OObject.h"
 #include "Recast.h"
 #include "DetourNavMeshQuery.h"
+
 class RecastManager : public OObject {
 protected:
 

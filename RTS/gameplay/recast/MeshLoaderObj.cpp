@@ -22,6 +22,9 @@
 #include <cstring>
 #define _USE_MATH_DEFINES
 #include <math.h>
+#include "../../misc/G.h"
+#include "../../gameplay/StaticCollision.h"
+
 
 rcMeshLoaderObj::rcMeshLoaderObj() :
 	m_scale(1.0f),
@@ -137,6 +140,7 @@ static int parseFace(char* row, int* data, int n, int vcnt)
 
 bool rcMeshLoaderObj::load(const std::string& filename)
 {
+	StaticCollision* b2 = (StaticCollision*)OEScene->getOObjectByName("static_collision");
 	char* buf = 0;
 	FILE* fp = fopen(filename.c_str(), "rb");
 	if (!fp)
@@ -191,6 +195,8 @@ bool rcMeshLoaderObj::load(const std::string& filename)
 		src++;
 
 		// read 8 vector3
+		float minx = 999, miny = 999, minz = 999;
+		float maxx = -999, maxy = -999, maxz = -999;
 		for (int i = 0; i < 8; ++i) {
 			float* x;
 			float* y;
@@ -201,7 +207,24 @@ bool rcMeshLoaderObj::load(const std::string& filename)
 			z = (float*)(src + 8);
 			src += 12;
 			addVertex(*x, *y, *z, vcap);
+			minx = (*x < minx) ? *x : minx;
+			miny = (*y < miny) ? *y : miny;
+			minz = (*z < minz) ? *z : minz;
+
+			maxx = (*x > maxx) ? *x : maxx;
+			maxy = (*y > maxy) ? *y : maxy;
+			maxz = (*z > maxz) ? *z : maxz;
 		}
+		float half_w = (maxx - minx) / 2.0f;
+		float half_h = (maxz - minz) / 2.0f;
+
+		float posx = (maxx + minx) / 2.0f;
+		float posy = (maxz + minz) / 2.0f;
+
+		float altitude = (maxy + miny) / 2.0f;
+		if(altitude > 0.0f)
+			b2->addStatic(Vector2(posx, posy), Vector2(half_w, half_h));
+
 		{
 			// Faces
 
