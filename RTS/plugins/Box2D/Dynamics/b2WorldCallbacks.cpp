@@ -34,3 +34,20 @@ bool b2ContactFilter::ShouldCollide(b2Fixture* fixtureA, b2Fixture* fixtureB)
 	bool collide = (filterA.maskBits & filterB.categoryBits) != 0 && (filterA.categoryBits & filterB.maskBits) != 0;
 	return collide;
 }
+b2RayCastCallback::b2RayCastCallback() {
+	hit = false;
+	//userData = nullptr;
+}
+float32 b2RayCastCallback::ReportFixture(b2Fixture* _fixture, const b2Vec2& _point,
+	const b2Vec2& _normal, float32 _fraction) {
+	if (_fixture->GetUserData() == nullptr) {
+		hit = true;
+		//userData = _fixture->GetUserData();
+		point = _point;
+		normal = _normal;
+		fraction = _fraction;
+
+		return 0.0f;
+	}
+	return _fraction;
+}

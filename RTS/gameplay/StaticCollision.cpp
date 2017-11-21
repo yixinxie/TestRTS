@@ -105,7 +105,7 @@ void StaticCollision::updateAgent(b2Body* b2body, Vector2 pos){
 	b2body->SetTransform(b2Vec2(pos.x, pos.y), 0.0f);
 }
 
-bool StaticCollision::raycast(Vector2 from, Vector2 to, RTSRaycastCallback* result) {
+bool StaticCollision::raycast(Vector2 from, Vector2 to, b2RayCastCallback* result) {
 	box2DInst->RayCast(result, b2Vec2(from.x, from.y), b2Vec2(to.x, to.y));
 	return result->hit;
 }
@@ -121,13 +121,3 @@ int StaticCollision::overlap(Vector2 center, float radius, b2QueryCallback* resu
 	//box2DInst->Step(deltaTime, 1, 1);
 //}
 
-float32 RTSRaycastCallback::ReportFixture(b2Fixture* _fixture, const b2Vec2& _point,
-	const b2Vec2& _normal, float32 _fraction){
-	hit = true;
-	userData = _fixture->GetUserData();
-	point = _point;
-	normal = _normal;
-	fraction = _fraction;
-
-	return 0.0f;
-}

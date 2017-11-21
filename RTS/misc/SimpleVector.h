@@ -23,7 +23,7 @@ struct Vector2{
 		vec.y = this->y - val.y;
 		return vec;
 	}
-	Vector2 operator+(const Vector2& val)
+	Vector2 operator+(const Vector2& val) const
 	{
 		Vector2 vec;
 		vec.x = this->x + val.x;
@@ -81,6 +81,11 @@ struct Vector2{
 	{
 		float ret = (x - other.x) * (x - other.x) + (y - other.y) * (y - other.y);
 		return sqrtf(ret);
+	}
+	float dot(const Vector2& other) const
+	{
+		float ret = x * other.x + y * other.y;
+		return ret;
 	}
 	void rotateClockwise90() {
 		float tmp = x;

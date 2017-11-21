@@ -146,9 +146,20 @@ public:
 /// See b2World::RayCast
 class b2RayCastCallback
 {
-public:
-	virtual ~b2RayCastCallback() {}
+//public:
+//	virtual ~b2RayCastCallback() {}
+//
 
+//	virtual float32 ReportFixture(	b2Fixture* fixture, const b2Vec2& point,
+//									const b2Vec2& normal, float32 fraction) = 0;
+
+public:
+	bool hit;
+	//void* userData;
+	b2Vec2 point;
+	b2Vec2 normal;
+	float32 fraction;
+	b2RayCastCallback();
 	/// Called for each fixture found in the query. You control how the ray cast
 	/// proceeds by returning a float:
 	/// return -1: ignore this fixture and continue
@@ -160,8 +171,11 @@ public:
 	/// @param normal the normal vector at the point of intersection
 	/// @return -1 to filter, 0 to terminate, fraction to clip the ray for
 	/// closest hit, 1 to continue
-	virtual float32 ReportFixture(	b2Fixture* fixture, const b2Vec2& point,
-									const b2Vec2& normal, float32 fraction) = 0;
+	float32 ReportFixture(
+		b2Fixture* fixture, const b2Vec2& point,
+		const b2Vec2& normal, float32 fraction);
 };
+
+
 
 #endif

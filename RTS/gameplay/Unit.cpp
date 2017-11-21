@@ -88,7 +88,8 @@ void Unit::update(float deltaTime) {
 			
 		}
 		dir.normalize();
-		dir = updateMovement(dir);// adjusted dir
+		dir = boidsMovement(dir);// adjusted dir
+		dir = staticCollisionPass(dir);
 		pos += dir * deltaTime * speed;
 		phys->updateAgent(b2body, pos);
 
@@ -105,7 +106,25 @@ void Unit::update(float deltaTime) {
 	}
 	OERenderer->circle(pos, collisionRadius, Color::white());
 }
-Vector2 Unit::updateMovement(Vector2 desiredVelocity) {
+// a partial implementation of a 2d movement raytest.
+Vector2 Unit::staticCollisionPass(Vector2 desiredVelocity) const {
+	b2RayCastCallback cb;
+	if (phys->raycast(pos, pos +  desiredVelocity * collisionRadius, &cb) == false){
+		return desiredVelocity;
+	}
+	Vector2 normal = Vector2(cb.normal.x, cb.normal.y);
+	normal.rotateClockwise90();
+	float dotprod = normal.dot(desiredVelocity);
+	if (dotprod < 0) {
+		normal.x = -normal.x;
+		normal.y = -normal.y;
+	}
+	normal.x *= cb.fraction;
+	normal.y *= cb.fraction;
+	return normal;
+
+}
+Vector2 Unit::boidsMovement(Vector2 desiredVelocity) {
 	const float repulsionCoeff = 2.0f;
 	const float repulsionDist = 0.5f;
 	Vector2 adjustedVelocity;
@@ -117,7 +136,7 @@ Vector2 Unit::updateMovement(Vector2 desiredVelocity) {
 	float originalVelocityCoeff = 1.0f;
 	for (int i = 0; i < count; ++i) {
 		Unit* boids = (Unit*)overlapResults.userData[i];
-		if (boids == this) continue;
+		if (boids == this || boids == nullptr) continue;
 		if (boids->dbgid == 1)
 		{
 			int sdf = 0;

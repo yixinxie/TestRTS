@@ -46,7 +46,8 @@ private:
 	StaticCollision* phys;
 	b2Body* b2body;
 
-	Vector2 updateMovement(Vector2 desiredVelocity);
+	Vector2 boidsMovement(Vector2 desiredVelocity);
+	Vector2 staticCollisionPass(Vector2 desiredVelocity) const;
 	void makeSpace(Vector2 _dir);
 	Vector2 pointToLine(Vector2 line_pos, Vector2 line_vec, Vector2 point_pos) const;
 
