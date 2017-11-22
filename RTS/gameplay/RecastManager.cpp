@@ -28,7 +28,7 @@ void RecastManager::init() {
 	//if (!m_geom || !m_geom->getMesh())
 	m_filter.setIncludeFlags(SAMPLE_POLYFLAGS_ALL ^ SAMPLE_POLYFLAGS_DISABLED);
 	m_filter.setExcludeFlags(0);
-	m_tileSize = 100.0f;
+	//m_tileSize = 100.0f;
 	BuildContext rcContext;
 	m_geom = new InputGeom();
 	if (m_geom->load(&rcContext, "assets/terrain.bin") == false) { 

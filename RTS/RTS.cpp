@@ -20,7 +20,7 @@ using namespace std::chrono;
 int main()
 {
 	Scene* test;
-	basicMem.initHeap(1000000);
+	basicMem.initHeap(1024 * 1024 * 32);
 	G::instance()->renderer = newClass<GLManager>();
 	G::instance()->renderer->init(0, 1024, 768);
 	

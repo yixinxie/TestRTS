@@ -117,7 +117,22 @@ int StaticCollision::overlap(Vector2 center, float radius, b2QueryCallback* resu
 	box2DInst->QueryAABB(result, aabb);
 	return result->count;
 }
-//void StaticCollision::update(float deltaTime) {
-	//box2DInst->Step(deltaTime, 1, 1);
-//}
+void StaticCollision::update(float deltaTime) {
+	const int total = 360;
+	float arc = 2.0f * Math_PI / (float)total;
+	for (int i = 0; i < total; ++i) {
+		float radius = 32.0f;
+		b2RayCastCallback cb;
+		raycast(Vector2(32, 32), Vector2(32.0f + cosf(arc * i) * radius, 32.0f + sinf(arc * i) * radius), &cb);
+		//radius = cb.point
+		//OERenderer->line2D(Vector2(32, 32), Vector2(32.0f + cosf(arc * i) * radius, 32.0f + sinf(arc * i)  * radius), Color::yellow());
+		if(cb.hit)
+			OERenderer->line2D(Vector2(32, 32), Vector2(cb.point.x, cb.point.y), Color::yellow());
+		else
+		{
+			//OERenderer->line2D(Vector2(32, 32), cb.point, Color::yellow());
+		}
+		
+	}
+}
 

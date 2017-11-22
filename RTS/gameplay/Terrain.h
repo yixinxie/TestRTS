@@ -14,7 +14,7 @@ private:
 	int spriteId;
 	byte* grid;
 public:
-	const int32 dim = 64;
+	const int32 dim = 256;
 	Terrain(void);
 	~Terrain();
 	void init(void);

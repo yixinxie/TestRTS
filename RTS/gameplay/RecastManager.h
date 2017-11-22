@@ -21,9 +21,10 @@ protected:
 	dtQueryFilter m_filter;
 	class InputGeom* m_geom;
 	// taken from Sample_TileMesh.h
-	const int m_maxTiles = 128;
-	const int m_maxPolysPerTile = 32768;
-	float m_tileSize = 32.0f;
+	const int m_maxTiles = 256;
+	//const int m_maxPolysPerTile = 32768;
+	const int m_maxPolysPerTile = 16384;
+	float m_tileSize = 256.0f;
 
 	unsigned int m_tileCol;
 	float m_lastBuiltTileBmin[3];
@@ -38,7 +39,7 @@ protected:
 	//const float m_cellHeight = 5.0f;
 
 	const float m_agentHeight = 5.0f;
-	const float m_agentRadius = 0.6f;
+	const float m_agentRadius = 0.0f;
 	const float m_agentMaxClimb = 0.9f;
 	const float m_agentMaxSlope = 45.0f;
 	

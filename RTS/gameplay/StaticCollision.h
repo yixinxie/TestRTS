@@ -11,7 +11,7 @@ public:
 	StaticCollision(void);
 	~StaticCollision();
 	void init(void);
-	//virtual void update(float deltaTime) override;
+	virtual void update(float deltaTime) override;
 	b2Body* addAgent(Vector2 pos, void* userData);
 	void updateAgent(b2Body*, Vector2 pos);
 	bool raycast(Vector2 from, Vector2 to, b2RayCastCallback* result);
