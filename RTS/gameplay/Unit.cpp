@@ -7,15 +7,16 @@
 #include "../misc/Macros.h"
 Unit::Unit(){
 	pathPointIndex = 0;
-	speed = 2.5f;
+	speed = 5.5f;
 	animState = UnitAnimStates::Idle;
 	dbgid = -1;
+	collisionRadius = 0.5f;
 }
 Unit::~Unit() {
 
 }
 void Unit::init(Vector2 _pos, const char* id) {
-	collisionRadius = 1.0f;
+	
 	pos = _pos;
 	lastPos = _pos;
 	textureId = OERenderer->newSpriteSheet("assets/arrows.png");
@@ -61,11 +62,12 @@ Vector2 Unit::pointToLine(Vector2 line_pos, Vector2 line_vec, Vector2 point_pos)
 
 void Unit::update(float deltaTime) {
 	
-	if (dbgid == 1) {
-		int sdf = 0;
-	}
+	
 	if (animState == UnitAnimStates::Moving)
 	{
+		if (dbgid == 1006) {
+			int sdf = 0;
+		}
 		Vector2 dir = targetPos - pos;
 		if (pathPointIndex == -1) {
 			if (dir.magSquared() < 0.44f) {
@@ -89,7 +91,8 @@ void Unit::update(float deltaTime) {
 		}
 		dir.normalize();
 		dir = boidsMovement(dir);// adjusted dir
-		dir = staticCollisionPass(dir);
+		if(dir.magSquared() != 0.0f)
+			dir = staticCollisionPass(dir);
 		pos += dir * deltaTime * speed;
 		phys->updateAgent(b2body, pos);
 
@@ -98,13 +101,13 @@ void Unit::update(float deltaTime) {
 		float rot = atan2(dir.y, dir.x) - Math_PI / 2.0f;
 		OERenderer->updateSprite(textureId, spriteDescId, pos, rot);
 
-		for (int i = 0; i < pathCount - 1; ++i) {
-			OERenderer->line2D(pathPoints[i], pathPoints[i + 1], Color::green());
-			OERenderer->line2D(pathPoints[i], pathPoints[i] + pathTurnPointNormals[i], Color::blue());
-		}
+		//for (int i = 0; i < pathCount - 1; ++i) {
+		//	OERenderer->line2D(pathPoints[i], pathPoints[i + 1], Color::green());
+		//	OERenderer->line2D(pathPoints[i], pathPoints[i] + pathTurnPointNormals[i], Color::blue());
+		//}
 		
 	}
-	OERenderer->circle(pos, collisionRadius, Color::white());
+//	OERenderer->circle(pos, collisionRadius, Color::white());
 }
 // a partial implementation of a 2d movement raytest.
 Vector2 Unit::staticCollisionPass(Vector2 desiredVelocity) const {
@@ -147,7 +150,8 @@ Vector2 Unit::boidsMovement(Vector2 desiredVelocity) {
 		if (//distanceToSelf >= 0.0f && 
 			distanceToSelf < repulsionDist) {
 			Vector2 repulVec = basePos - neighbourBasePos;
-			repulVec.normalize();
+			if (repulVec.magSquared() != 0.0f)
+				repulVec.normalize();
 			aggregatedInfluence += repulVec * (repulsionDist - distanceToSelf) * repulsionCoeff;
 			if (boids->animState == (byte)UnitAnimStates::Idle) {
 				// possibly the only reason this function cannot be const...
@@ -160,7 +164,8 @@ Vector2 Unit::boidsMovement(Vector2 desiredVelocity) {
 	}
 
 	adjustedVelocity = desiredVelocity * originalVelocityCoeff + aggregatedInfluence;
-	adjustedVelocity.normalize();
+	if(adjustedVelocity.magSquared() != 0.0f)
+		adjustedVelocity.normalize();
 
 	return adjustedVelocity;
 }
@@ -180,7 +185,7 @@ const Vector2& Unit::getPos(void) const {
 void Unit::setMoveTarget(const Vector2& _targetPos) {
 	
 	//printf_s("%f, %f\n", _targetPos.x, _targetPos.y);
-	OERenderer->line2D(pos, _targetPos, Color::blue());
+	//OERenderer->line2D(pos, _targetPos, Color::blue());
 	int32 thisPathCount = recast->findPath(pos, _targetPos, pathPoints);
 	if (thisPathCount > 1) {
 		pathCount = thisPathCount;

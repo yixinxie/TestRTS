@@ -82,7 +82,7 @@ void Scene::initScene() {
 	recastManager->init();
 	addOObject(recastManager);
 
-	Unit* one = addUnit(Vector2(0, 0), "green");
+	/*Unit* one = addUnit(Vector2(0, 0), "green");
 	one->dbgid = 0;
 
 	one = addUnit(Vector2(2, 0), "yellow");
@@ -92,7 +92,16 @@ void Scene::initScene() {
 	one->dbgid = 2;
 
 	one = addUnit(Vector2(6, 0), "blue");
-	one->dbgid = 3;
+	one->dbgid = 3;*/
+	const float spacing = 0.5f;
+	int w_count = 32;
+	int h_count = 16;
+	for (int y = 0; y < h_count; ++y) {
+		for (int x = 0; x < w_count; ++x) {
+			Unit* one = addUnit(Vector2(x * spacing, y * spacing), "blue");
+			one->dbgid = x + y * w_count;
+		}
+	}
 
 	/*newUnit = newClass<Unit>("units");
 	newUnit->init(Vector2(0.5, -0.5), "blue");

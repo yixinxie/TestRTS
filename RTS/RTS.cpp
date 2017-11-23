@@ -52,7 +52,7 @@ int main()
 		time_span = duration_cast<duration<double>>(after - fps0);
 		frames++;
 		if (time_span.count() >= 1.0) {
-			//printf_s("FPS: %d\n", frames);
+			printf_s("FPS: %d\n", frames);
 			fps0 = high_resolution_clock::now();
 			frames = 0;
 		}
