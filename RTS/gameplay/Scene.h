@@ -4,6 +4,7 @@
 
 class Unit;
 class OObject;
+class PathList;
 
 using namespace OriGraphics;
 class Scene {
@@ -11,10 +12,13 @@ private:
 	class Renderer* renderer;
 	std::unordered_map<unsigned int, OObject*> objectLookup;
 	ArrayPtr<OObject*> OObjectArray;
-	ArrayPtr<Unit*> units;
-	ArrayPtr<Unit*> selectedUnits;
 
-	void (*f)();
+	ArrayStruct<Unit> units;
+	//ArrayPtr<Unit*> units;
+
+	ArrayPtr<Unit*> selectedUnits;
+	PathList* pathList;
+
 public:
 	Scene(void);
 	~Scene();

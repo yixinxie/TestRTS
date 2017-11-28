@@ -49,7 +49,7 @@ public:
 		length = 0;
 	}
 	~ArrayPtr() {
-		deallocND(arrayData);
+		deallocT(arrayData);
 	}
 	void clear(void) {
 		length = 0;
@@ -83,6 +83,7 @@ public:
 		return arrayData[idx];
 	}
 };
+
 template<typename T>
 class ArrayStruct {
 private:
@@ -109,8 +110,8 @@ public:
 		arraySize = defaultSize;
 		arrayData = allocArray<T>(arraySize, "array struct template");
 		length = 0;
-
 	}
+
 	ArrayStruct(void) {
 		arraySize = 4;
 		arrayData = allocArray<T>(arraySize, "array struct template");
@@ -138,8 +139,7 @@ public:
 		if (length == arraySize) {
 			resize();
 		}
-		int unit_size = sizeof(T);
-		memcpy(&arrayData[length], &val, unit_size);
+		memcpy(&arrayData[length], &val, sizeof(T));
 		length++;
 	}
 	void removeAt(int idx) {

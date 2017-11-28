@@ -11,17 +11,17 @@
 #include "RecastManager.h"
 #include "Camera.h"
 #include "AABBManager.h"
+#include "PathList.h"
 
-Scene::Scene(void) {
-
+Scene::Scene(void) : units(512){
 }
 
 Scene::~Scene() {
+	//for (int i = 0; i < units.length; ++i) {
+	//	deallocT(units[i]);
+	//}
 	for (int i = 0; i < OObjectArray.length; ++i) {
 		deallocT(OObjectArray[i]);
-	}
-	for (int i = 0; i < units.length; ++i) {
-		deallocT(units[i]);
 	}
 }
 
@@ -82,6 +82,10 @@ void Scene::initScene() {
 	recastManager->init();
 	addOObject(recastManager);
 
+	pathList = newClass<PathList>("path_List");
+	pathList->init();
+	addOObject(pathList);
+
 	/*Unit* one = addUnit(Vector2(0, 0), "green");
 	one->dbgid = 0;
 
@@ -93,9 +97,11 @@ void Scene::initScene() {
 
 	one = addUnit(Vector2(6, 0), "blue");
 	one->dbgid = 3;*/
-	const float spacing = 0.5f;
-	int w_count = 32;
-	int h_count = 16;
+	const float spacing = 1.0f;
+	/*int w_count = 32;
+	int h_count = 16;*/
+	int w_count = 2;
+	int h_count = 2;
 	for (int y = 0; y < h_count; ++y) {
 		for (int x = 0; x < w_count; ++x) {
 			Unit* one = addUnit(Vector2(x * spacing, y * spacing), "blue");
@@ -115,23 +121,25 @@ void Scene::update(float timeElapsed) {
 		OObjectArray[i]->update(timeElapsed);
 	}
 	for (int i = 0; i < units.length; ++i) {
-		units[i]->update(timeElapsed);
+		units[i].update(timeElapsed);
 	}
 }
 
 Unit* Scene::addUnit(Vector2 pos, const char* id){
-	Unit* newUnit = newClass<Unit>("units");
+	Unit placeHolder;
+
+	units.push(placeHolder);
+	Unit* newUnit = &units[units.length - 1];
 	newUnit->init(pos, id);
-	units.push(newUnit);
 	return newUnit;
 }
 
 void Scene::findUnitsByArea(Vector2 min, Vector2 max, ArrayPtr<Unit*>& outUnits){
 	for (int i = 0; i < units.length; ++i) {
-		const Vector2& unitPos = units[i]->getPos();
+		const Vector2& unitPos = units[i].getPos();
 		if (unitPos.x > min.x && unitPos.y > min.y &&
 			unitPos.x < max.x && unitPos.y < max.y) {
-			outUnits.push(units[i]);
+			outUnits.push(&units[i]);
 		}
 	}
 }
@@ -144,7 +152,21 @@ void Scene::setSelectedUnits(ArrayPtr<Unit*>& _units){
 }
 
 void Scene::orderMove(const Vector2& targetPos) {
+	// tentatively we just use the geometric center
+	Vector2 center = Vector2::zero();
+	int unitCount = selectedUnits.length;
 	for (int i = 0; i < selectedUnits.length; ++i) {
-		selectedUnits[i]->setMoveTarget(targetPos);
+		center += selectedUnits[i]->getPos();
 	}
+	center.x /= unitCount;
+	center.y /= unitCount;
+	
+	int pathidx = pathList->newPath(center, targetPos, unitCount);
+	for (int i = 0; i < selectedUnits.length; ++i) {
+		selectedUnits[i]->setRefPath(pathidx);
+	}
+
+	/*for (int i = 0; i < selectedUnits.length; ++i) {
+		selectedUnits[i]->setMoveTarget(targetPos);
+	}*/
 }

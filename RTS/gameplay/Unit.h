@@ -6,6 +6,7 @@
 
 class AABBManager;
 class RecastManager;
+class PathList;
 class StaticCollision;
 class b2Body;
 enum UnitAnimStates : byte{
@@ -25,6 +26,7 @@ private:
 	float speed;
 
 	Vector2 targetPos;
+	Vector2 targetPosNormal;
 
 	// animation states
 
@@ -35,14 +37,16 @@ private:
 	int frame;
 
 	// pathfinding
-	AABBManager* aabb;
-	int32 aabbId;
+	//AABBManager* aabb;
+	//int32 aabbId;
 
-	RecastManager* recast;
+	PathList* pathlist;
+	int32 pathlistIndex;
 	int32 pathCount;
 	int32 pathPointIndex;
-	Vector2 pathPoints[MaxPathCount]; // reference path
-	Vector2 pathTurnPointNormals[MaxPathCount];
+	RecastManager* recast;
+	//Vector2 pathPoints[MaxPathCount]; // reference path
+	//Vector2 pathTurnPointNormals[MaxPathCount];
 	StaticCollision* phys;
 	b2Body* b2body;
 
@@ -59,4 +63,5 @@ public:
 	void update(float deltaTime);
 	const Vector2& getPos(void) const;
 	void setMoveTarget(const Vector2& _targetPos);
+	void setRefPath(int pathlistIndex);
 };

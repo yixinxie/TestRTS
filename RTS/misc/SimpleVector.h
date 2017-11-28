@@ -16,7 +16,7 @@ struct Vector2{
 		vec.y = this->y * val;
 		return vec;
 	}
-	Vector2 operator-(const Vector2& val)
+	Vector2 operator-(const Vector2& val) const
 	{
 		Vector2 vec;
 		vec.x = this->x - val.x;
@@ -30,7 +30,7 @@ struct Vector2{
 		vec.y = this->y + val.y;
 		return vec;
 	}
-	Vector2 operator/(const float val)
+	Vector2 operator/(const float val) const
 	{
 		Vector2 vec;
 		vec.x = this->x / val;

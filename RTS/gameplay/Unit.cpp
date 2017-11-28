@@ -4,13 +4,14 @@
 #include "RecastManager.h"
 #include "../misc/G.h"
 #include "../misc/CharHelper.h"
-#include "../misc/Macros.h"
+#include "PathList.h"
+
 Unit::Unit(){
-	pathPointIndex = 0;
+	pathlistIndex = -1;
 	speed = 5.5f;
 	animState = UnitAnimStates::Idle;
 	dbgid = -1;
-	collisionRadius = 0.5f;
+	collisionRadius = 1.0f;
 }
 Unit::~Unit() {
 
@@ -24,7 +25,7 @@ void Unit::init(Vector2 _pos, const char* id) {
 	
 
 	recast = (RecastManager*)OEScene->getOObjectByName("recast");
-
+	pathlist = (PathList*)OEScene->getOObjectByName("path_list");
 	//aabb = (AABBManager*)OEScene->getOObjectByName("aabb");
 	//aabbId = aabb->addAgent(pos, collisionRadius);
 
@@ -75,19 +76,23 @@ void Unit::update(float deltaTime) {
 			}
 		}
 		else{
-			Vector2 projected = pointToLine(targetPos, pathTurnPointNormals[pathPointIndex], pos);
+			//Vector2 projected = pointToLine(targetPos, pathTurnPointNormals[pathPointIndex], pos);
+			Vector2 projected = pointToLine(targetPos, targetPosNormal, pos);
 			float distToTurnLine = projected.distanceTo(pos);
 			if (distToTurnLine < 0.2f) { // could use dist squared here.
 				pathPointIndex++;
 				assert(pathPointIndex <= pathCount);
 				if (pathPointIndex == pathCount) {
 					animState = UnitAnimStates::Idle;
+					pathlist->finishPath(pathlistIndex);
+					pathlistIndex = -1;
 				}
 				else {
-					targetPos = pathPoints[pathPointIndex];
+					pathPointIndex++;
+					targetPos = pathlist->paths[pathlistIndex].pathPoints[pathPointIndex];
+					targetPosNormal = pathlist->paths[pathlistIndex].pathTurnPointNormals[pathPointIndex];
 				}
 			}
-			
 		}
 		dir.normalize();
 		dir = boidsMovement(dir);// adjusted dir
@@ -102,8 +107,8 @@ void Unit::update(float deltaTime) {
 		OERenderer->updateSprite(textureId, spriteDescId, pos, rot);
 
 		//for (int i = 0; i < pathCount - 1; ++i) {
-		//	OERenderer->line2D(pathPoints[i], pathPoints[i + 1], Color::green());
-		//	OERenderer->line2D(pathPoints[i], pathPoints[i] + pathTurnPointNormals[i], Color::blue());
+			//OERenderer->line2D(pos, targetPos, Color::green());
+			//OERenderer->line2D(targetPos, targetPos + targetPosNormal, Color::blue());
 		//}
 		
 	}
@@ -186,28 +191,44 @@ void Unit::setMoveTarget(const Vector2& _targetPos) {
 	
 	//printf_s("%f, %f\n", _targetPos.x, _targetPos.y);
 	//OERenderer->line2D(pos, _targetPos, Color::blue());
-	int32 thisPathCount = recast->findPath(pos, _targetPos, pathPoints);
-	if (thisPathCount > 1) {
-		pathCount = thisPathCount;
-		animState = UnitAnimStates::Moving;
-		pathPointIndex = 1;
-		targetPos = pathPoints[pathPointIndex];
-		Vector2 lastNormal = pathPoints[1] - pathPoints[0];
-		lastNormal.normalize();
-		lastNormal.rotateClockwise90();
-		pathTurnPointNormals[0] = Vector2::zero();// not used!
-		for (int i = 1; i < pathCount - 1; ++i) {
-			Vector2 thisDir = pathPoints[i + 1] - pathPoints[i];
-			thisDir.normalize();
-			thisDir.rotateClockwise90();
-			Vector2 avgDir = thisDir + lastNormal;
-			avgDir.normalize();
-			pathTurnPointNormals[i] = avgDir;
-			lastNormal = thisDir;
-		}
-	}
-	else {
-		int sdf = 0;
-	}
+	//int32 thisPathCount = recast->findPath(pos, _targetPos, pathPoints);
+	//if (thisPathCount > 1) {
+	//	pathCount = thisPathCount;
+	//	animState = UnitAnimStates::Moving;
+	//	pathPointIndex = 1;
+	//	targetPos = pathPoints[pathPointIndex];
+	//	Vector2 lastNormal = pathPoints[1] - pathPoints[0];
+	//	lastNormal.normalize();
+	//	lastNormal.rotateClockwise90();
+	//	pathTurnPointNormals[0] = Vector2::zero();// not used!
+	//	for (int i = 1; i < pathCount - 1; ++i) {
+	//		Vector2 thisDir = pathPoints[i + 1] - pathPoints[i];
+	//		thisDir.normalize();
+	//		thisDir.rotateClockwise90();
+	//		Vector2 avgDir = thisDir + lastNormal;
+	//		avgDir.normalize();
+	//		pathTurnPointNormals[i] = avgDir;
+	//		lastNormal = thisDir;
+	//	}
+	//}
+	//else {
+	//	int sdf = 0;
+	//}
 	
+}
+
+
+void Unit::setRefPath(int _pathlistIndex) {
+
+	//printf_s("%f, %f\n", _targetPos.x, _targetPos.y);
+	//OERenderer->line2D(pos, _targetPos, Color::blue());
+	if (pathlistIndex != -1) {
+		pathlist->finishPath(pathlistIndex);
+	}
+	animState = UnitAnimStates::Moving;
+	pathlistIndex = _pathlistIndex;
+	pathPointIndex = 1;
+	targetPos = pathlist->paths[pathlistIndex].pathPoints[pathPointIndex];
+	targetPosNormal = pathlist->paths[pathlistIndex].pathTurnPointNormals[pathPointIndex];
+	pathCount = pathlist->paths[pathlistIndex].pathCount;
 }

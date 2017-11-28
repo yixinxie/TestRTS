@@ -66,12 +66,6 @@
     <ClInclude Include="targetver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="misc\ArrayInt.h">
-      <Filter>Source Files\misc</Filter>
-    </ClInclude>
-    <ClInclude Include="misc\ArrayPtr.h">
-      <Filter>Source Files\misc</Filter>
-    </ClInclude>
     <ClInclude Include="misc\Auxi.h">
       <Filter>Source Files\misc</Filter>
     </ClInclude>
@@ -109,9 +103,6 @@
       <Filter>Source Files\graphics</Filter>
     </ClInclude>
     <ClInclude Include="misc\ArrayT.h">
-      <Filter>Source Files\misc</Filter>
-    </ClInclude>
-    <ClInclude Include="misc\ArrayStruct.h">
       <Filter>Source Files\misc</Filter>
     </ClInclude>
     <ClInclude Include="gameplay\Unit.h">
@@ -417,6 +408,9 @@
     <ClInclude Include="plugins\aabbcc\AABB.h">
       <Filter>Source Files\plugins\aabb</Filter>
     </ClInclude>
+    <ClInclude Include="gameplay\PathList.h">
+      <Filter>Source Files\gameplay</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -424,12 +418,6 @@
     </ClCompile>
     <ClCompile Include="RTS.cpp">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="misc\ArrayInt.cpp">
-      <Filter>Source Files\misc</Filter>
-    </ClCompile>
-    <ClCompile Include="misc\ArrayPtr.cpp">
-      <Filter>Source Files\misc</Filter>
     </ClCompile>
     <ClCompile Include="misc\Auxi.cpp">
       <Filter>Source Files\misc</Filter>
@@ -769,6 +757,9 @@
     </ClCompile>
     <ClCompile Include="plugins\aabbcc\AABB.cpp">
       <Filter>Source Files\plugins\aabb</Filter>
+    </ClCompile>
+    <ClCompile Include="gameplay\PathList.cpp">
+      <Filter>Source Files\gameplay</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
