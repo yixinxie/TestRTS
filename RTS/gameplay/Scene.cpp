@@ -97,14 +97,15 @@ void Scene::initScene() {
 
 	one = addUnit(Vector2(6, 0), "blue");
 	one->dbgid = 3;*/
-	const float spacing = 1.0f;
+	const float spacing = 1.01f;
 	/*int w_count = 32;
 	int h_count = 16;*/
 	int w_count = 2;
 	int h_count = 2;
+	int st = 2;
 	for (int y = 0; y < h_count; ++y) {
 		for (int x = 0; x < w_count; ++x) {
-			Unit* one = addUnit(Vector2(x * spacing, y * spacing), "blue");
+			Unit* one = addUnit(Vector2((st + x ) * spacing, (st + y) * spacing), "blue");
 			one->dbgid = x + y * w_count;
 		}
 	}
@@ -162,8 +163,10 @@ void Scene::orderMove(const Vector2& targetPos) {
 	center.y /= unitCount;
 	
 	int pathidx = pathList->newPath(center, targetPos, unitCount);
-	for (int i = 0; i < selectedUnits.length; ++i) {
-		selectedUnits[i]->setRefPath(pathidx);
+	if (pathidx >= 0) {
+		for (int i = 0; i < selectedUnits.length; ++i) {
+			selectedUnits[i]->setRefPath(pathidx);
+		}
 	}
 
 	/*for (int i = 0; i < selectedUnits.length; ++i) {

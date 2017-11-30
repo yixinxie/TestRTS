@@ -105,14 +105,7 @@ void Unit::update(float deltaTime) {
 		// calculate rotation
 		float rot = atan2(dir.y, dir.x) - Math_PI / 2.0f;
 		OERenderer->updateSprite(textureId, spriteDescId, pos, rot);
-
-		//for (int i = 0; i < pathCount - 1; ++i) {
-			//OERenderer->line2D(pos, targetPos, Color::green());
-			//OERenderer->line2D(targetPos, targetPos + targetPosNormal, Color::blue());
-		//}
-		
 	}
-//	OERenderer->circle(pos, collisionRadius, Color::white());
 }
 // a partial implementation of a 2d movement raytest.
 Vector2 Unit::staticCollisionPass(Vector2 desiredVelocity) const {
