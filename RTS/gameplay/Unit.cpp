@@ -11,7 +11,7 @@ Unit::Unit(){
 	speed = 5.5f;
 	animState = UnitAnimStates::Idle;
 	dbgid = -1;
-	collisionRadius = 1.0f;
+	collisionRadius = 1.0f; // this needs to be in sync with the radius in phys->addAgent()
 }
 Unit::~Unit() {
 
@@ -59,7 +59,21 @@ Vector2 Unit::pointToLine(Vector2 line_pos, Vector2 line_vec, Vector2 point_pos)
 	}
 	return ret;
 }
-
+void Unit::dirtyUpdate() {
+	b2QueryCallback overlapResults;
+	if (dirtyCollision == 1)return;
+	int count = phys->overlap(pos, collisionRadius * 1.0f, &overlapResults);
+	for (int i = 0; i < count; ++i) {
+		Unit* boids = (Unit*)overlapResults.userData[i];
+		if (boids == this || boids == nullptr) continue;
+		Vector2 neighbourBasePos = boids->pos;
+		float distanceToSelf = neighbourBasePos.distanceTo(pos);
+		if (distanceToSelf < boids->collisionRadius + collisionRadius) {
+			dirtyCollision = 1;
+			boids->dirtyCollision = 1;
+		}
+	}
+}
 
 void Unit::update(float deltaTime) {
 	
@@ -76,7 +90,6 @@ void Unit::update(float deltaTime) {
 			}
 		}
 		else{
-			//Vector2 projected = pointToLine(targetPos, pathTurnPointNormals[pathPointIndex], pos);
 			Vector2 projected = pointToLine(targetPos, targetPosNormal, pos);
 			float distToTurnLine = projected.distanceTo(pos);
 			if (distToTurnLine < 0.2f) { // could use dist squared here.
@@ -95,9 +108,17 @@ void Unit::update(float deltaTime) {
 			}
 		}
 		dir.normalize();
-		dir = boidsMovement(dir);// adjusted dir
-		if(dir.magSquared() != 0.0f)
-			dir = staticCollisionPass(dir);
+		if (dirtyCollision == 1) 
+		{
+			dir = boidsMovement(dir);// adjusted dir
+			if (dir.magSquared() != 0.0f)
+			{
+				dir = staticCollisionPass(dir);
+				dirtyCollision = 0;
+				//printf_s("d");
+			}
+			
+		}
 		pos += dir * deltaTime * speed;
 		phys->updateAgent(b2body, pos);
 
@@ -106,11 +127,12 @@ void Unit::update(float deltaTime) {
 		float rot = atan2(dir.y, dir.x) - Math_PI / 2.0f;
 		OERenderer->updateSprite(textureId, spriteDescId, pos, rot);
 	}
+	//OERenderer->circle(pos, collisionRadius, Color::white());
 }
 // a partial implementation of a 2d movement raytest.
 Vector2 Unit::staticCollisionPass(Vector2 desiredVelocity) const {
 	b2RayCastCallback cb;
-	if (phys->raycast(pos, pos +  desiredVelocity * collisionRadius, &cb) == false){
+	if (phys->raycast(pos, pos + desiredVelocity * collisionRadius, &cb) == false) {
 		return desiredVelocity;
 	}
 	Vector2 normal = Vector2(cb.normal.x, cb.normal.y);
@@ -123,7 +145,25 @@ Vector2 Unit::staticCollisionPass(Vector2 desiredVelocity) const {
 	normal.x *= cb.fraction;
 	normal.y *= cb.fraction;
 	return normal;
+}
 
+// a partial implementation of a 2d movement raytest.
+Vector2 Unit::staticCollisionPassWithForecast(Vector2 desiredVelocity) const {
+	/*b2RayCastCallback cb;
+	if (phys->raycast(pos, pos + desiredVelocity * collisionRadius, &cb) == false) {
+		return desiredVelocity;
+	}
+	Vector2 normal = Vector2(cb.normal.x, cb.normal.y);
+	normal.rotateClockwise90();
+	float dotprod = normal.dot(desiredVelocity);
+	if (dotprod < 0) {
+		normal.x = -normal.x;
+		normal.y = -normal.y;
+	}
+	normal.x *= cb.fraction;
+	normal.y *= cb.fraction;
+	return normal;*/
+	return Vector2::zero();
 }
 Vector2 Unit::boidsMovement(Vector2 desiredVelocity) {
 	const float repulsionCoeff = 2.0f;
@@ -131,7 +171,7 @@ Vector2 Unit::boidsMovement(Vector2 desiredVelocity) {
 	Vector2 adjustedVelocity;
 	Vector2 pos2d = pos;
 	b2QueryCallback overlapResults;
-	int count = phys->overlap(pos2d, collisionRadius * 2.0f, &overlapResults);
+	int count = phys->overlap(pos2d, collisionRadius * 1.5f, &overlapResults);
 	Vector2 basePos = pos;
 	Vector2 aggregatedInfluence = Vector2::zero();
 	float originalVelocityCoeff = 1.0f;
@@ -181,7 +221,6 @@ const Vector2& Unit::getPos(void) const {
 }
 
 void Unit::setMoveTarget(const Vector2& _targetPos) {
-	
 	//printf_s("%f, %f\n", _targetPos.x, _targetPos.y);
 	//OERenderer->line2D(pos, _targetPos, Color::blue());
 	//int32 thisPathCount = recast->findPath(pos, _targetPos, pathPoints);

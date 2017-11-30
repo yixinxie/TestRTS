@@ -97,11 +97,11 @@ void Scene::initScene() {
 
 	one = addUnit(Vector2(6, 0), "blue");
 	one->dbgid = 3;*/
-	const float spacing = 1.01f;
-	/*int w_count = 32;
-	int h_count = 16;*/
-	int w_count = 2;
-	int h_count = 2;
+	const float spacing = 2.01f;
+	int w_count = 32;
+	int h_count = 16;
+	//int w_count = 2;
+	//int h_count = 2;
 	int st = 2;
 	for (int y = 0; y < h_count; ++y) {
 		for (int x = 0; x < w_count; ++x) {
@@ -123,6 +123,9 @@ void Scene::update(float timeElapsed) {
 	}
 	for (int i = 0; i < units.length; ++i) {
 		units[i].update(timeElapsed);
+	}
+	for (int i = 0; i < units.length; ++i) {
+		units[i].dirtyUpdate();
 	}
 }
 

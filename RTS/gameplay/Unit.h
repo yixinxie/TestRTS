@@ -52,15 +52,18 @@ private:
 
 	Vector2 boidsMovement(Vector2 desiredVelocity);
 	Vector2 staticCollisionPass(Vector2 desiredVelocity) const;
+	Vector2 staticCollisionPassWithForecast(Vector2 desiredVelocity) const;
 	void makeSpace(Vector2 _dir);
 	Vector2 pointToLine(Vector2 line_pos, Vector2 line_vec, Vector2 point_pos) const;
 
 public:
+	byte dirtyCollision;
 	int dbgid;
 	Unit(void);
 	~Unit();
 	void init(Vector2 pos, const char* id);
 	void update(float deltaTime);
+	void dirtyUpdate();
 	const Vector2& getPos(void) const;
 	void setMoveTarget(const Vector2& _targetPos);
 	void setRefPath(int pathlistIndex);
