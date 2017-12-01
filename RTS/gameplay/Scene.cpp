@@ -139,11 +139,22 @@ Unit* Scene::addUnit(Vector2 pos, const char* id){
 }
 
 void Scene::findUnitsByArea(Vector2 min, Vector2 max, ArrayPtr<Unit*>& outUnits){
-	for (int i = 0; i < units.length; ++i) {
-		const Vector2& unitPos = units[i].getPos();
-		if (unitPos.x > min.x && unitPos.y > min.y &&
-			unitPos.x < max.x && unitPos.y < max.y) {
-			outUnits.push(&units[i]);
+	
+	if (max.x - min.x < 0.1f && max.y - min.y < 0.1f) {
+		b2QueryCallback cb;
+		StaticCollision* collision = (StaticCollision*)getOObjectByName("static_collision");
+		int count = collision->overlapRect(min, max, &cb);
+		for (int i = 0; i < count; ++i) {
+			outUnits.push((Unit*)cb.userData[i]);
+		}
+	}
+	else {
+		for (int i = 0; i < units.length; ++i) {
+			const Vector2& unitPos = units[i].getPos();
+			if (unitPos.x > min.x && unitPos.y > min.y &&
+				unitPos.x < max.x && unitPos.y < max.y) {
+				outUnits.push(&units[i]);
+			}
 		}
 	}
 }

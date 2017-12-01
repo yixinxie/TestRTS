@@ -92,7 +92,7 @@ void InputManager::updateCameraPosAdjustment(float deltaTime) {
 		adjustVec.y = -1.0f;
 	}
 	Vector2 camPos = cam->getPos();
-	camPos += adjustVec * deltaTime * cameraMoveSpeed;
+	camPos += adjustVec * deltaTime * cameraMoveSpeed * cam->getSize();
 	cam->setPos(camPos);
 }
 

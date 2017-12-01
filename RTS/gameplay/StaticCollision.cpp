@@ -117,6 +117,13 @@ int StaticCollision::overlap(Vector2 center, float radius, b2QueryCallback* resu
 	box2DInst->QueryAABB(result, aabb);
 	return result->count;
 }
+int StaticCollision::overlapRect(Vector2 min, Vector2 max, b2QueryCallback* result) {
+	b2AABB aabb;
+	aabb.lowerBound = b2Vec2(min.x, min.y);
+	aabb.upperBound = b2Vec2(max.x, max.y);
+	box2DInst->QueryAABB(result, aabb);
+	return result->count;
+}
 void StaticCollision::update(float deltaTime) {
 	//const int total = 360;
 	//float arc = 2.0f * Math_PI / (float)total;

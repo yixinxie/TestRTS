@@ -101,7 +101,6 @@ void Unit::update(float deltaTime) {
 					pathlistIndex = -1;
 				}
 				else {
-					pathPointIndex++;
 					targetPos = pathlist->paths[pathlistIndex].pathPoints[pathPointIndex];
 					targetPosNormal = pathlist->paths[pathlistIndex].pathTurnPointNormals[pathPointIndex];
 				}
